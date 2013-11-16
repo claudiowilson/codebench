@@ -72,7 +72,28 @@ var LoginUser = function(username, password, client, callback) {
 	});
 }
 
+var GetQuestion = function(id, client, callback) {
+	client.connect(function(err) {
+		if(err) { console.log(err); }
+		else {
+			var query = 'SELECT * FROM codebench.question WHERE question_id =' + id;
+			client.query(query, function(err, result) {
+				if(err) {
+					callback(new Error('Error getting question: ' + err));
+				} else {
+					if(result.rows[0] == undefined) {
+						callback(new Error('Question does not exist!'));
+					} else {
+						callback(null, result.rows[0]);
+					}
+				}
+			});
+		}
+	});
+}
+
 exports.AddUser = AddUser;
 exports.AddQuestion = AddQuestion;
 exports.AddSubmission = AddSubmission;
 exports.LoginUser = LoginUser;
+exports.GetQuestion = GetQuestion;

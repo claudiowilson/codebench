@@ -34,6 +34,15 @@ if (!String.prototype.format) {
   };
 }
 
+app.get('/question/:id', function(request, response) {
+	queries.GetQuestion(request.params.id, client, function(err, result) {
+		if(err) {console.log(err);}
+		else {
+			console.log(result);
+		}
+	});
+});
+
 app.get('/logon', function(request, response) {
 	var username = request.body.username;
 	var password = request.body.password;
