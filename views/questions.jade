@@ -1,7 +1,9 @@
 extend layout
 block content
+      body
 	if questions
-		for question in questions			
+		for question in questions
+		    	     	
 			h1(#{question.problem})
 			h2(#{original_user})
 			#{question.upvotes} 

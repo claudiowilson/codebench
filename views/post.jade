@@ -1,5 +1,6 @@
 extend layout
-block content
-	if (user)
-	   include question.jade
-	include question.html
+	body
+		if question
+			#{question.problem}
+		if user
+			#{user.username}
