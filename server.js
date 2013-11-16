@@ -102,15 +102,14 @@ app.post('/submitQuestion', function(request, response) {
     });
 });
 
-app.get('/submitSubmission', function(request, response) {
-	//queries.AddSubmission({submittedUser: 1, question: 1, code: 'yolo', result:'yolo'}, client);
+app.get('/submit/:submission_id', function(request, response) {
 	var exec = require('child_process').exec, child;
-	child = exec('/usr/bin/java -jar CodeBench.jar 3', function(error, stdout, stderr) {
+	child = exec('/usr/bin/java -jar CodeBench.jar ' + request.params.submission_id, function(error, stdout, stderr) {
 		console.log(stdout);
 		console.log(stderr);
 		if(error) { console.log(error);}
 	});
-	console.log('yolo');
+	response.render('layout.jade', {message: 'Code submitted! It will be benchmarked soon'});
 });
 
 app.get('/index', function(request, response) {
