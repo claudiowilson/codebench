@@ -33,10 +33,11 @@ html(lang="en")
 						ul(class="nav navbar-nav navbar-right" id="navbar-items")
 							li.active
 								a(href="/") Home
+							li#registerButton
+								a(href="#registerModal" role="button" data-toggle="modal") Register
 							li#loginButton
-								a(href="#loginModal" role="button" data-toggle="modal") Sign Up
+								a(href="#loginModal" role="button" data-toggle="modal") Sign In
 
-	include navbar.html
 	include register.html
 	include login.html
 
