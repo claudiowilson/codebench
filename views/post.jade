@@ -1,7 +1,12 @@
 extend layout
 block content
 	if question
-		include question.jade
+		div.container
+			include question.jade
+			if submissions
+				| #{submissions.length} answers
+			else
+				Nobody has submitted an answer.
 	hr
 	if submissions
 		div.container
@@ -18,6 +23,7 @@ block content
 
 	if user
 		div.container
+			hr
 			script.
 				$(document).ready(
 					function() {
@@ -28,13 +34,13 @@ block content
 			form.form-horizontal(method="post" action="/submitSolution" novalidate)
 				div.modal-body
 					div.control-group
-						label.control-label(for="response") Response
+						label.control-label( for="response") Response
 						.controls
-							textarea#response(name="message" rows="5" cols="150" required)
+							textarea#response(class="form-control" name="message" rows="5" cols="150" required)
 					div.control-group
 						label.control-label(for="solution") Solution
 						.controls
-							textarea#solution(name="solution" rows="5" cols="150" required)
+							textarea#solution(class="form-control" name="solution" rows="30" cols="150" required)
 					input(type="hidden" name="problemId" value="#{problem}")
 					div.modal-footer
 						.form-actions
