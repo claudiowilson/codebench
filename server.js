@@ -33,6 +33,10 @@ if (!String.prototype.format) {
   };
 }
 
+app.get('/', function(request, response) {
+	response.redirect('/index');
+});
+
 app.get('/question/:id', function(request, response) {
 	queries.GetQuestion(request.params.id, function(err, result) {
 		if(err) {console.log(err);}
@@ -81,14 +85,14 @@ app.get('/problem/:id', function(request, response) {
     	    for(var i = 0; i < submissions.length; i++) {
 	 	submissions[i].result = submissions[i].result && JSON.parse(submissions[i].result);
 	    }
-/*	    submissions = submissions.filter(function(entry) {
+	    submissions = submissions.filter(function(entry) {
 		if(entry.result) {
-		    if(entry.result.time && !entry.submission_error) {
+		    if(entry.result.time) {
 			return true;
 		    }
 		}
 		return false;
-	    });*/
+	    });
 	    submissions.sort(function(a, b) {
 		if (a.result.time < b.result.time) return -1;
 		if (a.result.time > b.result.time) return 1;
