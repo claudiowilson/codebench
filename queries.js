@@ -31,7 +31,7 @@ var AddQuestion = function(row, callback) {
 				if(err) {
 					callback(new Error('Error adding questions: ' + err));
 				} else {
-					callback(null, result);
+					callback(null, result.rows[0]);
 				}
 			});
 		}
@@ -44,13 +44,13 @@ var AddSubmission = function(row, callback) {
 		if(err) { console.log(err); }
 		else {
 			var query = "INSERT INTO codebench.submission (submitted_user, question, code)" +
-			" VALUES({0}, '{1}','{2}')".format(row['submittedUser'], row['question'], row['code']);
+			" VALUES({0}, '{1}','{2}') RETURNING submission_id".format(row['submittedUser'], row['question'], row['code']);
 			client.query(query, function(err, result) {
 				client.end();
 				if(err) {
 					callback(new Error('Error adding submission: ' + err));
 				} else {
-					callback(null, result);
+					callback(null, result.rows[0]);
 				}
 			});
 		}

@@ -105,7 +105,6 @@ app.post('/submitQuestion', function(request, response) {
 });
 
 app.post('/submitSolution', function(request, response) {
-	console.log(request.body);
 	queries.AddSubmission({submittedUser: request.cookies.user.userId, question : request.body.problemId, code: request.body.solution }, function(err, result) {
 		if(err) {
 			console.log(err);
