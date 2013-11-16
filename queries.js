@@ -25,7 +25,7 @@ var AddQuestion = function(row, callback) {
 		if(err) { console.log(err); }
 		else {
 			var query = "INSERT INTO codebench.question (asked_user, problem, input, output)" +
-			" VALUES ('" + row['askedUser'] + "','" + row['problem'] + "','" + row['inputs'] + "','" + row['outputs'] +"')";
+			" VALUES ('" + row['askedUser'] + "','" + row['problem'] + "','" + row['inputs'] + "','" + row['outputs'] +"') RETURNING question_id";
 			client.query(query, function(err, result) {
 				client.end();
 				if(err) {
