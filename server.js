@@ -43,16 +43,19 @@ app.get('/question/:id', function(request, response) {
 	});
 });
 
-app.get('/logon', function(request, response) {
+app.post('/logon', function(request, response) {
 	var username = request.body.username;
 	var password = request.body.password;
-	queries.LoginUser('test', 'test2', client, function(err, user) {
-		if(err) {console.log(err);}
+	queries.LoginUser(username, password, client, function(err, user) {
+		if(err) {
+			console.log(err);
+			response.render('layout.jade', {message: 'Invalid password'});
+		}
 		else {
 			expiry = new Date();
-			expiry = expiry.setMonth(expiry.getMonth() + 1);
-			response.cookie('user', {'userId' : user.user_id[0], 'full_name': user.full_name[0]},{expires: expiry, httpOnly:true});
-			response.redirect('/index');
+			expiry.setMonth(expiry.getMonth() + 1);
+			response.cookie('user', {'userId' : user.user_id, 'username': user.username},{expires: expiry, httpOnly:true});
+			response.redirect('index');
 		}
 	});
 });
@@ -64,9 +67,14 @@ app.post('/register', function(request, response) {
 		if(err) {
 			console.log(err);
 		} else {
-			response.redirect('/index');
+			response.render('index.jade');
 		}
 	});
+});
+
+app.get('/logoff', function(request, response) {
+	response.clearCookie('user');
+	response.render('index.jade');
 });
 
 app.get('/submitQuestion', function(request, response) {
@@ -86,18 +94,8 @@ app.get('/submitSubmission', function(request, response) {
 });
 
 app.get('/index', function(request, response) {
-    response.render('index.jade');
+    response.render('index.jade', {user: request.cookies.user});
 });
 
-app.listen(3000, function() {
-	console.log('Listening on port 3000')
-	var connection = amqp.createConnection({host:'54.201.74.218', port:5672});
-	connection.on('ready', function() {
-		connection.queue('completion', function(q) {
-			q.bind('#');
-			q.subscribeRaw(function(message) {
-				console.log(message);
-			});
-		});
-	});
-});
+app.listen(3000);
+console.log('listening on port 3000!');

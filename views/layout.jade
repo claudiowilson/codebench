@@ -35,7 +35,7 @@ html(lang="en")
 								a(href="/index") Home
 							if user
 								li.active
-									a(href="/logoff") LogOff #{user.full_name}
+									a(href="/logoff") LogOff #{user.username}
 							else
 								li#registerButton
 									a(href="#registerModal" role="button" data-toggle="modal") Sign Up
@@ -49,3 +49,4 @@ html(lang="en")
 		.container
 			.main-content
 				block content
+					h2 !{message}
