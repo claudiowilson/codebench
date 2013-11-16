@@ -34,6 +34,17 @@ if (!String.prototype.format) {
   };
 }
 
+app.get('/logon', function(request, response) {
+	var username = request.body.username;
+	var password = request.body.password;
+	queries.LoginUser('test', 'test2', client, function(err, user) {
+		if(err) {console.log(err);}
+		else {
+			console.log(user);
+		}
+	});
+});
+
 app.post('/register', function(request, response) {
 	var username = request.body.username;
 	var password = request.body.password;

@@ -52,6 +52,27 @@ var AddSubmission = function(row, client, callback) {
 	});
 }
 
+var LoginUser = function(username, password, client, callback) {
+	client.connect(function(err) {
+		if(err) { console.log(err); }
+		else {
+			var query = 'SELECT username, password FROM codebench.user WHERE username=' + "'" + username + "'";
+			client.query(query, function(err, result) {
+				if(err) {
+					callback(new Error('Error logging on: ' + err));
+				} else {
+					if(result.rows[0].password != password) {
+						callback(new Error('Invalid Password!'));
+					} else {
+						callback(null, result.rows[0]);
+					}
+				}
+			});
+		}
+	});
+}
+
 exports.AddUser = AddUser;
 exports.AddQuestion = AddQuestion;
 exports.AddSubmission = AddSubmission;
+exports.LoginUser = LoginUser;
