@@ -1,7 +1,7 @@
 extend layout
 block content
 	if questions
-		for question in questions
-			| #{question.problem}
-			| #{original_user}
-			br
+		div.container
+			for question in questions
+				h2
+					| #{question.problem}

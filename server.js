@@ -78,15 +78,14 @@ app.get('/problem/:id', function(request, response) {
 	if (err) {
 	    console.log(err);
 	} else {
-	    console.log(submissions);
-	    response.render('post.jade', {question: question, submissions: submissions});
+	    response.render('post.jade', {user: request.cookies.user, question: question, submissions: submissions});
 	}
     });
 });
 
 app.get('/logoff', function(request, response) {
-	response.clearCookie('user');
-	response.render('index.jade');
+    response.clearCookie('user');
+    response.render('index.jade', {user: request.cookies.user});
 });
 
 app.get('/addproblem', function(request, response) {
@@ -96,11 +95,11 @@ app.get('/addproblem', function(request, response) {
 app.post('/submitQuestion', function(request, response) {
     queries.AddQuestion({askedUser: request.cookies.user.userId, problem: request.body.problem, inputs: request.body.input, outputs: request.body.output}, function(err, result) {
     	if(err) {
-    		console.log(err);
-    		response.render('layout.jade', {message: 'Something went wrong'});
+    	    console.log(err);
+    	    response.render('layout.jade', {message: 'Something went wrong', user: request.cookies.user});
     	} else {
-    		response.redirect('/problem/'+ request.cookies.user.userId);
-		}
+    	    response.redirect('/problem/'+ request.cookies.user.userId);
+	}
     });
 });
 

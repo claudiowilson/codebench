@@ -1,12 +1,14 @@
 extend layout
 block content
 	if question
-		div.container
-			| #{question.problem}
+		include question.jade
 	if submissions
 		div.container
 			for submission in submissions
 				| #{submission.message}
-				| #{submission.code}
+				pre.prettyprint
+					code
+						| #{submission.code}
+			
 	if user
 		include submit.html
