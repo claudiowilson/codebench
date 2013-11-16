@@ -35,6 +35,8 @@ html(lang="en")
 								a(href="/index") Home
 							if user
 								li.active
+									a(href="/addproblem") Submit a Problem
+								li.active
 									a(href="/logoff") LogOff #{user.username}
 							else
 								li#registerButton

@@ -20,7 +20,6 @@ app.configure(function() {
 	app.use(express.static(__dirname + '/public'));
 });
 
-var client = new pg.Client(settings.connString);
 // First, checks if it isn't implemented yet.
 if (!String.prototype.format) {
   String.prototype.format = function() {
@@ -35,7 +34,7 @@ if (!String.prototype.format) {
 }
 
 app.get('/question/:id', function(request, response) {
-	queries.GetQuestion(request.params.id, client, function(err, result) {
+	queries.GetQuestion(request.params.id, function(err, result) {
 		if(err) {console.log(err);}
 		else {
 			console.log(result);
@@ -46,7 +45,7 @@ app.get('/question/:id', function(request, response) {
 app.post('/logon', function(request, response) {
 	var username = request.body.username;
 	var password = request.body.password;
-	queries.LoginUser(username, password, client, function(err, user) {
+	queries.LoginUser(username, password, function(err, user) {
 		if(err) {
 			console.log(err);
 			response.render('layout.jade', {message: 'Invalid password'});
@@ -55,7 +54,7 @@ app.post('/logon', function(request, response) {
 			expiry = new Date();
 			expiry.setMonth(expiry.getMonth() + 1);
 			response.cookie('user', {'userId' : user.user_id, 'username': user.username},{expires: expiry, httpOnly:true});
-			response.redirect('index');
+			response.redirect('/index');
 		}
 	});
 });
@@ -63,7 +62,7 @@ app.post('/logon', function(request, response) {
 app.post('/register', function(request, response) {
 	var username = request.body.username;
 	var password = request.body.password;
-	queries.AddUser(username, password, client, function(err, result) {
+	queries.AddUser(username, password, function(err, result) {
 		if(err) {
 			console.log(err);
 		} else {
@@ -77,9 +76,30 @@ app.get('/logoff', function(request, response) {
 	response.render('index.jade');
 });
 
-app.get('/submitQuestion', function(request, response) {
-//    queries.AddQuestion({askedUser: 1, problem: 'yolo', input:'yolo', output:'yolo', upvotes : 5, downvotes : 5}, client);
-    response.render('addQuestion.jade');
+app.get('/addproblem', function(request, response) {
+	response.render('addQuestion.jade', {user: request.cookies.user});
+});
+
+app.get('/problem/:id', function(request, response) {
+	queries.GetQuestionsForUser(request.params.id, function(err, questions) {
+		if(err) {
+			console.log(err);
+			response.render('layout.jade', {message: 'Something went wrong'});
+		} else {
+			response.redirect('/index');
+		}
+	});
+});
+
+app.post('/submitQuestion', function(request, response) {
+    queries.AddQuestion({askedUser: request.cookies.user.userId, problem: request.body.problem, inputs: request.body.input, outputs: request.body.output}, function(err, result) {
+    	if(err) {
+    		console.log(err);
+    		response.render('layout.jade', {message: 'Something went wrong'});
+    	} else {
+    		response.redirect('/problem/'+ request.cookies.user.userId);
+		}
+    });
 });
 
 app.get('/submitSubmission', function(request, response) {

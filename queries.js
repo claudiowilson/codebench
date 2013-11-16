@@ -1,4 +1,8 @@
-var AddUser = function(username, password, client, callback) {
+var pg = require('pg');
+var settings = require('./settings');
+
+var AddUser = function(username, password, callback) {
+	var client = GetClient();
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 		else {
@@ -15,13 +19,13 @@ var AddUser = function(username, password, client, callback) {
 	})
 }
 
-var AddQuestion = function(row, client, callback) {
+var AddQuestion = function(row, callback) {
+	var client = GetClient();
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 		else {
-			var query = 'INSERT INTO codebench.question (asked_user, problem, input, output, upvotes, downvotes)' +
-			' VALUES (' + row['askedUser'] +',' + row['problem'] + ',' + row['input'] + ',' + row['output'] + ',' +
-			row['upvotes'] + ',' + row['downvotes'] +')';
+			var query = "INSERT INTO codebench.question (asked_user, problem, input, output)" +
+			" VALUES ('" + row['askedUser'] + "','" + row['problem'] + "','" + row['inputs'] + "','" + row['outputs'] +"')";
 			client.query(query, function(err, result) {
 				client.end();
 				if(err) {
@@ -34,12 +38,13 @@ var AddQuestion = function(row, client, callback) {
 	})
 }
 
-var AddSubmission = function(row, client, callback) {
+var AddSubmission = function(row, callback) {
+	var client = GetClient();
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 		else {
-			var query = 'INSERT INTO codebench.submission (submitted_user, question, code, result)' +
-			' VALUES({0},{1},{2},{3})'.format(row['submittedUser'], row['question'], row['code'], row['result']);
+			var query = "INSERT INTO codebench.submission (submitted_user, question, code, result)" +
+			" VALUES({0}, '{1}','{2}','{3}')".format(row['submittedUser'], row['question'], row['code'], row['result']);
 			client.query(query, function(err, result) {
 				client.end();
 				if(err) {
@@ -52,7 +57,8 @@ var AddSubmission = function(row, client, callback) {
 	});
 }
 
-var LoginUser = function(username, password, client, callback) {
+var LoginUser = function(username, password, callback) {
+	var client = GetClient();
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 		else {
@@ -73,7 +79,8 @@ var LoginUser = function(username, password, client, callback) {
 	});
 }
 
-var GetQuestion = function(id, client, callback) {
+var GetQuestion = function(id, callback) {
+	var client = GetClient();
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 		else {
@@ -94,11 +101,12 @@ var GetQuestion = function(id, client, callback) {
 	});
 }
 
-var GetQuestions = function(client, callback) {
+var GetQuestions = function(callback) {
+	var client = GetClient();
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 	else {
-		var query = 'SELECT * FROM codebench.question LIMIT 50;'
+		var query = 'SELECT * FROM codebench.question LIMIT 50';
 		client.query(query, function(err, result) {
 			client.end();
 			if(err) {callback(new Error('Error getting questions: '+err));} else { callback(null, result.rows);}
@@ -107,24 +115,27 @@ var GetQuestions = function(client, callback) {
 	});
 }
 
-var QuestionsForUser = function(userid, client, callback) {
+var GetQuestionsForUser = function(userid, callback) {
+	var client = GetClient();
 	client.connect(function(err) {
+		console.log('hashtagyoloswag');
 		if(err) { console.log(err); }
 		else {
-			var query = 'SELECT * FROM codebench.question WHERE asked_user='+userid+';'
+			var query = 'SELECT * FROM codebench.question WHERE asked_user='+userid;
 			client.query(query, function(err, result) {
-			client.end();
-			if(err) {callback(new Error('Error getting questions for user: '+err));} else {callback(null, result.rows);}
-			});
-		}
+				client.end();
+				if(err) {callback(new Error('Error getting questions for user: '+err));} else {callback(null, result.rows);}
+				});
+			}
 	});
 }
 
-var SubmissionsForUser = function(userid, client, callback) {
+var SubmissionsForUser = function(userid, callback) {
+	var client = GetClient();
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 		else {
-			var query = 'SELECT * FROM codebench.submission WHERE submitted_user='+userid+';'
+			var query = 'SELECT * FROM codebench.submission WHERE submitted_user='+userid;
 			client.query(query, function(err, result) {
 				client.end();
 				if(err) {callback(new Error('Error getting questions for user: '+err));} else { callback(null, result.rows);}
@@ -133,11 +144,12 @@ var SubmissionsForUser = function(userid, client, callback) {
 	});
 }
 
-var SubmissionsForQuestion = function(questionid, client, callback) {
+var SubmissionsForQuestion = function(questionid, callback) {
+	var client = GetClient();
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 		else {
-			var query = 'SELECT * FROM codebench.submission WHERE question='+questionid+';'
+			var query = 'SELECT * FROM codebench.submission WHERE question='+questionid;
 			client.query(query, function(err, result) {
 				client.end();
 				if(err) {callback(new Error('Error getting submissions for question: '+err));} else {callback(null, result.rows);}
@@ -146,12 +158,17 @@ var SubmissionsForQuestion = function(questionid, client, callback) {
 	});
 }
 
+var GetClient = function() {
+	return new pg.Client(settings.connString);
+}
+
 exports.AddUser = AddUser;
 exports.AddQuestion = AddQuestion;
 exports.AddSubmission = AddSubmission;
 exports.LoginUser = LoginUser;
+exports.AddQuestion = AddQuestion;
 exports.GetQuestion = GetQuestion;
 exports.GetQuestions = GetQuestions;
-exports.QuestionsForUser = QuestionsForUser;
+exports.GetQuestionsForUser = GetQuestionsForUser;
 exports.SubmissionsForUser = SubmissionsForUser;
 exports.SubmissionsForQuestion = SubmissionsForQuestion;
