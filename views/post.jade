@@ -11,4 +11,20 @@ block content
 						| #{submission.code}
 			
 	if user
-		include submit.html
+		div.container
+			h1 Ready to post your solution?
+			form.form-horizontal(method="post" action="/submitSolution" novalidate)
+				div.modal-body
+					div.control-group
+						label.control-label(for="response") Response
+						.controls
+							textarea#response(name="message" rows="5" cols="150" required)
+					div.control-group
+						label.control-label(for="solution") Solution
+						.controls
+							textarea#solution(name="solution" rows="5" cols="150" required)
+					input(type="hidden" name="problemId" value="#{problem}")
+					div.modal-footer
+						.form-actions
+							button(type="submit" class="btn btn-primary") Submit
+								i(class="icon-ok icon-white")

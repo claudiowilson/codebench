@@ -4,14 +4,14 @@
       <h1>Post a new answer.</h1>
       
       <!-- Submission Form -->
-      <form class="form-horizontal" method="post" action="submitSubmission" novalidate>
+      <form class="form-horizontal" method="post" action="/submitSolution" novalidate>
         <div class="modal-body">
           
           <!-- Message -->
           <div class="control-group">
             <label class="control-label" for="response">Response</label>
             <div class="controls">
-              <textarea id="response" rows="5" cols="150" required></textarea>
+              <textarea id="response" name="message" rows="5" cols="150" required></textarea>
             </div>
           </div>
           
@@ -19,7 +19,7 @@
           <div class="control-group">
             <label class="control-label" for="file">Solution</label>
             <div class="controls">
-              <textarea name="file" id="file" required></textarea>
+              <textarea id="response" name="solution" rows="5" cols="150" required></textarea>
             </div>
           </div>
           
@@ -28,6 +28,8 @@
               <button type="submit" class="btn btn-primary" >Submit <i class="icon-ok icon-white"></i></button>
             </div>
           </div>
+          <input type="hidden" name="problemId" value="#{problem}"></input>
+        
       </form>
       
       </div>

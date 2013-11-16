@@ -3,5 +3,6 @@ block content
 	if questions
 		div.container
 			for question in questions
-				h2
-					| #{question.problem}
+				a(href="/problem/#{question.question_id}")
+					h2
+						| #{question.problem}
