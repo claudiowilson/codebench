@@ -51,8 +51,8 @@ app.get('/logon', function(request, response) {
 		else {
 			expiry = new Date();
 			expiry = expiry.setMonth(expiry.getMonth() + 1);
-			console.log()
-			//response.cookie('user')
+			response.cookie('user', {'userId' : user.user_id[0], 'full_name': user.full_name[0]},{expires: expiry, httpOnly:true});
+			response.redirect('/index');
 		}
 	});
 });
@@ -64,7 +64,6 @@ app.post('/register', function(request, response) {
 		if(err) {
 			console.log(err);
 		} else {
-			console.log(result);
 			response.redirect('/index');
 		}
 	});
