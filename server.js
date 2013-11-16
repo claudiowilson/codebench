@@ -48,7 +48,7 @@ app.post('/logon', function(request, response) {
 	queries.LoginUser(username, password, function(err, user) {
 		if(err) {
 			console.log(err);
-			response.render('layout.jade', {message: 'Invalid password'});
+			response.render('layout.jade', {message: err.message});
 		}
 		else {
 			expiry = new Date();
@@ -73,7 +73,6 @@ app.post('/register', function(request, response) {
 
 app.get('/problem/:id', function(request, response) {
     var id = request.params.id;
-    console.log(id);
     queries.GetQuestionAndSubmissions(id, function(err, question, submissions) {
 	if (err) {
 	    console.log(err);
@@ -98,7 +97,7 @@ app.post('/submitQuestion', function(request, response) {
     	    console.log(err);
     	    response.render('layout.jade', {message: 'Something went wrong', user: request.cookies.user});
     	} else {
-    	    response.redirect('/problem/'+ request.cookies.user.userId);
+    	    response.redirect('/problem/'+ result.question_id);
 	}
     });
 });
@@ -121,7 +120,7 @@ app.get('/submit/:submission_id', function(request, response) {
 		console.log(stderr);
 		if(error) { console.log(error);}
 	});
-	response.render('layout.jade', {message: 'Code submitted! It will be benchmarked soon'});
+	response.render('layout.jade', {message: 'Code submitted! It will be benchmarked soon', user: request.cookies.user});
 });
 
 app.get('/index', function(request, response) {

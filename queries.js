@@ -68,7 +68,10 @@ var LoginUser = function(username, password, callback) {
 				if(err) {
 					callback(new Error('Error logging on: ' + err));
 				} else {
-					if(result.rows[0].password != password) {
+					if(result.rows[0] == undefined) {
+						callback(new Error('No such user exists!'));
+					}
+					else if(result.rows[0].password != password) {
 						callback(new Error('Invalid Password!'));
 					} else {
 						callback(null, result.rows[0]);
