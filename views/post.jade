@@ -35,7 +35,7 @@ block content
 						label.control-label(for="solution") Solution
 						.controls
 							textarea#solution(name="solution" rows="5" cols="150" required)
-					input(type="hidden" name="problemId" value="#{problem}")
+					input(type="hidden" name="problemId" value="#{submissions[0].question}")
 					div.modal-footer
 						.form-actions
 							button(type="submit" class="btn btn-primary") Submit
