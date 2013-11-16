@@ -2,16 +2,28 @@ extend layout
 block content
 	if question
 		include question.jade
+	hr
 	if submissions
 		div.container
 			for submission in submissions
-				| #{submission.message}
+				if submission.result
+					h2
+						| #{submission.result.time} seconds
 				pre.prettyprint
 					code
 						| #{submission.code}
-			
+				| #{submission.message}
+				br
+				br
+
 	if user
 		div.container
+			script.
+				$(document).ready(
+					function() {
+					$('#solution').tabby()
+					}
+				);
 			h1 Ready to post your solution?
 			form.form-horizontal(method="post" action="/submitSolution" novalidate)
 				div.modal-body

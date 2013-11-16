@@ -43,8 +43,8 @@ var AddSubmission = function(row, callback) {
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 		else {
-			var query = "INSERT INTO codebench.submission (submitted_user, question, code)" +
-			" VALUES({0}, '{1}','{2}') RETURNING submission_id".format(row['submittedUser'], row['question'], row['code']);
+			var query = "INSERT INTO codebench.submission (submitted_user, question, message, code)" +
+			" VALUES({0}, '{1}','{2}', '{3}') RETURNING submission_id".format(row['submittedUser'], row['question'], row['message'], row['code']);
 			client.query(query, function(err, result) {
 				client.end();
 				if(err) {
