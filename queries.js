@@ -64,6 +64,7 @@ var LoginUser = function(username, password, client, callback) {
 					if(result.rows[0].password != password) {
 						callback(new Error('Invalid Password!'));
 					} else {
+						client.end();
 						callback(null, result.rows[0]);
 					}
 				}
@@ -84,9 +85,46 @@ var GetQuestion = function(id, client, callback) {
 					if(result.rows[0] == undefined) {
 						callback(new Error('Question does not exist!'));
 					} else {
+						client.end();
 						callback(null, result.rows[0]);
 					}
 				}
+			});
+		}
+	});
+}
+
+var GetQuestions = function(client, callback) {
+	client.connect(function(err) {
+		if(err) { console.log(err); }
+	else {
+		var query = 'SELECT * FROM codebench.question LIMIT 50;'
+		client.query(query, function(err, result) {
+			if(err) {callback(new Error('Error getting questions: '+err));} else {client.end(); callback(null, result.rows);}
+			});
+		}
+	});
+}
+
+var QuestionsForUser = function(userid, client, callback) {
+	client.connect(function(err) {
+		if(err) { console.log(err); }
+		else {
+			var query = 'SELECT * FROM codebench.question WHERE asked_user='+userid+';'
+			client.query(query, function(err, result) {
+			if(err) {callback(new Error('Error getting questions for user: '+err));} else {client.end(); callback(null, result.rows);}
+			});
+		}
+	});
+}
+
+var SubmissionsForUser = function(userid, client, callback) {
+	client.connect(function(err) {
+		if(err) { console.log(err); }
+		else {
+			var query = 'SELECT * FROM codebench.submission WHERE submitted_user='+userid+';'
+			client.query(query, function(err, result) {
+			if(err) {callback(new Error('Error getting questions for user: '+err));} else {client.end(); callback(null, result.rows);}
 			});
 		}
 	});
@@ -97,3 +135,6 @@ exports.AddQuestion = AddQuestion;
 exports.AddSubmission = AddSubmission;
 exports.LoginUser = LoginUser;
 exports.GetQuestion = GetQuestion;
+exports.GetQuestions = GetQuestions;
+exports.QuestionsForUser = QuestionsForUser;
+exports.SubmissionsForUser = SubmissionsForUser;
