@@ -37,11 +37,12 @@ html(lang="en")
 								li.active
 									a(href="/logoff") LogOff #{user.full_name}
 							else
-								li#loginButton
-									a(href="#loginModal" role="button" data-toggle="modal") Sign Up
+								li#registerButton
+									a(href="#registerModal" role="button" data-toggle="modal") Sign Up
 								li#loginButton
 									a(href="#loginModal" role="button" data-toggle="modal") Sign In
 							include login.html
+							include register.html
 
 	body
 		header
