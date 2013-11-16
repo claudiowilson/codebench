@@ -1,6 +1,9 @@
 extend layout
 block content
+	h1
+		| Put your code to the test.
 	if questions
+		hr
 		div.container
 			for question in questions
 				a(href="/problem/#{question.question_id}")

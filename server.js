@@ -78,15 +78,15 @@ app.get('/problem/:id', function(request, response) {
     		console.log(err);
     	} else {
 	    console.log(submissions);
-    		for(var i = 0; i < submissions.length; i++) {
-	 			submissions[i].result = submissions[i].result && JSON.parse(submissions[i].result);
-	     	}
-	     	submissions.sort(function(a, b) {
-					if (a.result.time < b.result.time) return -1;
-					if (a.result.time > b.result.time) return 1;
-					return 0;
-			    });
-
+    	    for(var i = 0; i < submissions.length; i++) {
+	 	submissions[i].result = submissions[i].result && JSON.parse(submissions[i].result);
+	    }
+	    submissions.sort(function(a, b) {
+		if (a.result.time < b.result.time) return -1;
+		if (a.result.time > b.result.time) return 1;
+		return 0;
+	    });
+	    
 	    queries.GetQuestion(id, function(err, question) {
 		if(err) {
 		    console.log(err);

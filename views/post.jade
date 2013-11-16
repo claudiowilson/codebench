@@ -11,17 +11,18 @@ block content
 	if submissions
 		div.container
 			for submission in submissions
-				if submission.result
-					h2
-						| #{submission.result.time} seconds					
-					h5
-						| posted by #{submission.username}					
-				pre.prettyprint
-					code
-						| #{submission.code}
-				| #{submission.message}
-				br
-				br
+				if submission.result && submission.result.submission_error == "null"
+					if submission.result
+						h2
+							| #{submission.result.time} seconds
+						h5
+							| posted by #{submission.username}					
+					pre.prettyprint
+						code
+							| #{submission.code}
+					| #{submission.message}
+					br
+					br
 
 	if user
 		div.container
