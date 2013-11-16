@@ -69,7 +69,7 @@ app.post('/register', function(request, response) {
 
 app.get('/submitQuestion', function(request, response) {
 //    queries.AddQuestion({askedUser: 1, problem: 'yolo', input:'yolo', output:'yolo', upvotes : 5, downvotes : 5}, client);
-    response.render('question.jade');
+    response.render('post.jade');
 });
 
 app.get('/submitSubmission', function(request, response) {
