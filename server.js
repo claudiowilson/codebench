@@ -78,6 +78,16 @@ app.get('/problem/:id', function(request, response) {
 	if (err) {
 	    console.log(err);
 	} else {
+	    console.log(submissions);
+	    for(var i = 0; i < submissions.length; i++) {
+		submissions[i].result = submissions[i].result && JSON.parse(submissions[i].result);
+	    }
+	    
+	    submissions.sort(function(a, b) {
+		if (a.result.time < b.result.time) return -1;
+		if (a.result.time > b.result.time) return 1;
+		return 0;
+	    });
 	    response.render('post.jade', {user : request.cookies.user, question: question, submissions: submissions, problem: id});
 	}
     });
@@ -104,7 +114,7 @@ app.post('/submitQuestion', function(request, response) {
 });
 
 app.post('/submitSolution', function(request, response) {
-	queries.AddSubmission({submittedUser: request.cookies.user.userId, question : request.body.problemId, code: request.body.solution }, function(err, result) {
+    queries.AddSubmission({submittedUser: request.cookies.user.userId, question : request.body.problemId, message: request.body.message, code: request.body.solution }, function(err, result) {
 		if(err) {
 			console.log(err);
     		response.render('layout.jade', {message: 'Something went wrong'});

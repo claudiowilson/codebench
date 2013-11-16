@@ -6,11 +6,16 @@ block content
 	if submissions
 		div.container
 			for submission in submissions
-				| #{submission.message}
+				if submission.result
+					h2
+						| #{submission.result.time} seconds
 				pre.prettyprint
 					code
 						| #{submission.code}
-			
+				| #{submission.message}
+				br
+				br
+
 	if user
 		div.container
 			script.
