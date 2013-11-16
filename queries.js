@@ -126,8 +126,21 @@ var SubmissionsForUser = function(userid, client, callback) {
 		else {
 			var query = 'SELECT * FROM codebench.submission WHERE submitted_user='+userid+';'
 			client.query(query, function(err, result) {
-			client.end();
-			if(err) {callback(new Error('Error getting questions for user: '+err));} else { callback(null, result.rows);}
+				client.end();
+				if(err) {callback(new Error('Error getting questions for user: '+err));} else { callback(null, result.rows);}
+			});
+		}
+	});
+}
+
+var SubmissionsForQuestion = function(questionid, client, callback) {
+	client.connect(function(err) {
+		if(err) { console.log(err); }
+		else {
+			var query = 'SELECT * FROM codebench.submission WHERE question='+questionid+';'
+			client.query(query, function(err, result) {
+				client.end();
+				if(err) {callback(new Error('Error getting submissions for question: '+err));} else {callback(null, result.rows);}
 			});
 		}
 	});
@@ -141,3 +154,4 @@ exports.GetQuestion = GetQuestion;
 exports.GetQuestions = GetQuestions;
 exports.QuestionsForUser = QuestionsForUser;
 exports.SubmissionsForUser = SubmissionsForUser;
+exports.SubmissionsForQuestion = SubmissionsForQuestion;
