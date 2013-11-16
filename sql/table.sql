@@ -26,6 +26,7 @@ CREATE TABLE codebench.submission(
 	question integer NOT NULL,
 	code text,
 	result text,
+	message text,
 	submission_error text,
 	PRIMARY KEY (submission_id),
 	CONSTRAINT submission_user_fkey FOREIGN KEY ("submitted_user") REFERENCES codebench.user ("user_id") ON DELETE CASCADE,

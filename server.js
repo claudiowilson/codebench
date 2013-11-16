@@ -60,15 +60,28 @@ app.post('/logon', function(request, response) {
 });
 
 app.post('/register', function(request, response) {
-	var username = request.body.username;
-	var password = request.body.password;
-	queries.AddUser(username, password, function(err, result) {
-		if(err) {
-			console.log(err);
-		} else {
-			response.render('index.jade');
-		}
-	});
+    var username = request.body.username;
+    var password = request.body.password;
+    queries.AddUser(username, password, function(err, result) {
+	if(err) {
+	    console.log(err);
+	} else {
+	    response.render('index.jade');
+	}
+    });
+});
+
+app.get('/problem/:id', function(request, response) {
+    var id = request.params.id;
+    console.log(id);
+    queries.GetQuestionAndSubmissions(id, function(err, question, submissions) {
+	if (err) {
+	    console.log(err);
+	} else {
+	    console.log(submissions);
+	    response.render('post.jade', {question: question, submissions: submissions});
+	}
+    });
 });
 
 app.get('/logoff', function(request, response) {
@@ -78,17 +91,6 @@ app.get('/logoff', function(request, response) {
 
 app.get('/addproblem', function(request, response) {
 	response.render('addQuestion.jade', {user: request.cookies.user});
-});
-
-app.get('/problem/:id', function(request, response) {
-	queries.GetQuestionsForUser(request.params.id, function(err, questions) {
-		if(err) {
-			console.log(err);
-			response.render('layout.jade', {message: 'Something went wrong'});
-		} else {
-			response.redirect('/index');
-		}
-	});
 });
 
 app.post('/submitQuestion', function(request, response) {
@@ -113,7 +115,9 @@ app.get('/submit/:submission_id', function(request, response) {
 });
 
 app.get('/index', function(request, response) {
-    response.render('index.jade', {user: request.cookies.user});
+    queries.GetQuestions( function (err, results) {
+	response.render('index.jade', {user: request.cookies.user, questions: results});
+    });
 });
 
 app.listen(3000);

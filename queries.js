@@ -83,21 +83,21 @@ var GetQuestion = function(id, callback) {
 	var client = GetClient();
 	client.connect(function(err) {
 		if(err) { console.log(err); }
-		else {
-			var query = 'SELECT * FROM codebench.question WHERE question_id =' + id;
-			client.query(query, function(err, result) {
-				client.end();
-				if(err) {
-					callback(new Error('Error getting question: ' + err));
-				} else {
-					if(result.rows[0] == undefined) {
-						callback(new Error('Question does not exist!'));
-					} else {
-						callback(null, result.rows[0]);
-					}
-				}
-			});
-		}
+	    else {
+		var query = 'SELECT * FROM codebench.question WHERE question_id =' + id;
+		client.query(query, function(err, result) {
+		    client.end();
+		    if(err) {
+			callback(new Error('Error getting question: ' + err));
+		    } else {
+			if(result.rows[0] == undefined) {
+			    callback(new Error('Question does not exist!'));
+			} else {
+			    callback(null, result.rows[0]);
+			}
+		    }
+		});
+	    }
 	});
 }
 
@@ -121,7 +121,7 @@ var GetQuestionsForUser = function(userid, callback) {
 		console.log('hashtagyoloswag');
 		if(err) { console.log(err); }
 		else {
-			var query = 'SELECT * FROM codebench.question WHERE asked_user='+userid;
+		    var query = 'SELECT * FROM codebench.question WHERE asked_user='+userid;
 			client.query(query, function(err, result) {
 				client.end();
 				if(err) {callback(new Error('Error getting questions for user: '+err));} else {callback(null, result.rows);}
@@ -135,7 +135,7 @@ var SubmissionsForUser = function(userid, callback) {
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 		else {
-			var query = 'SELECT * FROM codebench.submission WHERE submitted_user='+userid;
+		    var query = 'SELECT * FROM codebench.submission WHERE submitted_user='+userid;
 			client.query(query, function(err, result) {
 				client.end();
 				if(err) {callback(new Error('Error getting questions for user: '+err));} else { callback(null, result.rows);}
@@ -158,6 +158,20 @@ var SubmissionsForQuestion = function(questionid, callback) {
 	});
 }
 
+var GetQuestionAndSubmissions = function(questionid, callback) {
+    GetQuestion(questionid, function(err, question) {
+	if (err) { callback(err); }
+	else {
+	    SubmissionsForQuestion(questionid, function(err, submissions) {
+		if (err) { callback(err); }
+		else {
+		    callback(null, question, submissions);
+		}
+	    });
+	}
+    });
+}
+
 var GetClient = function() {
 	return new pg.Client(settings.connString);
 }
@@ -172,3 +186,4 @@ exports.GetQuestions = GetQuestions;
 exports.GetQuestionsForUser = GetQuestionsForUser;
 exports.SubmissionsForUser = SubmissionsForUser;
 exports.SubmissionsForQuestion = SubmissionsForQuestion;
+exports.GetQuestionAndSubmissions = GetQuestionAndSubmissions;
