@@ -1,0 +1,27 @@
+extend layout
+block content
+	script(src="jqBootStrapValidation.js" type="text/javascript")
+	script.
+		$(function () { $("input,select,textdata").jqBootstrapValidation(
+		{
+		submitError: function($form, event, errors) {
+		alert("ah shit");
+		},
+
+		submitSuccess: function($form, event) {
+		event.preventDefault();
+
+		alert($form.serialize());
+		var user = $("input#email").val();
+		var pw = $("input#password").val();
+		var data = "username=" + user + "password=" pw;
+		alert(data);
+
+		$.post($form.attr("/register", data, success: function(data) {
+		console.log("successful account submission");
+		}));
+
+		}
+		});
+		});
+	include register.html
