@@ -2,5 +2,9 @@ extend layout
 	body
 		if question
 			#{question.problem}
+		if submissions
+			for submission in submissions
+						#{submission.message}
+						#{submission.code}
 		if user
 			#{user.username}

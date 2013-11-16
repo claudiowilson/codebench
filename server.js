@@ -61,15 +61,24 @@ app.post('/logon', function(request, response) {
 });
 
 app.post('/register', function(request, response) {
-	var username = request.body.username;
-	var password = request.body.password;
-	queries.AddUser(username, password, client, function(err, result) {
-		if(err) {
-			console.log(err);
-		} else {
-			response.render('index.jade');
-		}
+    var username = request.body.username;
+    var password = request.body.password;
+    queries.AddUser(username, password, client, function(err, result) {
+	if(err) {
+	    console.log(err);
+	} else {
+	    response.render('index.jade');
+	}
+    });
+});
+
+app.get('/problems', function(request, response) {
+    var id = request.body.id;
+    queries.GetQuestion(id, client, function(err, question) {
+	queries.SubmissionsForQuestion(id, client, function(err, submissions) {
+	    response.render('post.jade', question, submissions);
 	});
+    });
 });
 
 app.get('/logoff', function(request, response) {
@@ -78,8 +87,17 @@ app.get('/logoff', function(request, response) {
 });
 
 app.get('/submitQuestion', function(request, response) {
-//    queries.AddQuestion({askedUser: 1, problem: 'yolo', input:'yolo', output:'yolo', upvotes : 5, downvotes : 5}, client);
+    //    queries.AddQuestion({askedUser: 1, problem: 'yolo', input:'yolo', output:'yolo', upvotes : 5, downvotes : 5}, client);
     response.render('addQuestion.jade');
+});
+
+app.post('/submitQuestion', function(request, response) {    
+    var question = request.body.question;
+    var input = request.body.input;
+    var output = request.body.output;
+    queries.AddQuestion({askedUser: 1, problem: question, input: input, output: output, upvotes : 0, downvotes : 5}, client, function(err, result) {
+	response.redirect('/problems', {question: result});
+    });
 });
 
 app.get('/submitSubmission', function(request, response) {
@@ -94,7 +112,9 @@ app.get('/submitSubmission', function(request, response) {
 });
 
 app.get('/index', function(request, response) {
-    response.render('index.jade', {user: request.cookies.user});
+    queries.GetQuestions(client, function (err, query) {
+	response.render('index.jade', {user: request.cookies.user}, {questions: query});
+    });
 });
 
 app.listen(3000);
