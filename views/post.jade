@@ -13,7 +13,9 @@ block content
 			for submission in submissions
 				if submission.result
 					h2
-						| #{submission.result.time} seconds
+						| #{submission.result.time} seconds					
+					h5
+						| posted by #{submission.username}					
 				pre.prettyprint
 					code
 						| #{submission.code}
@@ -41,7 +43,7 @@ block content
 						label.control-label(for="solution") Solution
 						.controls
 							textarea#solution(class="form-control" name="solution" rows="30" cols="150" required)
-					input(type="hidden" name="problemId" value="#{problem}")
+							input(type="hidden" name="problemId" value="#{submissions[0].question}")
 					div.modal-footer
 						.form-actions
 							button(type="submit" class="btn btn-primary") Submit

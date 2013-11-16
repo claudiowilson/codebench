@@ -48,7 +48,7 @@ app.post('/logon', function(request, response) {
 	queries.LoginUser(username, password, function(err, user) {
 		if(err) {
 			console.log(err);
-			response.render('layout.jade', {message: 'Invalid password'});
+			response.render('layout.jade', {message: err.message});
 		}
 		else {
 			expiry = new Date();
@@ -73,22 +73,27 @@ app.post('/register', function(request, response) {
 
 app.get('/problem/:id', function(request, response) {
     var id = request.params.id;
-    console.log(id);
-    queries.GetQuestionAndSubmissions(id, function(err, question, submissions) {
-	if (err) {
-	    console.log(err);
-	} else {
+    queries.GetQuestionAndSubmissions(id, function(err, submissions) {
+    	if(err) {
+    		console.log(err);
+    	} else {
 	    console.log(submissions);
-	    for(var i = 0; i < submissions.length; i++) {
-		submissions[i].result = submissions[i].result && JSON.parse(submissions[i].result);
-	    }
-	    
-	    submissions.sort(function(a, b) {
-		if (a.result.time < b.result.time) return -1;
-		if (a.result.time > b.result.time) return 1;
-		return 0;
+    		for(var i = 0; i < submissions.length; i++) {
+	 			submissions[i].result = submissions[i].result && JSON.parse(submissions[i].result);
+	     	}
+	     	submissions.sort(function(a, b) {
+					if (a.result.time < b.result.time) return -1;
+					if (a.result.time > b.result.time) return 1;
+					return 0;
+			    });
+
+	    queries.GetQuestion(id, function(err, question) {
+		if(err) {
+		    console.log(err);
+		} else {
+		    response.render('post.jade', {user: request.cookies.user, question: question, submissions: submissions});
+		}
 	    });
-	    response.render('post.jade', {user : request.cookies.user, question: question, submissions: submissions, problem: id});
 	}
     });
 });
@@ -108,7 +113,7 @@ app.post('/submitQuestion', function(request, response) {
     	    console.log(err);
     	    response.render('layout.jade', {message: 'Something went wrong', user: request.cookies.user});
     	} else {
-    	    response.redirect('/problem/'+ request.cookies.user.userId);
+    	    response.redirect('/problem/'+ result.question_id);
 	}
     });
 });
@@ -131,7 +136,7 @@ app.get('/submit/:submission_id', function(request, response) {
 		console.log(stderr);
 		if(error) { console.log(error);}
 	});
-	response.render('layout.jade', {message: 'Code submitted! It will be benchmarked soon'});
+	response.render('layout.jade', {message: 'Code submitted! It will be benchmarked soon', user: request.cookies.user});
 });
 
 app.get('/index', function(request, response) {

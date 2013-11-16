@@ -68,7 +68,10 @@ var LoginUser = function(username, password, callback) {
 				if(err) {
 					callback(new Error('Error logging on: ' + err));
 				} else {
-					if(result.rows[0].password != password) {
+					if(result.rows[0] == undefined) {
+						callback(new Error('No such user exists!'));
+					}
+					else if(result.rows[0].password != password) {
 						callback(new Error('Invalid Password!'));
 					} else {
 						callback(null, result.rows[0]);
@@ -159,16 +162,20 @@ var SubmissionsForQuestion = function(questionid, callback) {
 }
 
 var GetQuestionAndSubmissions = function(questionid, callback) {
-    GetQuestion(questionid, function(err, question) {
-	if (err) { callback(err); }
-	else {
-	    SubmissionsForQuestion(questionid, function(err, submissions) {
-		if (err) { callback(err); }
-		else {
-		    callback(null, question, submissions);
-		}
-	    });
-	}
+    var client = GetClient();
+    client.connect(function(err) {
+    	if(err) {console.log(err);}
+    	else {
+    		var query = 'SELECT * FROM codebench.submission INNER JOIN codebench.user ON codebench.submission.submitted_user = codebench.user.user_id WHERE codebench.submission.question=' + questionid;
+    		client.query(query, function(err, result) {
+    			client.end();
+    			if(err) {
+    				callback(new Error('Error getting qs and subs: ' + err));
+    			} else {
+    				callback(null, result.rows);
+    			}
+    		});
+    	}
     });
 }
 
