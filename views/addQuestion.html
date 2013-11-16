@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <div class="container">
+    <h1>Upload a new Question.</h1>
+    
+    <!-- Question Form -->
+    <form class="form-horizontal" method="post" action="submitQuestion" novalidate>
+      <div class="modal-body">
+	
+        <!-- Message -->
+        <div class="control-group">
+          <label class="control-label" for="question">Question</label>
+          <div class="controls">
+            <textarea id="question" rows="5" cols="150" required></textarea>
+          </div>
+        </div>
+	
+        <!-- Input -->
+        <div class="control-group">
+          <label class="control-label" for="input">Input</label>
+          <div class="controls">
+            <input type="text" size="100" name="input" id="input" required>
+          </div>
+        </div>
+	
+        <!-- Output -->
+        <div class="control-group">
+          <label class="control-label" for="output">Output</label>
+          <div class="controls">
+            <input type="text" size="100" name="output" id="output" required>
+          </div>
+        </div>
+	
+        <div class="modal-footer">
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" >Submit <i class="icon-ok icon-white"></i></button>
+          </div>
+        </div>
+    </form>
+    
+    </div>
+    
+</html>
