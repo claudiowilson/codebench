@@ -1,10 +1,12 @@
 extend layout
-	body
-		if question
-			#{question.problem}
-		if submissions
+block content
+	if question
+		div.container
+			| #{question.problem}
+	if submissions
+		div.container
 			for submission in submissions
-						#{submission.message}
-						#{submission.code}
-		if user
-			#{user.username}
+				| #{submission.message}
+				| #{submission.code}
+	if user
+		include submit.html

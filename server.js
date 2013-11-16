@@ -72,12 +72,14 @@ app.post('/register', function(request, response) {
     });
 });
 
-app.get('/problems', function(request, response) {
-    var id = request.body.id;
-    queries.GetQuestion(id, client, function(err, question) {
-	queries.SubmissionsForQuestion(id, client, function(err, submissions) {
-	    response.render('post.jade', question, submissions);
-	});
+app.get('/problem/:id', function(request, response) {
+    var id = request.params.id;
+    queries.GetQuestionAndSubmissions(id, client, function(err, question, submissions) {
+	if (err) {
+	    console.log(err);
+	} else {
+	    response.render('post.jade', {question: question, submissions: submissions});
+	}
     });
 });
 
@@ -112,8 +114,8 @@ app.get('/submitSubmission', function(request, response) {
 });
 
 app.get('/index', function(request, response) {
-    queries.GetQuestions(client, function (err, query) {
-	response.render('index.jade', {user: request.cookies.user}, {questions: query});
+    queries.GetQuestions(client, function (err, results) {
+	response.render('index.jade', {user: request.cookies.user, questions: results});
     });
 });
 

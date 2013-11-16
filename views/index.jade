@@ -1,8 +1,7 @@
 extend layout
 block content
 	if questions
-		for question in questions			
-			h1(#{question.problem})
-			h2(#{original_user})
-			#{question.upvotes} 
-			#{question.downvotes}
+		for question in questions
+			| #{question.problem}
+			| #{original_user}
+			br

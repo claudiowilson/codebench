@@ -76,21 +76,21 @@ var LoginUser = function(username, password, client, callback) {
 var GetQuestion = function(id, client, callback) {
 	client.connect(function(err) {
 		if(err) { console.log(err); }
-		else {
-			var query = 'SELECT * FROM codebench.question WHERE question_id =' + id;
-			client.query(query, function(err, result) {
-				client.end();
-				if(err) {
-					callback(new Error('Error getting question: ' + err));
-				} else {
-					if(result.rows[0] == undefined) {
-						callback(new Error('Question does not exist!'));
-					} else {
-						callback(null, result.rows[0]);
-					}
-				}
-			});
-		}
+	    else {
+		var query = 'SELECT * FROM codebench.question WHERE question_id =' + id;
+		client.query(query, function(err, result) {
+		    client.end();
+		    if(err) {
+			callback(new Error('Error getting question: ' + err));
+		    } else {
+			if(result.rows[0] == undefined) {
+			    callback(new Error('Question does not exist!'));
+			} else {
+			    callback(null, result.rows[0]);
+			}
+		    }
+		});
+	    }
 	});
 }
 
@@ -98,7 +98,7 @@ var GetQuestions = function(client, callback) {
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 	else {
-		var query = 'SELECT * FROM codebench.question LIMIT 50;'
+		var query = 'SELECT * FROM codebench.question LIMIT 50'
 		client.query(query, function(err, result) {
 			client.end();
 			if(err) {callback(new Error('Error getting questions: '+err));} else { callback(null, result.rows);}
@@ -111,7 +111,7 @@ var QuestionsForUser = function(userid, client, callback) {
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 		else {
-			var query = 'SELECT * FROM codebench.question WHERE asked_user='+userid+';'
+		    var query = 'SELECT * FROM codebench.question WHERE asked_user='+userid;
 			client.query(query, function(err, result) {
 			client.end();
 			if(err) {callback(new Error('Error getting questions for user: '+err));} else {callback(null, result.rows);}
@@ -124,7 +124,7 @@ var SubmissionsForUser = function(userid, client, callback) {
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 		else {
-			var query = 'SELECT * FROM codebench.submission WHERE submitted_user='+userid+';'
+		    var query = 'SELECT * FROM codebench.submission WHERE submitted_user='+userid;
 			client.query(query, function(err, result) {
 				client.end();
 				if(err) {callback(new Error('Error getting questions for user: '+err));} else { callback(null, result.rows);}
@@ -134,16 +134,28 @@ var SubmissionsForUser = function(userid, client, callback) {
 }
 
 var SubmissionsForQuestion = function(questionid, client, callback) {
-	client.connect(function(err) {
+    client.connect(function(err) {
+	if(err) { console.log(err); }
+	else {
+	    var query = 'SELECT * FROM codebench.submission WHERE question='+questionid;
+	    client.query(query, function(err, result) {
+		client.end();
+		if(err) {callback(new Error('Error getting submissions for question: '+err));} else {callback(null, result.rows);}
+	    });
+	}
+    });
+}
+
+var GetQuestionAndSubmissions = function(questionid, client, callback) {
+    GetQuestion(questionid, client, function(err, question) {
+	if(err) { console.log(err); }
+	else {
+	    SubmissionsForQuestion(questionid, client, function(err, submissions) {
 		if(err) { console.log(err); }
-		else {
-			var query = 'SELECT * FROM codebench.submission WHERE question='+questionid+';'
-			client.query(query, function(err, result) {
-				client.end();
-				if(err) {callback(new Error('Error getting submissions for question: '+err));} else {callback(null, result.rows);}
-			});
-		}
-	});
+		else { callback(null, question, submissions); }
+	    });
+	}
+    });
 }
 
 exports.AddUser = AddUser;
@@ -155,3 +167,4 @@ exports.GetQuestions = GetQuestions;
 exports.QuestionsForUser = QuestionsForUser;
 exports.SubmissionsForUser = SubmissionsForUser;
 exports.SubmissionsForQuestion = SubmissionsForQuestion;
+exports.GetQuestionAndSubmissions = GetQuestionAndSubmissions;
