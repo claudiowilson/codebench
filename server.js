@@ -49,7 +49,10 @@ app.get('/logon', function(request, response) {
 	queries.LoginUser('test', 'test2', client, function(err, user) {
 		if(err) {console.log(err);}
 		else {
-			console.log(user);
+			expiry = new Date();
+			expiry = expiry.setMonth(expiry.getMonth() + 1);
+			console.log()
+			//response.cookie('user')
 		}
 	});
 });

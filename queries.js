@@ -56,7 +56,7 @@ var LoginUser = function(username, password, client, callback) {
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 		else {
-			var query = 'SELECT username, password FROM codebench.user WHERE username=' + "'" + username + "'";
+			var query = 'SELECT username, password, user_id FROM codebench.user WHERE username=' + "'" + username + "'";
 			client.query(query, function(err, result) {
 				if(err) {
 					callback(new Error('Error logging on: ' + err));
