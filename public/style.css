@@ -1,5 +1,13 @@
 body {
     padding-top: 100px;
-    background-color:rgb(61,83,178);
+     background-color:rgb(61,83,178);
     color:white;
+}
+
+#registerModal {
+    color:black;
+}
+
+#loginModal {
+    color:black;
 }
