@@ -70,7 +70,7 @@ app.post('/register', function(request, response) {
 	if(err) {
 	    console.log(err);
 	} else {
-	    response.render('index.jade');
+	    response.redirect('/index');
 	}
     });
 });
