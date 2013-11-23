@@ -5,7 +5,7 @@ CREATE TABLE codebench.user(
 	full_name text,
 	email text,
 	PRIMARY KEY (user_id),
-	CONSTRAINT username_unique UNIQUE("username");
+	CONSTRAINT username_unique UNIQUE("username")
 );
 
 CREATE TABLE codebench.question(

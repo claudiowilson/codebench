@@ -1,0 +1,44 @@
+// Register Modal
+#registerModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='registerModalLabel', aria-hidden='true')
+  .modal-dialog
+    .modal-content
+      .modal-header
+        button.close(type='button', data-dismiss='modal', aria-hidden='true')
+        h4#registerModalLabel.modal-title Register
+          
+      // Register Form 
+      .modal-body
+        form.form-horizontal(method='post', action='/register', novalidate='novalidate')
+        
+          // Email 
+          .control-group
+            label.control-label(for='username') Email address
+            .controls
+              input#email(type='email', name='username', required='required')
+              p.help-block Email address we can contact you with
+          .control-group
+            label.control-label(for='username2') Verify Email
+            .controls
+              input#emailAgain(type='email', data-validation-matches-match='email', name='emailAgain')
+              
+          // Password 
+          .control-group
+            label.control-label(for='password') Password
+            .controls
+              input#password(type='password', name='password', required='required')
+
+          // Legal 
+          .control-group
+            .controls
+              label.checkbox
+                input#terms-and-conditions(type='checkbox', name='terms-and-conditions', required='required', ata-validation-required-message='You must agree to the terms and conditions')
+                | I agree to the 
+                a(href='terms.html') terms and conditions
+
+      // Modal Body 
+      .modal-footer
+        .form-actions
+          button.btn.btn-default(type='button', data-dismiss='modal') Close
+          button.btn.btn-primary(type='submit')
+            | Submit
+            i.icon-ok.icon-white

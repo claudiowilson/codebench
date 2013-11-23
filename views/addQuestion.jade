@@ -1,4 +1,32 @@
 extend layout
 block content
-	body
-		include addQuestion.html
+  body
+    .container
+      h1 Describe your programming problem
+
+      .modal-body
+        form.form-horizontal(method='post', action='/submitQuestion', novalidate='novalidate')
+
+          // Message 
+          .control-group
+            label.control-label(for='question') Problem
+            .controls
+              textarea#question.form-control(name='problem', rows='5', cols='150', required='required')
+         
+          // Input 
+          .control-group
+            label.control-label(for='input') Inputs
+            .controls
+              input#input.form-control(type='text', size='100', name='input', required='required')
+        
+          // Output 
+          .control-group
+            label.control-label(for='output') Outputs
+            .controls
+              input#output.form-control(type='text', size='100', name='output', required='required')
+
+      .modal-footer
+        .form-actions
+          button.btn.btn-primary(type='submit')
+            | Submit
+            i.icon-ok.icon-white

@@ -1,0 +1,27 @@
+!!! 5
+html
+.container
+    h1 Post a new answer.
+    
+    // Submission Form 
+    form.form-horizontal(method='post', action='/submitSolution', novalidate='novalidate')
+        
+        // Message 
+        .control-group
+          label.control-label(for='response') Response
+          .controls
+            textarea#response(name='message', rows='5', cols='150', required='required')
+        
+        // Solution 
+        .control-group
+          label.control-label(for='file') Solution
+          .controls
+            textarea#response(name='solution', rows='5', cols='150', required='required')
+        
+        .modal-footer
+          .form-actions
+            button.btn.btn-primary(type='submit')
+              | Submit
+              i.icon-ok.icon-white
+        
+        input(type='hidden', name='problemId', value='#{problem}')

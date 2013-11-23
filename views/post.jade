@@ -8,6 +8,7 @@ block content
 			else
 				Nobody has submitted an answer.
 	hr
+
 	if submissions
 		div.container
 			for submission in submissions
@@ -33,18 +34,25 @@ block content
 					$('#solution').tabby()
 					}
 				);
+
 			h1 Ready to post your solution?
 			form.form-horizontal(method="post" action="/submitSolution" novalidate)
 				div.modal-body
-					div.control-group
+					
+          // Message
+          div.control-group
 						label.control-label( for="response") Response
 						.controls
 							textarea#response(class="form-control" name="message" rows="5" cols="150" required)
+
+          // Solution
 					div.control-group
 						label.control-label(for="solution") Solution
 						.controls
 							textarea#solution(class="form-control" name="solution" rows="30" cols="150" required)
 							input(type="hidden" name="problemId" value="#{question.question_id}")
+
+          // Footer
 					div.modal-footer
 						.form-actions
 							button(type="submit" class="btn btn-primary") Submit
