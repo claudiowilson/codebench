@@ -1,5 +1,5 @@
 CREATE TABLE codebench.user(
-	user_id oid NOT NULL,
+	user_id SERIAL NOT NULL,
 	username text NOT NULL,
 	password text NOT NULL,
 	full_name text,
@@ -9,7 +9,7 @@ CREATE TABLE codebench.user(
 );
 
 CREATE TABLE codebench.question(
-	question_id oid NOT NULL,
+	question_id SERIAL NOT NULL,
 	asked_user integer,
 	problem text NOT NULL,
 	input text,
@@ -21,7 +21,7 @@ CREATE TABLE codebench.question(
 );
 
 CREATE TABLE codebench.submission(
-	submission_id oid NOT NULL,
+	submission_id SERIAL NOT NULL,
 	submitted_user integer NOT NULL,
 	question integer NOT NULL,
 	code text,
