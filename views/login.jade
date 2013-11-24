@@ -6,26 +6,26 @@
         button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
         h4#loginModalLabel.modal-title Sign In
 
-      .modal-body
-        // Login Form 
-        form.form-horizontal(method='post', action='/logon', novalidate='novalidate')
+      // Login Form 
+      form.form-horizontal(method='post', action='/logon', novalidate='novalidate')
+        .modal-body
         
-          // Email 
+          // Username
           .control-group
-            label.control-label(for='username') Email address
+            label.control-label(for='username') Username
             .controls
-              input#email(type='email', name='username', required='required')
+              input#username.form-control(name='username', required='required')
               
           // Password 
           .control-group
             label.control-label(for='password') Password
             .controls
-              input#password(type='password', name='password', required='required')
+              input#password.form-control(type='password', name='password', required='required')
 
-      // Modal Body 
-      .modal-footer
-        .form-actions
-          button.btn.btn-default(type='button', data-dismiss='modal') Close
-          button.btn.btn-primary(type='submit')
-            | Login
-            i.icon-ok.icon-white
+        // Footer
+        .modal-footer
+          .form-actions
+            button.btn.btn-default(type='button', data-dismiss='modal') Close
+            button.btn.btn-primary(type='submit')
+              | Login
+              i.icon-ok.icon-white

@@ -3,7 +3,7 @@ CREATE TABLE codebench.user(
 	username text NOT NULL,
 	password text NOT NULL,
 	full_name text,
-	email text,
+	email text NOT NULL,
 	PRIMARY KEY (user_id),
 	CONSTRAINT username_unique UNIQUE("username")
 );

@@ -1,44 +1,65 @@
 // Register Modal
+script.
+  $(document).ready(
+    function() {
+      $('#solution').tabby();
+      $('input,select,textarea').jqBootstrapValidation();
+  });
+
 #registerModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='registerModalLabel', aria-hidden='true')
   .modal-dialog
     .modal-content
       .modal-header
-        button.close(type='button', data-dismiss='modal', aria-hidden='true')
+        button.close(type='button', data-dismiss='modal', aria-hidden='true') x
         h4#registerModalLabel.modal-title Register
+        h5 Welcome to CodeBench! Enter your information below to take part in our community.
           
       // Register Form 
-      .modal-body
-        form.form-horizontal(method='post', action='/register', novalidate='novalidate')
-        
-          // Email 
+      form.form-horizontal(method='post', action='/register' novalidate)
+        .modal-body
+          
+          // Name
           .control-group
-            label.control-label(for='username') Email address
+            label.control-label(for='full_name') Full Name
             .controls
-              input#email(type='email', name='username', required='required')
-              p.help-block Email address we can contact you with
+              input#fullname.form-control(name='full_name')
+
+          // Username
           .control-group
-            label.control-label(for='username2') Verify Email
+            label.control-label(for='username') * Username
             .controls
-              input#emailAgain(type='email', data-validation-matches-match='email', name='emailAgain')
-              
+              input#username.form-control(name='username', required='required')
+
           // Password 
           .control-group
-            label.control-label(for='password') Password
+            label.control-label(for='password') * Password
             .controls
-              input#password(type='password', name='password', required='required')
+              input#password.form-control(type='password', name='password', required='required')
+
+          // Email 
+          .control-group
+            label.control-label(for='email') * Email address
+            .controls
+              input#email.form-control(type='email', name='email', required='required')
+              p.help-block Email address we can contact you with.
+
+          .control-group
+            label.control-label(for='emailValidate') * Retype Email
+            .controls
+              input#emailValidate.form-control(type='email', name='emailValidate', required='required' data-validation-email-match='email' data-validation-email-message='Must match email address entered above.')
 
           // Legal 
           .control-group
             .controls
               label.checkbox
-                input#terms-and-conditions(type='checkbox', name='terms-and-conditions', required='required', ata-validation-required-message='You must agree to the terms and conditions')
+                input#terms-and-conditions(type='checkbox', name='terms-and-conditions', required='required', data-validation-required-message='You must agree to the terms and conditions')
                 | I agree to the 
-                a(href='terms.html') terms and conditions
+                a(href='terms.html') terms and conditions.
 
-      // Modal Body 
-      .modal-footer
-        .form-actions
-          button.btn.btn-default(type='button', data-dismiss='modal') Close
-          button.btn.btn-primary(type='submit')
-            | Submit
-            i.icon-ok.icon-white
+        // Footer
+        .modal-footer
+          .form-actions
+            button.btn.btn-default(type='button', data-dismiss='modal') Close
+            button.btn.btn-primary(type='submit')
+              | Submit
+              i.icon-ok.icon-white

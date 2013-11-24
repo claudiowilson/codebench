@@ -1,12 +1,12 @@
 var pg = require('pg');
 var settings = require('./settings');
 
-var AddUser = function(username, password, callback) {
+var AddUser = function(name, username, password, email, callback) {
 	var client = GetClient();
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 		else {
-			var query = 'INSERT INTO codebench.user (username, password) VALUES (' + "'" + username + "'" +", '" + password + "')";
+			var query = 'INSERT INTO codebench.user (username, password, full_name, email) VALUES (' + "'" + username + "', '" + password + "', '" + name + "', '" + email + "')";
             client.query(query, function(err, result) {
             	client.end();
                 if(err) {

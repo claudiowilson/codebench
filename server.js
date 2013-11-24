@@ -64,9 +64,12 @@ app.post('/logon', function(request, response) {
 });
 
 app.post('/register', function(request, response) {
+    var name     = request.body.full_name;
     var username = request.body.username;
     var password = request.body.password;
-    queries.AddUser(username, password, function(err, result) {
+    var email    = request.body.email;
+
+    queries.AddUser(name, username, password, email, function(err, result) {
 	if(err) {
 	    console.log(err);
 	} else {
