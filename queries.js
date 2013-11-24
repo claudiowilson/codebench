@@ -6,7 +6,7 @@ var AddUser = function(name, username, password, email, callback) {
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 		else {
-			var query = 'INSERT INTO codebench.user (username, password, full_name, email) VALUES (' + "'" + username + "', '" + password + "', '" + name + "', '" + email + "')";
+			var query = 'INSERT INTO codebench.user (username, password, full_name, email) VALUES (' + "'" + username + "', '" + password + "', '" + name + "', '" + email + "') RETURNING user_id";
             client.query(query, function(err, result) {
             	client.end();
                 if(err) {

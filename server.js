@@ -55,7 +55,7 @@ app.post('/logon', function(request, response) {
 			response.render('layout.jade', {message: err.message});
 		}
 		else {
-			expiry = new Date();
+		        expiry = new Date();
 			expiry.setMonth(expiry.getMonth() + 1);
 			response.cookie('user', {'userId' : user.user_id, 'username': user.username},{expires: expiry, httpOnly:true});
 			response.redirect('/index');
@@ -73,7 +73,11 @@ app.post('/register', function(request, response) {
 	if(err) {
 	    console.log(err);
 	} else {
-	    response.render('index.jade');
+	    expiry = new Date();
+	    expiry.setMonth(expiry.getMonth() + 1);
+	    response.cookie('user', {'userId' : result.user_id, 'username': username},{expires: expiry, httpOnly:true});
+	    response.redirect('/index');
+//	    response.redirect('/logon' + request.serialize);
 	}
     });
 });
