@@ -39,8 +39,13 @@ html(lang="en")
 							if user
 								li.active
 									a(href="/addproblem") Submit a Problem
-								li.active
-									a(href="/logoff") Log Off #{user.username}
+								li.active.dropdown
+									a#userDropdownButton(href="#", role="button", data-toggle="dropdown") #{user.username} 
+										span.caret
+									ul.dropdown-menu(role="menu" aria-labelledby="#userDropdownButton")
+										li(role="presentation")
+											a(role="menuitem" tabindex="-1" href="/logoff") Logoff
+										
 							else
 								li#registerButton
 									a(href="#registerModal" role="button" data-toggle="modal") Sign Up
