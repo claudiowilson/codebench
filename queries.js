@@ -62,7 +62,7 @@ var LoginUser = function(username, password, callback) {
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 		else {
-			var query = 'SELECT username, password, user_id FROM codebench.user WHERE username=' + "'" + username + "'";
+			var query = 'SELECT username, password, user_id, full_name FROM codebench.user WHERE username=' + "'" + username + "'";
 			client.query(query, function(err, result) {
 				client.end();
 				if(err) {
