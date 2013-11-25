@@ -77,7 +77,6 @@ app.post('/register', function(request, response) {
 	    expiry.setMonth(expiry.getMonth() + 1);
 	    response.cookie('user', {'userId' : result.user_id, 'username': username, 'fullName' : name},{expires: expiry, httpOnly:true});
 	    response.redirect('/index');
-//	    response.redirect('/logon' + request.serialize);
 	}
     });
 });

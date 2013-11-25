@@ -7,6 +7,8 @@ html(lang="en")
 		meta(name="description" content="Code Bench")
 		meta(name="keywords" content="")
 		meta(name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0")
+
+		link(rel='icon' type='image/x-icon' href='/favicon.ico')
 		link(href="http://netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet" type="text/css") <!-- Bootstrap -->
 		link(href="http://netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css" rel="stylesheet" type="text/css")<!-- FontAwesome --> 
 		link(href="http://fonts.googleapis.com/css?family=Roboto:400,300,100" rel="stylesheet" type="text/css") <!-- Google Font: Roboto -->
@@ -40,9 +42,16 @@ html(lang="en")
 								li.active
 									a(href="/addproblem") Submit a Problem
 								li.active.dropdown
-									a#userDropdownButton(href="#", role="button", data-toggle="dropdown") #{user.fullName} 
+									a#userDropdownButton(href="#", role="button", data-toggle="dropdown") 
+										if user.fullName && user.fullName.length > 0
+											| #{user.fullName} 
+										else
+											| #{user.username} 
 										span.caret
 									ul.dropdown-menu(role="menu" aria-labelledby="#userDropdownButton")
+										if user.fullName && user.fullName.length > 0
+											li.dropdown-header(role="presentation") #{user.username}
+											li.divider(role="presentation")
 										li(role="presentation")
 											a(role="menuitem" tabindex="-1" href="/logoff") Logoff
 										
