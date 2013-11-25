@@ -6,7 +6,7 @@ team yoloswag and their hackathon app
 
 Installing Postgres
 ===================
-1. Install postgres `sudo apt-get install postgresql` and [set it up.](https://help.ubuntu.com/10.04/serverguide/postgresql.html)
+1. Install postgres `sudo apt-get install postgresql postgresql-contrib` and [set it up.](https://help.ubuntu.com/10.04/serverguide/postgresql.html)
 
 2. Create and prepare the database from scratch.
 
