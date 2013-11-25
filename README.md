@@ -12,8 +12,10 @@ Installing Postgres
 
 * Create the db: `createdb codebench` 
 
-* Connect: `psql -U postgres codebench`. 
+* Connect: `psql -U postgres codebench` or `psql codebench`
 
 * Create tables: `\i <path to .sql file>` 
 
 * Edit `settings.js` to point to the db. `postgres://postgres:<pw>@<ip>:<port>/codebench`, default localhost:5432.
+
+* Install the pgcrypto extension by running the command `CREATE EXTENSION pgcrypto`

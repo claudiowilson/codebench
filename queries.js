@@ -6,7 +6,8 @@ var AddUser = function(name, username, password, email, callback) {
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 		else {
-			var query = 'INSERT INTO codebench.user (username, password, full_name, email) VALUES (' + "'" + username + "', '" + password + "', '" + name + "', '" + email + "') RETURNING user_id";
+			var query = 'INSERT INTO codebench.user (username, password, full_name, email) VALUES (' + "'" + username + "', crypt('" + password + "', gen_salt('bf')), '" + name + "', '" + email + "') RETURNING user_id";
+			console.log(query);
             client.query(query, function(err, result) {
             	client.end();
                 if(err) {
@@ -62,7 +63,7 @@ var LoginUser = function(username, password, callback) {
 	client.connect(function(err) {
 		if(err) { console.log(err); }
 		else {
-			var query = 'SELECT username, password, user_id, full_name FROM codebench.user WHERE username=' + "'" + username + "'";
+			var query = "SELECT username, password = crypt('" + password + "', password)" + ', user_id, full_name FROM codebench.user WHERE username=' + "'" + username + "'";
 			client.query(query, function(err, result) {
 				client.end();
 				if(err) {
@@ -70,9 +71,6 @@ var LoginUser = function(username, password, callback) {
 				} else {
 					if(result.rows[0] == undefined) {
 						callback(new Error('No such user exists!'));
-					}
-					else if(result.rows[0].password != password) {
-						callback(new Error('Invalid Password!'));
 					} else {
 						callback(null, result.rows[0]);
 					}
