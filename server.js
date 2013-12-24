@@ -69,9 +69,10 @@ app.post('/register', function(request, response) {
     var password = request.body.password;
     var email    = request.body.email;
 
-    queries.AddUser(name, username, password, email, function(err, result) {
+    queries.AddUserPrepared(name, username, password, email, function(err, result) {
 	if(err) {
 	    console.log(err);
+	    response.render('layout.jade', {message: err.message});
 	} else {
 	    expiry = new Date();
 	    expiry.setMonth(expiry.getMonth() + 1);

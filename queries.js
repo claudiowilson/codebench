@@ -1,24 +1,6 @@
 var pg = require('pg');
 var settings = require('./settings');
 
-var AddUser = function(name, username, password, email, callback) {
-	var client = GetClient();
-	client.connect(function(err) {
-		if(err) { console.log(err); }
-		else {
-			var query = 'INSERT INTO codebench.user (username, password, full_name, email) VALUES (' + "'" + username + "', crypt('" + password + "', gen_salt('bf')), '" + name + "', '" + email + "') RETURNING user_id";
-			console.log(query);
-            client.query(query, function(err, result) {
-            	client.end();
-                if(err) {
-                	callback(new Error('Error adding user: ' + err));
-                } else {
-                	callback(null, result);
-                }
-            });
-		}
-	})
-}
 
 var AddQuestion = function(row, callback) {
 	var client = GetClient();
@@ -177,11 +159,31 @@ var GetQuestionAndSubmissions = function(questionid, callback) {
     });
 }
 
-var GetClient = function() {
-	return new pg.Client(settings.connString);
+var AddQuestion = function(askedUserId, problem, input, output, callback) {
+	CallPreparedStatement( { name: 'add_question', text : "INSERT INTO codebench.question (asked_user, problem, input, output) VALUES ($1,$2,$3,$4) RETURNING question_id", values: [askedUserId, problem, input, output]}, callback);
 }
 
-exports.AddUser = AddUser;
+var AddUserPrepared = function(name, username, password, email, callback) {
+	CallPreparedStatement( {name: 'add_user', text: "INSERT INTO codebench.user (username, password, full_name, email) VALUES ($1, crypt($2, gen_salt('bf')), $3, $4) RETURNING user_id", values: [username, password, name, email] }, callback);
+}
+
+var CallPreparedStatement = function(statement, callback) {
+	pg.connect(settings.connString, function(err, client, done) {
+		client.query(statement, function(err, result) {
+			done();
+			if(err) {
+				callback(new Error(err));
+			} else {
+				callback(null, result);
+			}
+		});
+	});
+}
+
+
+
+
+exports.AddUser = AddUserPrepared;
 exports.AddQuestion = AddQuestion;
 exports.AddSubmission = AddSubmission;
 exports.LoginUser = LoginUser;
