@@ -20,19 +20,6 @@ app.configure(function() {
 	app.use(express.static(__dirname + '/public'));
 });
 
-// First, checks if it isn't implemented yet.
-if (!String.prototype.format) {
-  String.prototype.format = function() {
-    var args = arguments;
-    return this.replace(/{(\d+)}/g, function(match, number) { 
-      return typeof args[number] != 'undefined'
-        ? args[number]
-        : match
-      ;
-    });
-  };
-}
-
 app.get('/', function(request, response) {
 	response.redirect('/index');
 });
@@ -57,7 +44,7 @@ app.post('/logon', function(request, response) {
 		else {
 		    expiry = new Date();
 			expiry.setMonth(expiry.getMonth() + 1);
-			response.cookie('user', {'userId' : user.user_id, 'username': user.username, 'fullName' : user.full_name},{expires: expiry, httpOnly:true});
+			response.cookie('user', {'userId' : user.rows[0].user_id, 'username': user.rows[0].username, 'fullName' : user.rows[0].full_name},{expires: expiry, httpOnly:true});
 			response.redirect('/index');
 		}
 	});
@@ -69,7 +56,7 @@ app.post('/register', function(request, response) {
     var password = request.body.password;
     var email    = request.body.email;
 
-    queries.AddUserPrepared(name, username, password, email, function(err, result) {
+    queries.AddUser(name, username, password, email, function(err, result) {
 	if(err) {
 	    console.log(err);
 	    response.render('layout.jade', {message: err.message});
@@ -85,14 +72,14 @@ app.post('/register', function(request, response) {
 app.get('/problem/:id', function(request, response) {
     var id = request.params.id;
     queries.GetQuestionAndSubmissions(id, function(err, submissions) {
-    	if(err) {
-    		console.log(err);
+		if(err) {
+			console.log(err);
     	} else {
-	    console.log(submissions);
-    	    for(var i = 0; i < submissions.length; i++) {
-	 	submissions[i].result = submissions[i].result && JSON.parse(submissions[i].result);
-	    }
-	    submissions = submissions.filter(function(entry) {
+		console.log(submissions);
+		for(var i = 0; i < submissions.length; i++) {
+			submissions[i].result = submissions.rows[i].result && JSON.parse(submissions.rows[i].result);
+		}
+	    submissions = submissions.rows.filter(function(entry) {
 		if(entry.result) {
 		    if(entry.result.time) {
 			return true;
@@ -110,7 +97,7 @@ app.get('/problem/:id', function(request, response) {
 		if(err) {
 		    console.log(err);
 		} else {
-		    response.render('post.jade', {user: request.cookies.user, question: question, submissions: submissions});
+		    response.render('post.jade', {user: request.cookies.user, question: question.rows[0], submissions: submissions});
 		}
 	    });
 	}
@@ -127,25 +114,23 @@ app.get('/addproblem', function(request, response) {
 });
 
 app.post('/submitQuestion', function(request, response) {
-    queries.AddQuestion({askedUser: request.cookies.user.userId, problem: request.body.problem, inputs: request.body.input, outputs: request.body.output}, function(err, result) {
+    queries.AddQuestion(request.cookies.user.userId, request.body.problem, request.body.input, request.body.output, function(err, result) {
     	if(err) {
-    	    console.log(err);
     	    response.render('layout.jade', {message: 'Something went wrong', user: request.cookies.user});
     	} else {
-    	    response.redirect('/problem/'+ result.question_id);
+    	    response.redirect('/problem/'+ result.rows[0].question_id);
 	}
     });
 });
 
 app.post('/submitSolution', function(request, response) {
-    queries.AddSubmission({submittedUser: request.cookies.user.userId, question : request.body.problemId, message: request.body.message, code: request.body.solution }, function(err, result) {
+    queries.AddSubmission(request.cookies.user.userId, request.body.problemId, request.body.message, request.body.solution, function(err, result) {
 		if(err) {
-			console.log(err);
     		response.render('layout.jade', {message: 'Something went wrong'});
 		} else {
-    		response.redirect(/submit/ + result.submission_id);
+    		response.redirect(/submit/ + result.rows[0].submission_id);
 		}
-	})
+	});
 });
 
 app.get('/submit/:submission_id', function(request, response) {
@@ -160,7 +145,7 @@ app.get('/submit/:submission_id', function(request, response) {
 
 app.get('/index', function(request, response) {
     queries.GetQuestions( function (err, results) {
-	response.render('index.jade', {user: request.cookies.user, questions: results});
+		response.render('index.jade', {user: request.cookies.user, questions: results.rows});
     });
 });
 
