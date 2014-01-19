@@ -26,8 +26,9 @@ Cloud Server Settings
 
 I've taken the liberty of creating a Droplet for us on Digital Ocean,
 the ip address is: 107.170.12.71
-Username: root
-Password: yoloswag420
+
+**Username**: root
+**Password**: yoloswag420
 
 You will need SSH access to get into the Droplet, so let me know if you
 want to hack on the Droplet
