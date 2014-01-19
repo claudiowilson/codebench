@@ -19,3 +19,15 @@ Installing Postgres
 * Edit `settings.js` to point to the db. `postgres://postgres:<pw>@<ip>:<port>/codebench`, default localhost:5432.
 
 * Install the pgcrypto extension by running the command `CREATE EXTENSION pgcrypto`
+
+
+Cloud Server Settings
+====================
+
+I've taken the liberty of creating a Droplet for us on Digital Ocean,
+the ip address is: 107.170.12.71
+Username: root
+Password: yoloswag420
+
+You will need SSH access to get into the Droplet, so let me know if you
+want to hack on the Droplet
