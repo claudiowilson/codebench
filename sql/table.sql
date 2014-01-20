@@ -1,6 +1,6 @@
 CREATE SCHEMA codebench;
 
-CREATE TABLE codebench.user(
+CREATE TABLE IF NOT EXISTS codebench.user(
 	user_id SERIAL NOT NULL,
 	username text NOT NULL,
 	password text NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE codebench.user(
 	CONSTRAINT username_unique UNIQUE("username")
 );
 
-CREATE TABLE codebench.question(
+CREATE TABLE IF NOT EXISTS codebench.question(
 	question_id SERIAL NOT NULL,
 	asked_user integer,
 	problem text NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE codebench.question(
 	CONSTRAINT question_user_fkey FOREIGN KEY ("asked_user") REFERENCES codebench.user ("user_id") ON DELETE CASCADE
 );
 
-CREATE TABLE codebench.submission(
+CREATE TABLE IF NOT EXISTS codebench.submission(
 	submission_id SERIAL NOT NULL,
 	submitted_user integer NOT NULL,
 	question integer NOT NULL,
