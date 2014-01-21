@@ -1,0 +1,3 @@
+[submodule "JavaRunner"]
+	path = JavaRunner
+	url = git@github.com:claudiowilson/CodeBenchJavaRunner.git
