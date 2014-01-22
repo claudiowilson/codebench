@@ -32,3 +32,10 @@ the ip address is: 107.170.12.71
 
 You will need SSH access to get into the Droplet, so let me know if you
 want to hack on the Droplet
+
+
+#Versions of Stuff
+
+Postgresql - 9.3
+Node - 0.10.24
+
