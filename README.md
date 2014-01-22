@@ -37,5 +37,8 @@ want to hack on the Droplet
 #Versions of Stuff
 
 Postgresql - 9.3
+
 Node - 0.10.24
+
+RabbitMQ - 3.2.2
 

@@ -63,7 +63,7 @@ var AddUserPrepared = function(name, username, password, email, callback) {
 }
 
 var CallPreparedStatement = function(statement, callback) {
-	pg.connect(settings.connString, function(err, client, done) {
+	pg.connect(settings.PgConnString, function(err, client, done) {
 		client.query(statement, function(err, result) {
 			done();
 			if(err) {

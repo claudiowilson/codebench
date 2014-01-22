@@ -1,4 +1,7 @@
-var connString = "postgres://postgres:yoloswag@localhost:5432/codebench"
-
+var PgConnString = "postgres://postgres:yoloswag@localhost:5432/codebench";
+//var rabbitUrl = "amqp://guest:guest@localhost:5672";
+var Rabbit = { url : "amqp://guest:guest@localhost:5672",
+		exhangeName : "codebench" };
 //var connString = "postgres://claudiowilson:claudiowilson@localhost:5432/codebench"
-exports.connString = connString;
+exports.PgConnString = PgConnString;
+exports.Rabbit = Rabbit;
