@@ -4,7 +4,7 @@ var express = require('express'),
 	settings = require('./settings'),
 	queries = require('./queries'),
 	pg = require('pg'),
-	amqp = require('amqp');
+	sender = require('./messageSender');
 var app = express();
 
 app.configure(function() {
