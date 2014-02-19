@@ -13,7 +13,7 @@ block content
 		div.container
 			for submission in submissions
 				h2
-					| #{submission.result.time} seconds
+					| #{JSON.parse(submission.result).time} seconds
 				h5
 					| posted by #{submission.username}				
 

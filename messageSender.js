@@ -5,12 +5,16 @@
 		exchange = null;
 
 	connection.on('ready', function() {
-		exchange = connection.exchange(settings.Rabbit.exchangeName);
+		options = { autoDelete : false };
+		exchange = connection.exchange(settings.Rabbit.exchangeName,options, function() {
+			console.log("exchange declared!");
+		});
 	});
 
 	var SendMessage = function(message, routingKey, callback) {
 		if(exchange === null) return callback(new Error('exchange not defined!'));
-		exchange.publish(routingKey, { message : message });
+		exchange.publish(routingKey,  message);
+		callback(null, "Sent " + message);
 	};
 	
 	exports.SendMessage = SendMessage;

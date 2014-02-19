@@ -21,6 +21,7 @@ app.configure(function() {
 });
 
 app.get('/', function(request, response) {
+	console.log(request.cookies.user);
 	response.redirect('/index');
 });
 
@@ -72,32 +73,15 @@ app.post('/register', function(request, response) {
 app.get('/problem/:id', function(request, response) {
     var id = request.params.id;
     queries.GetQuestionAndSubmissions(id, function(err, submissions) {
-		if(err) {
-			console.log(err);
+	if(err) {
+		console.log(err);
     	} else {
 		console.log(submissions);
-		for(var i = 0; i < submissions.length; i++) {
-			submissions[i].result = submissions.rows[i].result && JSON.parse(submissions.rows[i].result);
-		}
-	    submissions = submissions.rows.filter(function(entry) {
-		if(entry.result) {
-		    if(entry.result.time) {
-			return true;
-		    }
-		}
-		return false;
-	    });
-	    submissions.sort(function(a, b) {
-		if (a.result.time < b.result.time) return -1;
-		if (a.result.time > b.result.time) return 1;
-		return 0;
-	    });
-	    
 	    queries.GetQuestion(id, function(err, question) {
 		if(err) {
 		    console.log(err);
 		} else {
-		    response.render('post.jade', {user: request.cookies.user, question: question.rows[0], submissions: submissions});
+		    response.render('post.jade', {user: request.cookies.user, question: question.rows[0], submissions: submissions.rows});
 		}
 	    });
 	}
@@ -128,18 +112,15 @@ app.post('/submitSolution', function(request, response) {
 		if(err) {
     		response.render('layout.jade', {message: 'Something went wrong'});
 		} else {
-    		response.redirect(/submit/ + result.rows[0].submission_id);
+			sender.SendMessage(result.rows[0].submission_id, "java", function(error, msg) {
+				console.log(msg);	
+			});
+    			response.redirect(/submit/ + result.rows[0].submission_id);
 		}
 	});
 });
 
 app.get('/submit/:submission_id', function(request, response) {
-	var exec = require('child_process').exec, child;
-	child = exec('/usr/bin/java -jar CodeBench.jar ' + request.params.submission_id, function(error, stdout, stderr) {
-		console.log(stdout);
-		console.log(stderr);
-		if(error) { console.log(error);}
-	});
 	response.render('layout.jade', {message: 'Code submitted! It will be benchmarked soon', user: request.cookies.user});
 });
 

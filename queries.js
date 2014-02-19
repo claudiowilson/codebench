@@ -41,7 +41,7 @@ var LoginUser = function(username, password, callback) {
 		if(err) {
 			callback(err);
 		} else {
-			if(result.rows[0] == 'undefined') {
+			if(result.rows.length == 0 || result.rows[0] == 'undefined') {
 				callback(new Error('No such user exists!'));
 			} else {
 				callback(null, result);
