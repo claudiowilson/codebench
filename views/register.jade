@@ -1,9 +1,27 @@
 // Register Modal
 script.
+  var numClasses = 2;
   $(document).ready(
     function() {
+      $(".nav.nav-tabs").on("click", "a", function(e){
+        e.preventDefault();
+        $(this).tab('show');
+      });
+      var addClassFunc = function() {
+          $(this).attr('id', numClasses);
+          $('#' + numClasses)[0].onclick = null;
+          $(this).removeAttr('id');
+          $(this).attr('data-toggle', 'tab');
+          $(this).attr('href', '#' + numClasses);
+          $(this).text(numClasses);
+          $('ul.nav.nav-tabs').append('<li><a id="addClass" href="#' + numClasses + '", data-toggle="tab">+</a></li>');
+          $('#content.tab-content').append('<div id="' + numClasses + '" class="tab-pane"><textarea name="' + numClasses + '" rows="30" cols="150" class="form-control"></textarea></div>');
+          $('#addClass')[0].onclick = addClassFunc;
+          numClasses++;
+      }
       $('#solution').tabby();
       $('input,select,textarea').jqBootstrapValidation();
+      $('#addClass')[0].onclick = addClassFunc;
   });
 
 #registerModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='registerModalLabel', aria-hidden='true')
