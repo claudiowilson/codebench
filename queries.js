@@ -27,8 +27,12 @@ var GetQuestion = function(id, callback) {
     })
 }
 
+var GetCodeForSubmission = function(submissionId, callback) {
+    CallPreparedStatement( { name: 'get_code_for_submission', text: "SELECT * FROM codebench.code WHERE codebench.code.submission_id=$1", values : [submissionId]}, callback);
+}
+
 var GetQuestionAndSubmissions = function(questionId, callback) {
-    CallPreparedStatement( { name: 'get_questions_and_submissions', text: "SELECT * FROM codebench.submission INNER JOIN codebench.user ON codebench.submission.submitted_user = codebench.user.user_id WHERE codebench.submission.question=$1", values : [questionId]}, callback);
+    CallPreparedStatement( { name: 'get_questions_and_submissions', text: "SELECT * FROM codebench.submission INNER JOIN codebench.user ON codebench.submission.submitted_user = codebench.user.user_id WHERE codebench.submission.question=$1 AND codebench.submission.time_taken IS NOT NULL", values : [questionId]}, callback);
 }
 
 var GetQuestions = function(callback) {
@@ -57,8 +61,8 @@ var LoginUser = function(username, password, callback) {
     })
 }
 
-var AddSubmission = function(submittedUserId, question, message, callback) {
-    CallPreparedStatement( { name: 'add_sumission', text : "INSERT INTO codebench.submission (submitted_user, question, message) VALUES($1, $2, $3) RETURNING submission_id", values: [submittedUserId, question, message] }, callback);
+var AddSubmission = function(submittedUserId, question, message, language,  callback) {
+    CallPreparedStatement( { name: 'add_sumission', text : "INSERT INTO codebench.submission (submitted_user, question, message, language) VALUES($1, $2, $3, $4) RETURNING submission_id", values: [submittedUserId, question, message, language] }, callback);
 }
 
 var AddCodeForSubmission = function(submissionId, code, className, callback) {
@@ -125,4 +129,5 @@ exports.GetSubmissionsForUser = GetSubmissionsForUser;
 exports.GetSubmissionsForQuestion = GetSubmissionsForQuestion;
 exports.GetQuestionAndSubmissions = GetQuestionAndSubmissions;
 exports.AddCodeForSubmission = AddCodeForSubmission;
+exports.GetCodeForSubmission = GetCodeForSubmission;
 exports.SetQuestionVote = SetQuestionVote;

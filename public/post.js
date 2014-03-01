@@ -14,6 +14,7 @@ $("#javaSelector")[0].onclick = function() {
   for(var i = 0; i < editors.length; i++){
     editors[i].getSession().setMode(new JavaMode());
     editors[i].getSession().setValue("import java.util.*;\n\npublic class Main {\n\tpublic static void main(String[] args){\n\t\t// code away!\n\t}\n}");
+    $("#language").val("java");
   }
 };
 
@@ -21,9 +22,12 @@ $("#pythonSelector")[0].onclick = function() {
   for(var i = 0; i < editors.length; i++){
     editors[i].getSession().setMode(new PythonMode());
     editors[i].getSession().setValue("");
+    $("#language").val("python");
   }
 };
 
 $("#submit")[0].onclick = function() {
-  document.getElementById("sol-0").value = editors[0].getValue();
+  for(var i = 0; i < editors.length; i++) {
+    document.getElementById("sol-" + i).value = editors[i].getValue();
+  }
 };

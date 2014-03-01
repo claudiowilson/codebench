@@ -26,7 +26,6 @@ app.get('/text', function(request, response) {
 });
 
 app.get('/', function(request, response) {
-    console.log(request.cookies.user);
     response.redirect('/index');
 });
 
@@ -81,6 +80,9 @@ app.get('/problem/:id', function(request, response) {
         if(err) {
             console.log(err);
         } else {
+            queries.GetCodeForSubmission(submissions.rows[0].submissionId, function(err, result) {
+                console.log(result);
+            });
             queries.GetQuestion(id, function(err, question) {
                 if(err) {
                     console.log(err);
@@ -113,16 +115,26 @@ app.post('/submitQuestion', function(request, response) {
 
 app.post('/submitSolution', function(request, response) {
     var submissionId = 0;
-    queries.AddSubmission(request.cookies.user.userId, request.body.problemId, request.body.message, function(err, result) {
+    queries.AddSubmission(request.cookies.user.userId, request.body.problemId, request.body.message, request.body.language, function(err, result) {
         if(err) {
             response.render('layout.jade', {message: 'Something went wrong'});
         } else {
             submissionId = result.rows[0].submission_id;
-            queries.AddCodeForSubmission(submissionId, request.body['1'], 'Main', function(err, result) {
-            	sender.SendMessage(submissionId, "java", function(err, result) {
-            		console.log(result);
-            	});
-            });
+            numClasses = request.body.numClasses;
+            for(var i = 0; i < numClasses; i++) {
+                console.log(request.body[i] + ' ' + request.body['file-' + i] + ' ' + numClasses)
+                if(i == numClasses - 1) {
+                    queries.AddCodeForSubmission(submissionId,request.body[i], request.body['file-' + i], function(err, result) {
+                        sender.SendMessage(submissionId, "java", function(err, result) {
+                            console.log(result);
+                        });
+                    });
+                } else {
+                    queries.AddCodeForSubmission(submissionId, request.body[i], request.body['file-' + i], function(err, result) {
+                        console.log('Sent to postgres' + result);
+                    });
+                }
+            }
             response.redirect(/submit/ + result.rows[0].submission_id);
         }
     })
@@ -146,5 +158,5 @@ app.get('/index', function(request, response) {
     });
 });
 
-app.listen(3000);
+app.listen(80);
 console.log('listening on port 80!');

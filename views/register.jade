@@ -13,12 +13,12 @@ script.
           $(this).removeAttr('id');
           $(this).attr('data-toggle', 'tab');
           $(this).attr('href', '#' + numClasses);
-          $(this).text(numClasses);
+          $(this)[0].innerHTML = '<input class="form-control" name="file-' + numClasses + '"></input>';
           $('ul.nav.nav-tabs').append('<li><a id="addClass" href="#' + numClasses + '", data-toggle="tab">+</a></li>');
           $('#content.tab-content').append('<div id="' + numClasses + '" class="tab-pane"><textarea id="sol-' + numClasses + '" name="' + numClasses + '"class="form-control solution"></textarea><div class="editor form-control" id="editor' + numClasses + '"></div></div>');
           addEditor();
           $('#addClass')[0].onclick = addClassFunc;
-          $('#classes').val(numClasses);
+          $('#classes').val(numClasses + 1);
           numClasses++;
       }
       $('#solution').tabby();
