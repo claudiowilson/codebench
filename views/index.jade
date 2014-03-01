@@ -14,14 +14,23 @@ block content
   #content.tab-content
     #1.tab-pane.active
       if questions
-        div.container
-          for question in questions
-            a(href="/problem/#{question.question_id}")
-              h3 #{question.problem}
+        .container
+          each question, i in questions
+            .row(class=(i % 2 == 0) ? 'light-row' : 'dark-row')
+              .col-md-1
+                h3.float-left #{question.upvotes - question.downvotes}
+                img.center(src="/thumbs-up.png" height='30' width='30')
+                img.center(src="/thumbs-down.png" height='30' width='30')
+              .col-md-11
+                h3: a(href="/problem/#{question.question_id}") #{question.problem}
+                h5 Submitted by #{question.username}
     #2.tab-pane
       if questions
-        div.container
-          for question in questions
-            h3 #{question.upvotes - question.downvotes}
-            a(href="/problem/#{question.question_id}")
-              h3 #{question.problem}
+        .container
+          each question, i in questions
+            .row(class=(i % 2 == 0) ? 'light-row' : 'dark-row')
+              .col-md-1
+                h3 #{question.upvotes - question.downvotes}
+              .col-md-11
+                h3: a(href="/problem/#{question.question_id}") #{question.problem}
+                h5 Submitted by #{question.username}
