@@ -20,7 +20,13 @@ h2 {
 h3 {
     margin-top:15px;
 }
-
+.poster {
+    text-shadow: 1px 1px 5px #141414;
+    margin-top:10px;
+    padding:5px;
+    background-color:#DB6837;
+    border-radius:5px;
+}
 .light-row {
     background: rgb(61,83,178);
 }
@@ -66,7 +72,10 @@ a:hover {
 .center {
     display:block;
     margin-left:auto;
-    margin-right:auto;    
+    margin-right:auto;
+}
+.greenify {
+    background: green;
 }
 #topnav {
     padding:0;

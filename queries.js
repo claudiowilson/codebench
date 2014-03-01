@@ -14,7 +14,7 @@ var GetQuestionsForUser = function(userId, callback) {
 }
 
 var GetQuestion = function(id, callback) {
-    CallPreparedStatement( {name: 'get_user', text: "SELECT * FROM codebench.question WHERE question_id=$1", values : [id] }, function(err, result) {
+    CallPreparedStatement( {name: 'get_user', text: "SELECT * FROM codebench.question INNER JOIN codebench.user ON codebench.question.asked_user = codebench.user.user_id WHERE question_id=$1", values : [id] }, function(err, result) {
         if(err) {
             callback(err);
         } else {
@@ -31,8 +31,12 @@ var GetQuestionAndSubmissions = function(questionId, callback) {
     CallPreparedStatement( { name: 'get_questions_and_submissions', text: "SELECT * FROM codebench.submission INNER JOIN codebench.user ON codebench.submission.submitted_user = codebench.user.user_id WHERE codebench.submission.question=$1", values : [questionId]}, callback);
 }
 
+//var GetQuestions = function(callback) {
+//    CallPreparedStatement("SELECT * FROM codebench.question INNER JOIN codebench.user ON codebench.question.asked_user = codebench.user.user_id LIMIT 50", callback);
+//}
+
 var GetQuestions = function(callback) {
-    CallPreparedStatement("SELECT * FROM codebench.question INNER JOIN codebench.user ON codebench.question.asked_user = codebench.user.user_id LIMIT 50", callback);
+    CallPreparedStatement("SELECT codebench.question.question_id, codebench.question.asked_user, codebench.question.title, codebench.question.upvotes, codebench.question.downvotes, codebench.user.username, codebench.qvote.vote FROM ((codebench.question INNER JOIN codebench.user ON codebench.question.asked_user = codebench.user.user_id) LEFT JOIN codebench.qvote ON codebench.question.asked_user = codebench.qvote.user_id) LIMIT 50", callback);
 }
 
 var GetQuestionVote = function(userId, questionId, callback) {
@@ -74,9 +78,13 @@ var AddUserPrepared = function(name, username, password, email, callback) {
 }
 
 var SetQuestionVote = function(userId, questionId, vote, callback) {
+    CallPreparedStatement( { name: 'set_qvote', text: "UPDATE codebench.qvote SET codebench.qvote.vote=$3 WHERE codebench.qvote.user_id=$1 AND codebench.qvote.question_id=$2; INSERT INTO codebench.qvote (user_id, question_id, vote) SELECT $1, $2, $3 WHERE NOT EXISTS (SELECT 1 FROM codebench.qvote WHERE codebench.qvote.user_id=$1 AND codebench.qvote.question_id=$2)", values: [userId, questionId, vote] }, callback);
+}
+/*
+var SetQuestionVote = function(userId, questionId, vote, callback) {
     CallPreparedStatement( { name: 'set_qvote', text: "INSERT INTO codebench.qvote (user_id, question_id, vote) VALUES ($1, $2, $3) ON DUPLICATE KEY UPDATE vote = VALUES(vote) RETURNING vote", values: [userId, questionId, vote] }, callback);
 }
-
+*/
 var SetSubmissionVote = function(userId, submissionId, vote, callback) {
     CallPreparedStatement( { name: 'set_svote', text: "INSERT INTO codebench.svote (user_id, submission_id, vote) VALUES ($1, $2, $3) ON DUPLICATE KEY UPDATE vote = VALUES(vote) RETURNING vote", values: [userId, submissionId, vote] }, callback);
 }
@@ -110,3 +118,4 @@ exports.GetSubmissionsForUser = GetSubmissionsForUser;
 exports.GetSubmissionsForQuestion = GetSubmissionsForQuestion;
 exports.GetQuestionAndSubmissions = GetQuestionAndSubmissions;
 exports.AddCodeForSubmission = AddCodeForSubmission;
+exports.SetQuestionVote = SetQuestionVote;
