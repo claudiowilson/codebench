@@ -27,6 +27,10 @@ var GetQuestion = function(id, callback) {
     })
 }
 
+var GetCodeForSubmission = function(submissionId, callback) {
+    CallPreparedStatement( { name: 'get_code_for_submission', text: "SELECT * FROM codebench.code WHERE codebench.code.submission_id=$1", values : [submissionId]}, callback);
+}
+
 var GetQuestionAndSubmissions = function(questionId, callback) {
     CallPreparedStatement( { name: 'get_questions_and_submissions', text: "SELECT * FROM codebench.submission INNER JOIN codebench.user ON codebench.submission.submitted_user = codebench.user.user_id WHERE codebench.submission.question=$1 AND codebench.submission.time_taken IS NOT NULL", values : [questionId]}, callback);
 }
@@ -118,4 +122,5 @@ exports.GetSubmissionsForUser = GetSubmissionsForUser;
 exports.GetSubmissionsForQuestion = GetSubmissionsForQuestion;
 exports.GetQuestionAndSubmissions = GetQuestionAndSubmissions;
 exports.AddCodeForSubmission = AddCodeForSubmission;
+exports.GetCodeForSubmission = GetCodeForSubmission;
 exports.SetQuestionVote = SetQuestionVote;

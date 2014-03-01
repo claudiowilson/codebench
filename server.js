@@ -80,6 +80,9 @@ app.get('/problem/:id', function(request, response) {
         if(err) {
             console.log(err);
         } else {
+            queries.GetCodeForSubmission(submissions.rows[0].submissionId, function(err, result) {
+                console.log(result);
+            });
             queries.GetQuestion(id, function(err, question) {
                 if(err) {
                     console.log(err);

@@ -19,6 +19,9 @@ block content
 
 				pre.prettyprint
 					code
+						if submission.error
+						| #{submission.error}
+					code
 						| #{submission.code}
 				| #{submission.message}
 				br
