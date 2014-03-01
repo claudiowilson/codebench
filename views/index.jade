@@ -1,8 +1,8 @@
 extend layout
 block hero
   .jumbotron#intro: header: .container
-    h1.text-shadowed Welcome to CodeBench.
-    h3 We benchmark your code so you know how you stack up against others.
+    h1(style='color:#DB6837').text-shadowed Welcome to CodeBench.
+    h3 We benchmark your code and stack your solutions against the best.
 
 block content
 
@@ -20,8 +20,8 @@ block content
             .row(class=(i % 2 == 0) ? 'light-row' : 'dark-row')
               .col-md-1
                 h3.float-left #{question.upvotes - question.downvotes}
-                img.center(src="/thumbs-up.png" height='30' width='30' style='margin-top:13px' onclick='toggleUp(this, #{question.question_id});')
-                img.center(src="/thumbs-down.png" height='30' width='30' style='margin:auto' onclick='toggleDown(this, #{question.question_id});')
+                img.center(src=(question.vote == 1 ? "/thumbs-up-good.png" : "/thumbs-up.png") height='30' width='30' style='margin-top:13px' onclick='toggleUp(this, #{question.question_id});')
+                img.center(src=(question.vote == -1 ? "/thumbs-down-bad.png" : "/thumbs-down.png") height='30' width='30' style='margin:auto' onclick='toggleDown(this, #{question.question_id});')
               .col-md-11
                 h3: a(href="/problem/#{question.question_id}") #{question.title}
                 h5 Submitted by #{question.username}
@@ -39,10 +39,11 @@ block content
           }
           $(thumb).attr('src', '/thumbs-up-good.png');
           $(votes).text(parseInt($(votes).text()) + 1);
-          
+          $.post("/SetQVote/" + qid + "/1");
         } else {
           $(thumb).attr('src', '/thumbs-up.png');
           $(votes).text(parseInt($(votes).text()) - 1);
+          $.post("/SetQVote/" + qid + "/0");
         }
       }
       var toggleDown = function(thumb, qid) {
@@ -57,9 +58,11 @@ block content
           }
           $(thumb).attr('src', '/thumbs-down-bad.png');
           $(votes).text(parseInt($(votes).text()) - 1);
+          $.post("/SetQVote/" + qid + "/0");
         } else {
           $(thumb).attr('src', '/thumbs-down.png');
           $(votes).text(parseInt($(votes).text()) + 1);
+          $.post("/SetQVote/" + qid + "/0");
         }
       }
 

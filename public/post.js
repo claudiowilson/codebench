@@ -13,7 +13,7 @@ function addEditor(){
 $("#javaSelector")[0].onclick = function() {
   for(var i = 0; i < editors.length; i++){
     editors[i].getSession().setMode(new JavaMode());
-    editors[i].getSession().setValue("public static void main(String[] args){\n  // code away!\n}");
+    editors[i].getSession().setValue("import java.util.*;\n\npublic class Main {\n\tpublic static void main(String[] args){\n\t\t// code away!\n\t}\n}");
   }
 };
 

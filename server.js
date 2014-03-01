@@ -128,8 +128,9 @@ app.post('/submitSolution', function(request, response) {
     })
 });
 
-app.post('/setQVote', function(request, response) {
-    queries.SetQuestionVote(request.cookies.user.userId, request.body.problemId, request.body.vote, function(err, result) {
+app.post('/setQVote/:problemId/:vote', function(request, response) {
+    queries.SetQuestionVote(request.cookies.user.userId, request.params.problemId, request.params.vote, function(err, result) {
+        
     });
 });
 
@@ -139,6 +140,7 @@ app.get('/submit/:submission_id', function(request, response) {
 
 app.get('/index', function(request, response) {
     queries.GetQuestions( function (err, results) {
+        console.log(results.rows);
         response.render('index.jade', {user: request.cookies.user, questions: results.rows});
     });
 });
