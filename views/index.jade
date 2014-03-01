@@ -22,7 +22,7 @@ block content
                 img.center(src="/thumbs-up.png" height='30' width='30')
                 img.center(src="/thumbs-down.png" height='30' width='30')
               .col-md-11
-                h3: a(href="/problem/#{question.question_id}") #{question.problem}
+                h3: a(href="/problem/#{question.question_id}") #{question.title}
                 h5 Submitted by #{question.username}
     #2.tab-pane
       if questions
@@ -32,5 +32,5 @@ block content
               .col-md-1
                 h3 #{question.upvotes - question.downvotes}
               .col-md-11
-                h3: a(href="/problem/#{question.question_id}") #{question.problem}
+                h3: a(href="/problem/#{question.question_id}") #{question.title}
                 h5 Submitted by #{question.username}

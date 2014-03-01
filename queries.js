@@ -109,3 +109,4 @@ exports.GetQuestionsForUser = GetQuestionsForUser;
 exports.GetSubmissionsForUser = GetSubmissionsForUser;
 exports.GetSubmissionsForQuestion = GetSubmissionsForQuestion;
 exports.GetQuestionAndSubmissions = GetQuestionAndSubmissions;
+exports.AddCodeForSubmission = AddCodeForSubmission;

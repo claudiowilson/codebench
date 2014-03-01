@@ -3,8 +3,8 @@ stylus = require('stylus'),
 async = require('async'),
 settings = require('./settings'),
 queries = require('./queries'),
-pg = require('pg');
-//sender = require('./messageSender');
+pg = require('pg'),
+sender = require('./messageSender');
 var app = express();
 
 app.configure(function() {
@@ -118,9 +118,11 @@ app.post('/submitSolution', function(request, response) {
             response.render('layout.jade', {message: 'Something went wrong'});
         } else {
             submissionId = result.rows[0].submission_id;
-            // for(int i = 1; i <= request.body.numClasses; i++) {
-            //      queries.AddCodeForSubmission(submissionId, request.body[i], )
-            // }
+            queries.AddCodeForSubmission(submissionId, request.body['1'], 'Main', function(err, result) {
+            	sender.SendMessage(submissionId, "java", function(err, result) {
+            		console.log(result);
+            	});
+            });
             response.redirect(/submit/ + result.rows[0].submission_id);
         }
     })
@@ -128,7 +130,6 @@ app.post('/submitSolution', function(request, response) {
 
 app.post('/setQVote', function(request, response) {
     queries.SetQuestionVote(request.cookies.user.userId, request.body.problemId, request.body.vote, function(err, result) {
-
     });
 });
 
