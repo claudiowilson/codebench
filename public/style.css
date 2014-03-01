@@ -66,7 +66,10 @@ a:hover {
 .center {
     display:block;
     margin-left:auto;
-    margin-right:auto;    
+    margin-right:auto;
+}
+.greenify {
+    background: green;
 }
 #topnav {
     padding:0;
