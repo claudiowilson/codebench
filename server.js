@@ -120,6 +120,12 @@ app.post('/submitSolution', function(request, response) {
 	});
 });
 
+app.post('/setQVote', function(request, response) {
+    queries.SetQuestionVote(request.cookies.user.userId, request.body.problemId, request.body.vote, function(err, result) {
+        
+    }
+}
+
 app.get('/submit/:submission_id', function(request, response) {
 	response.render('layout.jade', {message: 'Code submitted! It will be benchmarked soon', user: request.cookies.user});
 });

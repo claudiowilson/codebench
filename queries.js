@@ -35,6 +35,14 @@ var GetQuestions = function(callback) {
 	CallPreparedStatement("SELECT * FROM codebench.question LIMIT 50", callback);
 }
 
+var GetQuestionVote = function(userId, questionId, callback) {
+    CallPreparedState("SELECT 1 FROM codebench.qvote WHERE codebench.qvote.user_id=$1 AND codebench.qvote.question_id=$2", callback);
+}
+
+var GetSubmissionVote = function(userId, submissionId, callback) {
+    CallPreparedState("SELECT 1 FROM codebench.svote WHERE codebench.svote.user_id=$1 AND codebench.svote.submission_id=$2", callback);
+}
+
 var LoginUser = function(username, password, callback) {
 	CallPreparedStatement( {name: 'login_user', text: "SELECT username, password = crypt($1, password), user_id, full_name FROM codebench.user WHERE username=$2", values : [password, username] }, function(err, result) {
 		if(err) {
@@ -63,6 +71,14 @@ var AddQuestion = function(askedUserId, problem, input, output, callback) {
 
 var AddUserPrepared = function(name, username, password, email, callback) {
 	CallPreparedStatement( { name: 'add_user', text: "INSERT INTO codebench.user (username, password, full_name, email) VALUES ($1, crypt($2, gen_salt('bf')), $3, $4) RETURNING user_id", values: [username, password, name, email] }, callback);
+}
+
+var SetQuestionVote = function(userId, questionId, vote, callback) {
+    CallPreparedStatement( { name: 'set_qvote', text: "INSERT INTO codebench.qvote (user_id, question_id, vote) VALUES ($1, $2, $3) ON DUPLICATE KEY UPDATE vote = VALUES(vote) RETURNING vote", values: [userId, questionId, vote] }, callback);
+}
+
+var SetSubmissionVote = function(userId, submissionId, vote, callback) {
+    CallPreparedStatement( { name: 'set_svote', text: "INSERT INTO codebench.svote (user_id, submission_id, vote) VALUES ($1, $2, $3) ON DUPLICATE KEY UPDATE vote = VALUES(vote) RETURNING vote", values: [userId, submissionId, vote] }, callback);
 }
 
 var CallPreparedStatement = function(statement, callback) {

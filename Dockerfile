@@ -27,4 +27,4 @@ RUN apt-get -y update --fix-missing
 ADD . /src
 
 # Define default command.
-CMD ["java -jar /src/JavaRunner/out/artifacts/CodeBenchJavaRunner_jar/CodeBenchJavaRunner.jar"]
+CMD java -jar /src/JavaRunner/out/artifacts/CodeBenchJavaRunner_jar/CodeBenchJavaRunner.jar
