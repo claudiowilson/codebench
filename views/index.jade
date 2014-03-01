@@ -1,11 +1,26 @@
 extend layout
+block hero
+  .jumbotron#intro: header: .container
+    h1.text-shadowed Welcome to CodeBench.
+    h3 We benchmark your code so you know how you stack up against others.
+
 block content
-	h1
-		| Put your code to the test.
-	if questions
-		hr
-		div.container
-			for question in questions
-				a(href="/problem/#{question.question_id}")
-					h2
-						| #{question.problem}
+  h2 Put your code to the test.
+  br
+  ul.nav.nav-tabs
+    li.active: a(href='#1', data-toggle='tab') Top Questions
+    li: a(href='#2', data-toggle='tab') Newest 
+  
+  #content.tab-content
+    #1.tab-pane.active
+      if questions
+        div.container
+          for question in questions
+            a(href="/problem/#{question.question_id}")
+              h3 #{question.problem}
+    #2.tab-pane
+      if questions
+        div.container
+          for question in questions
+            a(href="/problem/#{question.question_id}")
+              h3 #{question.problem}

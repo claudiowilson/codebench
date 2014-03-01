@@ -1,72 +1,73 @@
 !!! 5
 html(lang="en")
-	head
-		title CodeBench
-		meta(charset="utf-8")
-		meta(name="author" content="Kevin Yeh, Claudio Wilson, Tyler Yates")
-		meta(name="description" content="Code Bench")
-		meta(name="keywords" content="")
-		meta(name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0")
+  head
+    title CodeBench
+    meta(charset="utf-8")
+    meta(name="author" content="Kevin Yeh, Claudio Wilson, Tyler Yates")
+    meta(name="description" content="Code Bench")
+    meta(name="keywords" content="")
+    meta(name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0")
 
-		link(rel='icon' type='image/x-icon' href='/favicon.ico')
-		link(href="http://netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet" type="text/css") <!-- Bootstrap -->
-		link(href="http://netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css" rel="stylesheet" type="text/css")<!-- FontAwesome --> 
-		link(href="http://fonts.googleapis.com/css?family=Roboto:400,300,100" rel="stylesheet" type="text/css") <!-- Google Font: Roboto -->
-		
-		link(href="/style.css" rel="stylesheet" type="text/css") <!-- Custom -->
+    link(rel='icon' type='image/x-icon' href='/favicon.ico')
+    link(href="http://netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet" type="text/css") <!-- Bootstrap -->
+    link(href="http://netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css" rel="stylesheet" type="text/css")<!-- FontAwesome --> 
+    link(href="http://fonts.googleapis.com/css?family=Roboto:400,300,100" rel="stylesheet" type="text/css") <!-- Google Font: Roboto -->
+    
+    link(href="/style.css" rel="stylesheet" type="text/css") <!-- Custom -->
 
-		script(src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript")
-		script(src="http://netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js" type="text/javascript")
-		script(src="http://cdn.jsdelivr.net/jquery.scrollto/1.4.6/jquery.scrollTo.min.js" type="text/javascript")
-		script(src="http://cdn.jsdelivr.net/jquery.localscroll/1.2.8b/jquery.localScroll.min.js" type="text/javascript")
-		script(src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js" type="text/javascript")
-		script(src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap-tab.js" type="text/javascript")
-		script(src="/jqBootstrapValidation.js")
-		script(src="/jquery.textarea.min.js")
+    script(src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript")
+    script(src="http://netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js" type="text/javascript")
+    script(src="http://cdn.jsdelivr.net/jquery.scrollto/1.4.6/jquery.scrollTo.min.js" type="text/javascript")
+    script(src="http://cdn.jsdelivr.net/jquery.localscroll/1.2.8b/jquery.localScroll.min.js" type="text/javascript")
+    script(src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js" type="text/javascript")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap-tab.js" type="text/javascript")
+    script(src="/jqBootstrapValidation.js")
+    script(src="/jquery.textarea.min.js")
 
-		nav#topnav(class="navbar navbar-default navbar-fixed-top" role="navigation")
-			.container
-				.span12
-					.navbar-header
-						button(type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse")
-							span.sr-only Toggle Navigation
-							span.icon-bar
-							span.icon-bar
-							span.icon-bar
-						a.navbar-brand(href="/index")
-							img(src="/logo.png" style="height: 40px")
-					div(class="collapse navbar-collapse navbar-ex1-collapse")
-						ul(class="nav navbar-nav navbar-right" id="navbar-items")
-							li.active
-								a(href="/index") Home
-							if user
-								li.active
-									a(href="/addproblem") Submit a Problem
-								li.active.dropdown
-									a#userDropdownButton(href="#", role="button", data-toggle="dropdown") 
-										if user.fullName && user.fullName.length > 0
-											| #{user.fullName} 
-										else
-											| #{user.username} 
-										span.caret
-									ul.dropdown-menu(role="menu" aria-labelledby="#userDropdownButton")
-										if user.fullName && user.fullName.length > 0
-											li.dropdown-header(role="presentation") #{user.username}
-											li.divider(role="presentation")
-										li(role="presentation")
-											a(role="menuitem" tabindex="-1" href="/logoff") Logoff
-										
-							else
-								li#registerButton
-									a(href="#registerModal" role="button" data-toggle="modal") Sign Up
-								li#loginButton
-									a(href="#loginModal" role="button" data-toggle="modal") Sign In
-		include login.jade
-		include register.jade
+    nav#topnav(class="navbar navbar-default navbar-fixed-top" role="navigation")
+      .container
+        .span12
+          .navbar-header
+            button(type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse")
+              span.sr-only Toggle Navigation
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.navbar-brand(href="/index")
+              img(src="/logo.png" style="height: 40px")
+          div(class="collapse navbar-collapse navbar-ex1-collapse")
+            ul(class="nav navbar-nav navbar-right" id="navbar-items")
+              li.active
+                a(href="/index") Home
+              if user
+                li.active
+                  a(href="/addproblem") Submit a Problem
+                li.active.dropdown
+                  a#userDropdownButton(href="#", role="button", data-toggle="dropdown") 
+                    if user.fullName && user.fullName.length > 0
+                      | #{user.fullName} 
+                    else
+                      | #{user.username} 
+                    span.caret
+                  ul.dropdown-menu(role="menu" aria-labelledby="#userDropdownButton")
+                    if user.fullName && user.fullName.length > 0
+                      li.dropdown-header(role="presentation") #{user.username}
+                      li.divider(role="presentation")
+                    li(role="presentation")
+                      a(role="menuitem" tabindex="-1" href="/logoff") Logoff
+                    
+              else
+                li#registerButton
+                  a(href="#registerModal" role="button" data-toggle="modal") Sign Up
+                li#loginButton
+                  a(href="#loginModal" role="button" data-toggle="modal") Sign In
+    include login.jade
+    include register.jade
 
-	body
-		header
-		.container
-			.main-content
-				block content
-					h2 !{message}
+  body
+    block hero
+    header
+    .container
+      .main-content
+        block content
+          h2 !{message}
