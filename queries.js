@@ -2,7 +2,7 @@ var pg = require('pg');
 var settings = require('./settings');
 
 var GetSubmissionsForQuestion = function(questionId, callback) {
-    CallPreparedStatement({name: 'get_submissions_for_question', text: "SELECT * FROM codebench.submission WHERE question=$1 AND time_taken IS NOT NULL", values: [questionId]}, callback);
+    CallPreparedStatement({name: 'get_submissions_for_question', text: "SELECT * FROM codebench.submission WHERE question=$1", values: [questionId]}, callback);
 }
 
 var GetSubmissionsForUser = function(userId, callback) {
@@ -28,7 +28,7 @@ var GetQuestion = function(id, callback) {
 }
 
 var GetQuestionAndSubmissions = function(questionId, callback) {
-    CallPreparedStatement( { name: 'get_questions_and_submissions', text: "SELECT * FROM codebench.submission INNER JOIN codebench.user ON codebench.submission.submitted_user = codebench.user.user_id WHERE codebench.submission.question=$1", values : [questionId]}, callback);
+    CallPreparedStatement( { name: 'get_questions_and_submissions', text: "SELECT * FROM codebench.submission INNER JOIN codebench.user ON codebench.submission.submitted_user = codebench.user.user_id WHERE codebench.submission.question=$1 AND codebench.submission.time_taken IS NOT NULL", values : [questionId]}, callback);
 }
 
 //var GetQuestions = function(callback) {
