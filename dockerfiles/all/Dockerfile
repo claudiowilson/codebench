@@ -1,7 +1,3 @@
-#
-# Java Dockerfile
-#
-
 # Pull base image.
 FROM ubuntu:12.10
 MAINTAINER      Kevin Yeh "kevinyeah@utexas.edu"
@@ -19,6 +15,14 @@ RUN apt-get update
 RUN echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
 RUN echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections
 RUN apt-get install -y oracle-java7-installer
+
+# Install Python
+RUN apt-get install -y -q python-software-properties python python-setuptools python-virtualenv python-dev python-distribute python-pip
+RUN pip --no-input --exists-action=w install --upgrade pip
+
+# LIBS
+RUN apt-get install -y -q libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms1-dev libwebp-dev libtiff-dev
+RUN apt-get -y update --fix-missing
 
 ADD . /src
 
