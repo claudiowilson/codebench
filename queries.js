@@ -73,21 +73,21 @@ var AddUserPrepared = function(name, username, password, email, callback) {
     CallPreparedStatement( { name: 'add_user', text: "INSERT INTO codebench.user (username, password, full_name, email) VALUES ($1, crypt($2, gen_salt('bf')), $3, $4) RETURNING user_id", values: [username, password, name, email] }, callback);
 }
 
-var SetQuestionVote = function(userId, questionId, vote, callback) {
+var SetQuestionVote = function(userId, questionId, prevVote, vote, callback) {
+    if (!prevVote) prevVote = 0;
+//    if (!vote) vote = 0;
 
     // Update qvote if exists
-    CallPreparedStatement( { name: 'set_qvote', text: "UPDATE codebench.qvote SET codebench.qvote.vote = $3 WHERE codebench.qvote.user_id = $1 AND codebench.qvote.question_id = $2 RETURNING codebench.qvote.vote", values: [userId, questionId, vote] }, function(err, result) {
+    CallPreparedStatement( { name: 'set_qvote', text: "UPDATE codebench.qvote SET vote = $3 WHERE codebench.qvote.user_id = $1 AND codebench.qvote.question_id = $2", values: [userId, questionId, vote] }, function(err, result) {
 
         // Insert qvote if failed to update
         CallPreparedStatement( { name: 'add_qvote', text: "INSERT INTO codebench.qvote (user_id, question_id, vote) SELECT $1, $2, $3 WHERE NOT EXISTS (SELECT 1 FROM codebench.qvote WHERE codebench.qvote.user_id=$1 AND codebench.qvote.question_id=$2)", values: [userId, questionId, vote]}, function(err, result) {
 
-            // Need to get the user's previous vote to update upvotes/downvotes accordingly.
-            
             // Update question count
             if (vote == -1) {
-                CallPreparedStatement( { name: 'update_question', text: "UPDATE codebench.question SET codebench.question.downvotes = $2, codebench.question.upvotes = 0 WHERE codebench.question.question_id = $1", values: [questionId, vote] }, callback);
+                CallPreparedStatement( { name: 'update_question', text: "UPDATE codebench.question SET downvotes=downvotes+$1, upvotes=upvotes-$3 WHERE codebench.question.question_id = $2", values: [vote, questionId, prevVote] }, callback);
             } else if (vote == 1) {
-                CallPreparedStatement( { name: 'update_question', text: "UPDATE codebench.question SET codebench.question.upvotes = $2, codebench.question.downvotes = 0 WHERE codebench.question.question_id = $1", values: [questionId, vote] }, callback);
+                CallPreparedStatement( { name: 'update_question', text: "UPDATE codebench.question SET upvotes=upvotes+$1, downvotes=downvotes+$3 WHERE codebench.question.question_id = $2", values: [vote, questionId, prevVote] }, callback);
             }
         });
     });

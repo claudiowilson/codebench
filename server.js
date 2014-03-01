@@ -128,8 +128,9 @@ app.post('/submitSolution', function(request, response) {
     })
 });
 
-app.post('/setQVote/:problemId/:vote', function(request, response) {
-    queries.SetQuestionVote(request.cookies.user.userId, request.params.problemId, request.params.vote, function(err, result) {
+app.post('/setQVote/:problemId/:prevVote/:vote', function(request, response) {
+    console.log(request.params.vote);
+    queries.SetQuestionVote(request.cookies.user.userId, request.params.problemId, request.params.prevVote, request.params.vote, function(err, result) {
         
     });
 });
