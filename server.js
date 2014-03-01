@@ -118,11 +118,23 @@ app.post('/submitSolution', function(request, response) {
             response.render('layout.jade', {message: 'Something went wrong'});
         } else {
             submissionId = result.rows[0].submission_id;
-            queries.AddCodeForSubmission(submissionId, request.body['1'], 'Main', function(err, result) {
-            	sender.SendMessage(submissionId, "java", function(err, result) {
-            		console.log(result);
-            	});
-            });
+            numClasses = request.body.numClasses;
+            classNames = request.body.classNames.split('|');
+            console.log(numClasses + ' ' + classNames[0] + ' ' + request.body.language);
+            if(classNames.length < numClasses) return;
+            for(var i = 0; i < NumClasses; i++) {
+                if(i == NumClasses - 1) {
+                    queries.AddCodeForSubmission(submissionId,request.body[i], classNames[i], function(err, result) {
+                        sender.SendMessage(submissionId, "java", function(err, result) {
+                            console.log(result);
+                        });
+                    });
+                } else {
+                    queries.AddCodeForSubmission(submissionId, request.body[i], classNames[i], function(err, result) {
+
+                    });
+                }
+            }
             response.redirect(/submit/ + result.rows[0].submission_id);
         }
     })

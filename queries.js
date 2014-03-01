@@ -2,7 +2,7 @@ var pg = require('pg');
 var settings = require('./settings');
 
 var GetSubmissionsForQuestion = function(questionId, callback) {
-    CallPreparedStatement({name: 'get_submissions_for_question', text: "SELECT * FROM codebench.submission WHERE question=$1", values: [questionId]}, callback);
+    CallPreparedStatement({name: 'get_submissions_for_question', text: "SELECT * FROM codebench.submission WHERE question=$1 AND time_taken IS NOT NULL", values: [questionId]}, callback);
 }
 
 var GetSubmissionsForUser = function(userId, callback) {
@@ -61,8 +61,8 @@ var LoginUser = function(username, password, callback) {
     })
 }
 
-var AddSubmission = function(submittedUserId, question, message, callback) {
-    CallPreparedStatement( { name: 'add_sumission', text : "INSERT INTO codebench.submission (submitted_user, question, message) VALUES($1, $2, $3) RETURNING submission_id", values: [submittedUserId, question, message] }, callback);
+var AddSubmission = function(submittedUserId, question, message, language,  callback) {
+    CallPreparedStatement( { name: 'add_sumission', text : "INSERT INTO codebench.submission (submitted_user, question, message, language) VALUES($1, $2, $3, $4) RETURNING submission_id", values: [submittedUserId, question, message, language] }, callback);
 }
 
 var AddCodeForSubmission = function(submissionId, code, className, callback) {
