@@ -79,3 +79,7 @@ a:hover {
 #solution {
     display: none;
 }
+
+.inout {
+    max-width: 100%;
+}
