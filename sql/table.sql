@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS codebench.submission(
 	time_taken interval,
 	message text,
 	errors text,
+	language text,
 	PRIMARY KEY (submission_id),
 	CONSTRAINT submission_user_fkey FOREIGN KEY ("submitted_user") REFERENCES codebench.user ("user_id") ON DELETE CASCADE,
 	CONSTRAINT submission_question_fkey FOREIGN KEY ("question") REFERENCES codebench.question("question_id") ON DELETE CASCADE
