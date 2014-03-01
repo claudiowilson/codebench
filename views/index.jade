@@ -5,7 +5,7 @@ block hero
     h3 We benchmark your code so you know how you stack up against others.
 
 block content
-  h2 Put your code to the test.
+  h2 > Put your code to the test.
   br
   ul.nav.nav-tabs
     li.active: a(href='#1', data-toggle='tab') Top Questions
@@ -22,5 +22,6 @@ block content
       if questions
         div.container
           for question in questions
+            h3 #{question.upvotes - question.downvotes}
             a(href="/problem/#{question.question_id}")
               h3 #{question.problem}

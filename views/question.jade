@@ -1,5 +1,8 @@
 h2 #{question.problem}
-h4 Test Inputs
-pre #{question.input}
-h4 Expected Outputs
-pre #{question.output}
+div.row
+  div.col-md-6
+    h4 Test Inputs
+    textarea.form-control.inout(readonly) #{question.input}
+  div.col-md-6
+    h4 Expected Outputs
+    textarea.form-control.inout(readonly) #{question.output}
