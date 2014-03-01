@@ -108,7 +108,7 @@ app.post('/submitQuestion', function(request, response) {
 });
 
 app.post('/submitSolution', function(request, response) {
-    queries.AddSubmission(request.cookies.user.userId, request.body.problemId, request.body.message, request.body.solution, function(err, result) {
+    queries.AddSubmission(request.cookies.user.userId, request.body.problemId, request.body.message, function(err, result) {
 		if(err) {
     		response.render('layout.jade', {message: 'Something went wrong'});
 		} else {
@@ -130,5 +130,5 @@ app.get('/index', function(request, response) {
     });
 });
 
-app.listen(80);
+app.listen(3000);
 console.log('listening on port 80!');
