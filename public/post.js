@@ -1,23 +1,29 @@
-var editor = ace.edit("editor");
+var editors = [];
 var JavaMode = require("ace/mode/java").Mode;
 var PythonMode = require("ace/mode/python").Mode;
-editor.getSession().setMode(new JavaMode());
-editor.setTheme("ace/theme/eclipse");
-var codeInput = $(".ace_text-input")[0];
-document.getElementById("solution").value = editor.getValue();
+addEditor();
+
+function addEditor(){
+  current_i = editors.length;
+  editors[current_i] = ace.edit("editor" + current_i);
+  editors[current_i].getSession().setMode(new JavaMode());
+  editors[current_i].setTheme("ace/theme/eclipse");
+}
 
 $("#javaSelector")[0].onclick = function() {
-  editor.getSession().setMode(new JavaMode());
-  editor.getSession().setValue("public static void main(String[] args){\n  // code away!\n}");
-  document.getElementById("solution").value = editor.getValue();
+  for(var i = 0; i < editors.length; i++){
+    editors[i].getSession().setMode(new JavaMode());
+    editors[i].getSession().setValue("public static void main(String[] args){\n  // code away!\n}");
+  }
 };
 
 $("#pythonSelector")[0].onclick = function() {
-  editor.getSession().setMode(new PythonMode());
-  editor.getSession().setValue("");
-  document.getElementById("solution").value = editor.getValue();
+  for(var i = 0; i < editors.length; i++){
+    editors[i].getSession().setMode(new PythonMode());
+    editors[i].getSession().setValue("");
+  }
 };
 
 $("#submit")[0].onclick = function() {
-  document.getElementById("solution").value = editor.getValue();
+  document.getElementById("sol-0").value = editors[0].getValue();
 };

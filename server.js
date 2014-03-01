@@ -19,7 +19,12 @@ app.configure(function() {
 	app.set('views', __dirname + '/views');
 	app.use(express.static(__dirname + '/public'));
 });
-
+app.get('/text', function(request, response) {
+	sender.SendMessage(0, "java", function(error, msg) {
+             console.log(msg);       
+        });
+});
+ 
 app.get('/', function(request, response) {
 	console.log(request.cookies.user);
 	response.redirect('/index');
