@@ -14,6 +14,7 @@ $("#javaSelector")[0].onclick = function() {
   for(var i = 0; i < editors.length; i++){
     editors[i].getSession().setMode(new JavaMode());
     editors[i].getSession().setValue("public static void main(String[] args){\n  // code away!\n}");
+    $("#language").val("java");
   }
 };
 
@@ -21,6 +22,7 @@ $("#pythonSelector")[0].onclick = function() {
   for(var i = 0; i < editors.length; i++){
     editors[i].getSession().setMode(new PythonMode());
     editors[i].getSession().setValue("");
+    $("#language").val("python");
   }
 };
 
