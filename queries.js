@@ -1,7 +1,6 @@
 var pg = require('pg');
 var settings = require('./settings');
 
-
 var GetSubmissionsForQuestion = function(questionId, callback) {
 	CallPreparedStatement({name: 'get_submissions_for_question', text: "SELECT * FROM codebench.submission WHERE question=$1", values: [questionId]}, callback);
 }

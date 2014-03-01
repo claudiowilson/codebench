@@ -42,3 +42,21 @@ CREATE TABLE IF NOT EXISTS codebench.code(
 	class_name text,
 	CONSTRAINT code_submission_fkey FOREIGN KEY ("submission_id") REFERENCES codebench.submission ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS codebench.qvote(
+       user_id integer NOT NULL,
+       question_id integer NOT NULL,
+       vote BIT NOT NULL,
+       PRIMARY KEY (user_id, question_id),
+       CONSTRAINT vote_user_fkey FOREIGN KEY ("user_id") REFERENCES codebench.user ("user_id") ON DELETE CASCADE,
+       CONSTRAINT vote_question_fkey FOREIGN KEY ("question_id") REFERENCES codebench.question("question_id") ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS codebench.svote(
+       user_id integer NOT NULL,
+       submission_id integer NOT NULL,
+       vote BIT NOT NULL,
+       PRIMARY KEY (user_id, submission_id),
+       CONSTRAINT vote_user_fkey FOREIGN KEY ("user_id") REFERENCES codebench.user ("user_id") ON DELETE CASCADE,
+       CONSTRAINT vote_submission_fkey FOREIGN KEY ("submission_id") REFERENCES codebench.submission("submission_id") ON DELETE CASCADE
+);
