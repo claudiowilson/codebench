@@ -1,59 +1,64 @@
 extend layout
 block content
-	if question
-		div.container
-			include question.jade
-			if submissions
-				| #{submissions.length} answers
-			else
-				Nobody has submitted an answer.
-	hr
+  if question
+    div.container
+      include question.jade
+      if submissions
+        | #{submissions.length} answers
+      else
+        Nobody has submitted an answer.
+  hr
 
-	if submissions
-		div.container
-			for submission in submissions
-				h2
-					| #{JSON.parse(submission.result).time} seconds
-				h5
-					| posted by #{submission.username}				
+  if submissions
+    div.container
+      for submission in submissions
+        h2
+          | #{JSON.parse(submission.result).time} seconds
+        h5
+          | posted by #{submission.username}        
 
-				pre.prettyprint
-					code
-						| #{submission.code}
-				| #{submission.message}
-				br
-				br
+        pre.prettyprint
+          code
+            | #{submission.code}
+        | #{submission.message}
+        br
+        br
+  if user
+    div.container
+      if submissions.length > 0
+        hr
+      script.
+        $(document).ready(
+          function() {
+          $('#solution').tabby();
+          $('#tabs').tab();
+          }
+        );
 
-	if user
-		div.container
-			if submissions.length > 0
-				hr
-			script.
-				$(document).ready(
-					function() {
-					$('#solution').tabby()
-					}
-				);
+      h1 Ready to post your solution?
+      form.form-horizontal(method="post" action="/submitSolution" novalidate)
+        div.modal-body
+          
+          // Message
+          div.control-group
+            label.control-label( for="response") Response
+            .controls
+              textarea#response(class="form-control" name="message" rows="5" cols="150" required)
+          ul.nav.nav-tabs
+            li.active
+              a(href='#1', data-toggle='tab') Main
+            li
+              a#addClass(href='#2', data-toggle='tab') +
+          #content.tab-content
+            #1.tab-pane.active
+              textarea#solution(class="form-control" name="solution" rows="30" cols="150" required)
+              input(type="hidden" name="problemId" value="#{question.question_id}")
+            #2.tab-pane
+              textarea#solution(class="form-control" name="solution" rows="30" cols="150" required)
+              input(type="hidden" name="problemId" value="#{question.question_id}")
 
-			h1 Ready to post your solution?
-			form.form-horizontal(method="post" action="/submitSolution" novalidate)
-				div.modal-body
-					
-					// Message
-					div.control-group
-						label.control-label( for="response") Response
-						.controls
-							textarea#response(class="form-control" name="message" rows="5" cols="150" required)
-
-					// Solution
-					div.control-group
-						label.control-label(for="solution") Solution
-						.controls
-							textarea#solution(class="form-control" name="solution" rows="30" cols="150" required)
-							input(type="hidden" name="problemId" value="#{question.question_id}")
-
-					// Footer
-					div.modal-footer
-						.form-actions
-							button(type="submit" class="btn btn-primary") Submit
-								i(class="icon-ok icon-white")
+          // Footer
+          div.modal-footer
+            .form-actions
+              button(type="submit" class="btn btn-primary") Submit
+                i(class="icon-ok icon-white")

@@ -3,8 +3,8 @@ var express = require('express'),
 	async = require('async'),
 	settings = require('./settings'),
 	queries = require('./queries'),
-	pg = require('pg'),
-	sender = require('./messageSender');
+	pg = require('pg');
+	//sender = require('./messageSender');
 var app = express();
 
 app.configure(function() {
@@ -112,9 +112,9 @@ app.post('/submitSolution', function(request, response) {
 		if(err) {
     		response.render('layout.jade', {message: 'Something went wrong'});
 		} else {
-			sender.SendMessage(result.rows[0].submission_id, "java", function(error, msg) {
-				console.log(msg);	
-			});
+			//sender.SendMessage(result.rows[0].submission_id, "java", function(error, msg) {
+			//	console.log(msg);	
+			//});
     			response.redirect(/submit/ + result.rows[0].submission_id);
 		}
 	});

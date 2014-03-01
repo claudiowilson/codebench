@@ -1,9 +1,62 @@
 body {
     padding-top: 100px;
-     background-color:rgb(61,83,178);
+    background-color:rgb(61,83,178);
     color:white;
 }
+h1 {
+    font-family:'Roboto', serif;
+    font-size:3em;
+    font-weight:500;
+    line-height:30px;
+    color: #ffffff;
+}
+h2 {
+    font-family:'Roboto', serif;
+    font-size:2.5em;
+    font-weight:300;
+    line-height:25px;
+    color: #ffffff;
+}
 
+a {
+    color: white;
+}
+a:hover {
+    color: #5588BB;
+}
+.text-shadowed {
+    text-shadow: 1px 1px 5px #141414;    
+}
+.text-upper {
+    text-transform:uppercase;
+}
+.text-lower {
+    text-transform:lowercase;
+}
+.text-centered  {
+    text-align:center;
+}
+.text-left  {
+    text-align:left;
+}
+.text-right  {
+    text-align:right;
+}
+.text-justified  {
+    text-align:justify;
+}
+
+#topnav {
+    padding:0;
+    margin:0;
+    box-shadow: 0px 3px 1px -2px #363636;
+}
+#intro {
+    marginBottom:10px;
+    background:url(/stripe.png);
+    background-repeat: repeat;
+    box-shadow: 0px -4px 4px -2px #363636 inset;
+}
 #registerModal {
     color:black;
 }

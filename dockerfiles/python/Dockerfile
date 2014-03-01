@@ -22,4 +22,6 @@ RUN pip --no-input --exists-action=w install --upgrade pip
 # LIBS
 RUN apt-get install -y -q libjpeg8-dev zlib1g-dev libfreetype6-dev liblcms1-dev libwebp-dev libtiff-dev
 
+ADD . /src
+
 RUN apt-get -y update --fix-missing

@@ -55,7 +55,7 @@ var AddSubmission = function(submittedUserId, question, message, callback) {
 }
 
 var AddCodeForSubmission = function(submissionId, code, className, callback) {
-	CallPreparedStatement( { name: 'add_code_for_submission', text : "INSERT INTO codebench.code (submission_id, code, class_name) VALUES($1, $2, $3) RETURNING code_id", values: [submissionId, code, className], callback);	
+	CallPreparedStatement( { name: 'add_code_for_submission', text : "INSERT INTO codebench.code (submission_id, code, class_name) VALUES($1, $2, $3) RETURNING code_id", values: [submissionId, code, className] }, callback);	
 }
 
 var AddQuestion = function(askedUserId, problem, input, output, callback) {
