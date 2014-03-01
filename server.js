@@ -3,8 +3,8 @@ var express = require('express'),
 	async = require('async'),
 	settings = require('./settings'),
 	queries = require('./queries'),
-	pg = require('pg'),
-	sender = require('./messageSender');
+	pg = require('pg');
+	//sender = require('./messageSender');
 var app = express();
 
 app.configure(function() {
@@ -108,13 +108,13 @@ app.post('/submitQuestion', function(request, response) {
 });
 
 app.post('/submitSolution', function(request, response) {
-    queries.AddSubmission(request.cookies.user.userId, request.body.problemId, request.body.message, request.body.solution, function(err, result) {
+    queries.AddSubmission(request.cookies.user.userId, request.body.problemId, request.body.message, function(err, result) {
 		if(err) {
     		response.render('layout.jade', {message: 'Something went wrong'});
 		} else {
-			sender.SendMessage(result.rows[0].submission_id, "java", function(error, msg) {
-				console.log(msg);	
-			});
+			//sender.SendMessage(result.rows[0].submission_id, "java", function(error, msg) {
+			//	console.log(msg);	
+			//});
     			response.redirect(/submit/ + result.rows[0].submission_id);
 		}
 	});
@@ -130,5 +130,5 @@ app.get('/index', function(request, response) {
     });
 });
 
-app.listen(80);
+app.listen(3000);
 console.log('listening on port 80!');

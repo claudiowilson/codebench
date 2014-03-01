@@ -26,11 +26,19 @@ CREATE TABLE IF NOT EXISTS codebench.submission(
 	submission_id SERIAL NOT NULL,
 	submitted_user integer NOT NULL,
 	question integer NOT NULL,
-	code text,
-	result text,
+	time_taken interval,
 	message text,
-	submission_error text,
+	errors text,
+	language text,
 	PRIMARY KEY (submission_id),
 	CONSTRAINT submission_user_fkey FOREIGN KEY ("submitted_user") REFERENCES codebench.user ("user_id") ON DELETE CASCADE,
 	CONSTRAINT submission_question_fkey FOREIGN KEY ("question") REFERENCES codebench.question("question_id") ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS codebench.code(
+	code_id SERIAL NOT NULL,
+	submission_id integer,
+	code text,
+	class_name text,
+	CONSTRAINT code_submission_fkey FOREIGN KEY ("submission_id") REFERENCES codebench.submission ON DELETE CASCADE
 );
