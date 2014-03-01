@@ -1,5 +1,5 @@
-var PgConnString = "postgres://postgres:yoloswag@localhost:5432/codebench";
-//var PgConnString = "postgres://kyeh:yoloswag@localhost:5432/codebench";
+//var PgConnString = "postgres://postgres:yoloswag@localhost:5432/codebench";
+var PgConnString = "postgres://kyeh:yoloswag@localhost:5432/codebench";
 //var rabbitUrl = "amqp://guest:guest@localhost:5672";
 
 var Rabbit = { url : "amqp://guest:guest@localhost:5672",

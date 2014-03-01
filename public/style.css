@@ -87,7 +87,7 @@ a:hover {
     color:black;
 }
 
-#editor {
+.editor {
     position: relative;
     width: 100%;
     height: 400px;
@@ -96,9 +96,10 @@ a:hover {
 #languageSelector {
     padding-left: 20px;
     padding-bottom: 10px;
+    padding-top: 10px;
 }
 
-#solution {
+.solution {
     display: none;
 }
 
