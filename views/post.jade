@@ -13,7 +13,7 @@ block content
 		div.container
 			for submission in submissions
 				h2
-					| #{JSON.parse(submission.result).time} seconds
+					| #{submission.time_taken} seconds
 				h5
 					| posted by #{submission.username}        
 
@@ -30,13 +30,15 @@ block content
 					
 			h1 Ready to post your solution?
 			form.form-horizontal(method="post" action="/submitSolution" novalidate)
+				input(type="hidden" name="problemId" value="#{question.question_id}")
+				input(type="hidden" id="classes" name="numClasses" value="1");
 				div.modal-body
 					// Message
 					div.control-group
 						label.control-label( for="response") Response
 						.controls
 						textarea#response(class="form-control" name="message" placeholder="Explain your algorithm in plain english" rows="5" cols="150" required)
-					input(type="hidden" name="problemId" value="#{question.question_id}")
+						br
 					// Solution
 					div.control-group
 						label.control-label(for="solution") Solution

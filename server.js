@@ -81,7 +81,6 @@ app.get('/problem/:id', function(request, response) {
 	if(err) {
 		console.log(err);
     	} else {
-		console.log(submissions);
 	    queries.GetQuestion(id, function(err, question) {
 		if(err) {
 		    console.log(err);
@@ -103,7 +102,7 @@ app.get('/addproblem', function(request, response) {
 });
 
 app.post('/submitQuestion', function(request, response) {
-    queries.AddQuestion(request.cookies.user.userId, request.body.problem, request.body.input, request.body.output, function(err, result) {
+    queries.AddQuestion(request.cookies.user.userId, request.body.title, request.body.problem, request.body.input, request.body.output, function(err, result) {
     	if(err) {
     	    response.render('layout.jade', {message: 'Something went wrong', user: request.cookies.user});
     	} else {
@@ -113,16 +112,22 @@ app.post('/submitQuestion', function(request, response) {
 });
 
 app.post('/submitSolution', function(request, response) {
+	var submissionId = 0;
     queries.AddSubmission(request.cookies.user.userId, request.body.problemId, request.body.message, function(err, result) {
 		if(err) {
     		response.render('layout.jade', {message: 'Something went wrong'});
 		} else {
-			//sender.SendMessage(result.rows[0].submission_id, "java", function(error, msg) {
-			//	console.log(msg);	
-			//});
-    			response.redirect(/submit/ + result.rows[0].submission_id);
+			submissionId = result.rows[0].submission_id;
+			// for(int i = 1; i <= request.body.numClasses; i++) {
+			// 	queries.AddCodeForSubmission(submissionId, request.body[i], )
+			// }
+    		response.redirect(/submit/ + result.rows[0].submission_id);
 		}
 	});
+	// sender.SendMessage(submissionId, "java", function(error, msg) {
+	// 	console.log(msg);	
+	// });
+	
 });
 
 app.get('/submit/:submission_id', function(request, response) {
@@ -135,5 +140,5 @@ app.get('/index', function(request, response) {
     });
 });
 
-app.listen(80);
+app.listen(3000);
 console.log('listening on port 80!');

@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS codebench.user(
 CREATE TABLE IF NOT EXISTS codebench.question(
 	question_id SERIAL NOT NULL,
 	asked_user integer,
+	title text NOT NULL,
 	problem text NOT NULL,
 	input text,
 	output text,

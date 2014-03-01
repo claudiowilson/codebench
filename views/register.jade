@@ -18,6 +18,7 @@ script.
           $('#content.tab-content').append('<div id="' + numClasses + '" class="tab-pane"><textarea id="sol-' + numClasses + '" name="' + numClasses + '"class="form-control solution"></textarea><div class="editor form-control" id="editor' + numClasses + '"></div></div>');
           addEditor();
           $('#addClass')[0].onclick = addClassFunc;
+          $('#classes').val(numClasses);
           numClasses++;
       }
       $('#solution').tabby();

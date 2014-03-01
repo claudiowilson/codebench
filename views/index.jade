@@ -17,11 +17,11 @@ block content
         div.container
           for question in questions
             a(href="/problem/#{question.question_id}")
-              h3 #{question.problem}
+              h3 #{question.title}
     #2.tab-pane
       if questions
         div.container
           for question in questions
             h3 #{question.upvotes - question.downvotes}
             a(href="/problem/#{question.question_id}")
-              h3 #{question.problem}
+              h3 #{question.title}
