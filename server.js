@@ -118,19 +118,17 @@ app.post('/submitSolution', function(request, response) {
         } else {
             submissionId = result.rows[0].submission_id;
             numClasses = request.body.numClasses;
-            classNames = request.body.classNames.split('|');
-            console.log(numClasses + ' ' + classNames[0] + ' ' + request.body.language);
-            if(classNames.length < numClasses) return;
-            for(var i = 0; i < NumClasses; i++) {
-                if(i == NumClasses - 1) {
-                    queries.AddCodeForSubmission(submissionId,request.body[i], classNames[i], function(err, result) {
+            for(var i = 0; i < numClasses; i++) {
+                console.log(request.body[i] + ' ' + request.body['file-' + i] + ' ' + numClasses)
+                if(i == numClasses - 1) {
+                    queries.AddCodeForSubmission(submissionId,request.body[i], request.body['file-' + i], function(err, result) {
                         sender.SendMessage(submissionId, "java", function(err, result) {
                             console.log(result);
                         });
                     });
                 } else {
-                    queries.AddCodeForSubmission(submissionId, request.body[i], classNames[i], function(err, result) {
-
+                    queries.AddCodeForSubmission(submissionId, request.body[i], request.body['file-' + i], function(err, result) {
+                        console.log('Sent to postgres' + result);
                     });
                 }
             }

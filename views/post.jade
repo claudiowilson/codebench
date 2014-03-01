@@ -32,7 +32,6 @@ block content
 			form.form-horizontal(method="post" action="/submitSolution" novalidate)
 				input(type="hidden" name="problemId" value="#{question.question_id}")
 				input(type="hidden" id="classes" name="numClasses" value="1");
-				input(type="hidden" id="classNames" name="classNames" value="Main|")
 				input(type="hidden" id="lang" name="language" value="java");
 				div.modal-body
 					// Message
@@ -58,7 +57,7 @@ block content
 							textarea#sol-0.solution(class="form-control" name="0" required)
 							div.editor(id="editor0" class="form-control")
 								|import java.util.*;
-								|
+								| 
 								|public class Main {
 								|	public static void main(String[] args){
 								|		// code away!
