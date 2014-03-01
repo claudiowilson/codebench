@@ -32,6 +32,7 @@ block content
 			form.form-horizontal(method="post" action="/submitSolution" novalidate)
 				input(type="hidden" name="problemId" value="#{question.question_id}")
 				input(type="hidden" id="classes" name="numClasses" value="1");
+				input(type="hidden" id="classNames" name="classNames" value="Main|")
 				input(type="hidden" id="lang" name="language" value="java");
 				div.modal-body
 					// Message

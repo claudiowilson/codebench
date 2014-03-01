@@ -27,5 +27,7 @@ $("#pythonSelector")[0].onclick = function() {
 };
 
 $("#submit")[0].onclick = function() {
-  document.getElementById("sol-0").value = editors[0].getValue();
+  for(var i = 0; i < editors.length; i++) {
+    document.getElementById("sol-" + i).value = editors[i].getValue();
+  }
 };
