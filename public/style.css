@@ -1,6 +1,6 @@
 body {
     padding-top: 100px;
-     background-color:rgb(61,83,178);
+    background-color:rgb(61,83,178);
     color:white;
 }
 
@@ -10,4 +10,19 @@ body {
 
 #loginModal {
     color:black;
+}
+
+#editor {
+    position: relative;
+    width: 100%;
+    height: 400px;
+}
+
+#languageSelector {
+    padding-left: 20px;
+    padding-bottom: 10px;
+}
+
+#solution {
+    display: none;
 }
