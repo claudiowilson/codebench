@@ -17,6 +17,7 @@ script.
           $('ul.nav.nav-tabs').append('<li><a id="addClass" href="#' + numClasses + '", data-toggle="tab">+</a></li>');
           $('#content.tab-content').append('<div id="' + numClasses + '" class="tab-pane"><textarea name="' + numClasses + '" rows="30" cols="150" class="form-control"></textarea></div>');
           $('#addClass')[0].onclick = addClassFunc;
+          $('#classes').val(numClasses);
           numClasses++;
       }
       $('#solution').tabby();
