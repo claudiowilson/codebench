@@ -1,8 +1,9 @@
-h2 #{question.problem}
+h2 #{question.title}
+p #{question.problem}
 div.row
-  div.col-md-6
-    h4 Test Inputs
-    textarea.form-control.inout(readonly) #{question.input}
-  div.col-md-6
-    h4 Expected Outputs
-    textarea.form-control.inout(readonly) #{question.output}
+	div.col-md-6
+		h4 Test Inputs
+		textarea.form-control.inout(readonly) #{question.input}
+	div.col-md-6
+		h4 Expected Outputs
+		textarea.form-control.inout(readonly) #{question.output}

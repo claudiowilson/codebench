@@ -6,7 +6,12 @@ block content
 
       form.form-horizontal(method='post', action='/submitQuestion', novalidate)
         .modal-body
-
+          // Title
+          .control-group
+            label.control-label(for='title') Title
+            .controls
+              input#title.form-control(type='text', size='100', name='title', required='required')
+                
           // Message 
           .control-group
             label.control-label(for='question') Problem
