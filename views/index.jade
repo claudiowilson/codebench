@@ -19,7 +19,9 @@ block content
           each question, i in questions
             .row(class=(i % 2 == 0) ? 'light-row' : 'dark-row')
               .col-md-1
-                h3.float-left #{question.upvotes - question.downvotes}
+                // Yolo fix plz fix sql query to update upvotes and downvotes
+                // h3.float-left #{question.upvotes - question.downvotes}
+                h3.float-left #{question.vote - question.downvotes}
                 img.center(src=(question.vote == 1 ? "/thumbs-up-good.png" : "/thumbs-up.png") height='30' width='30' style='margin-top:13px' onclick='toggleUp(this, #{question.question_id});')
                 img.center(src=(question.vote == -1 ? "/thumbs-down-bad.png" : "/thumbs-down.png") height='30' width='30' style='margin:auto' onclick='toggleDown(this, #{question.question_id});')
               .col-md-11
@@ -58,7 +60,7 @@ block content
           }
           $(thumb).attr('src', '/thumbs-down-bad.png');
           $(votes).text(parseInt($(votes).text()) - 1);
-          $.post("/SetQVote/" + qid + "/0");
+          $.post("/SetQVote/" + qid + "/-1");
         } else {
           $(thumb).attr('src', '/thumbs-down.png');
           $(votes).text(parseInt($(votes).text()) + 1);

@@ -31,12 +31,8 @@ var GetQuestionAndSubmissions = function(questionId, callback) {
     CallPreparedStatement( { name: 'get_questions_and_submissions', text: "SELECT * FROM codebench.submission INNER JOIN codebench.user ON codebench.submission.submitted_user = codebench.user.user_id WHERE codebench.submission.question=$1", values : [questionId]}, callback);
 }
 
-//var GetQuestions = function(callback) {
-//    CallPreparedStatement("SELECT * FROM codebench.question INNER JOIN codebench.user ON codebench.question.asked_user = codebench.user.user_id LIMIT 50", callback);
-//}
-
 var GetQuestions = function(callback) {
-    CallPreparedStatement("SELECT codebench.question.question_id, codebench.question.asked_user, codebench.question.title, codebench.question.upvotes, codebench.question.downvotes, codebench.user.username, codebench.qvote.vote FROM ((codebench.question INNER JOIN codebench.user ON codebench.question.asked_user = codebench.user.user_id) LEFT JOIN codebench.qvote ON codebench.question.asked_user = codebench.qvote.user_id) LIMIT 50", callback);
+    CallPreparedStatement("SELECT codebench.question.question_id, codebench.question.asked_user, codebench.question.title, codebench.question.upvotes, codebench.question.downvotes, codebench.user.username, codebench.qvote.vote FROM ((codebench.question INNER JOIN codebench.user ON codebench.question.asked_user = codebench.user.user_id) LEFT JOIN codebench.qvote ON codebench.question.asked_user = codebench.qvote.user_id AND codebench.question.question_id = codebench.qvote.question_id) LIMIT 50", callback);
 }
 
 var GetQuestionVote = function(userId, questionId, callback) {
@@ -78,13 +74,24 @@ var AddUserPrepared = function(name, username, password, email, callback) {
 }
 
 var SetQuestionVote = function(userId, questionId, vote, callback) {
-    CallPreparedStatement( { name: 'set_qvote', text: "UPDATE codebench.qvote SET codebench.qvote.vote=$3 WHERE codebench.qvote.user_id=$1 AND codebench.qvote.question_id=$2; INSERT INTO codebench.qvote (user_id, question_id, vote) SELECT $1, $2, $3 WHERE NOT EXISTS (SELECT 1 FROM codebench.qvote WHERE codebench.qvote.user_id=$1 AND codebench.qvote.question_id=$2)", values: [userId, questionId, vote] }, callback);
+
+    // Update qvote if exists
+    CallPreparedStatement( { name: 'set_qvote', text: "UPDATE codebench.qvote SET codebench.qvote.vote = $3 WHERE codebench.qvote.user_id = $1 AND codebench.qvote.question_id = $2 RETURNING codebench.qvote.vote", values: [userId, questionId, vote] }, function(err, result) {
+
+        // Insert qvote if failed to update
+        CallPreparedStatement( { name: 'add_qvote', text: "INSERT INTO codebench.qvote (user_id, question_id, vote) SELECT $1, $2, $3 WHERE NOT EXISTS (SELECT 1 FROM codebench.qvote WHERE codebench.qvote.user_id=$1 AND codebench.qvote.question_id=$2)", values: [userId, questionId, vote]}, function(err, result) {
+
+            // Need to get the user's previous vote to update upvotes/downvotes accordingly.
+            
+            // Update question count
+            if (vote == -1) {
+                CallPreparedStatement( { name: 'update_question', text: "UPDATE codebench.question SET codebench.question.downvotes = $2, codebench.question.upvotes = 0 WHERE codebench.question.question_id = $1", values: [questionId, vote] }, callback);
+            } else if (vote == 1) {
+                CallPreparedStatement( { name: 'update_question', text: "UPDATE codebench.question SET codebench.question.upvotes = $2, codebench.question.downvotes = 0 WHERE codebench.question.question_id = $1", values: [questionId, vote] }, callback);
+            }
+        });
+    });
 }
-/*
-var SetQuestionVote = function(userId, questionId, vote, callback) {
-    CallPreparedStatement( { name: 'set_qvote', text: "INSERT INTO codebench.qvote (user_id, question_id, vote) VALUES ($1, $2, $3) ON DUPLICATE KEY UPDATE vote = VALUES(vote) RETURNING vote", values: [userId, questionId, vote] }, callback);
-}
-*/
 var SetSubmissionVote = function(userId, submissionId, vote, callback) {
     CallPreparedStatement( { name: 'set_svote', text: "INSERT INTO codebench.svote (user_id, submission_id, vote) VALUES ($1, $2, $3) ON DUPLICATE KEY UPDATE vote = VALUES(vote) RETURNING vote", values: [userId, submissionId, vote] }, callback);
 }
