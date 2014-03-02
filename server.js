@@ -80,9 +80,7 @@ app.get('/problem/:id', function(request, response) {
         if(err) {
             console.log(err);
         } else {
-            queries.GetCodeForSubmission(submissions.rows[0].submissionId, function(err, result) {
-                console.log(result);
-            });
+            console.log(submissions.rows);
             queries.GetQuestion(id, function(err, question) {
                 if(err) {
                     console.log(err);
@@ -158,5 +156,5 @@ app.get('/index', function(request, response) {
     });
 });
 
-app.listen(80);
-console.log('listening on port 80!');
+app.listen(3000);
+console.log('listening on port 3000!');

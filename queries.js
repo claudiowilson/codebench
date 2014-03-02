@@ -32,7 +32,7 @@ var GetCodeForSubmission = function(submissionId, callback) {
 }
 
 var GetQuestionAndSubmissions = function(questionId, callback) {
-    CallPreparedStatement( { name: 'get_questions_and_submissions', text: "SELECT * FROM codebench.submission INNER JOIN codebench.user ON codebench.submission.submitted_user = codebench.user.user_id WHERE codebench.submission.question=$1 AND codebench.submission.time_taken IS NOT NULL", values : [questionId]}, callback);
+    CallPreparedStatement( { name: 'get_questions_and_submissions', text: "SELECT codebench.submission.*, codebench.code.*, codebench.user.username FROM ((codebench.submission INNER JOIN codebench.user ON codebench.submission.submitted_user = codebench.user.user_id) LEFT JOIN codebench.code ON codebench.code.submission_id = codebench.submission.submission_id) WHERE codebench.submission.question=$1 AND codebench.submission.time_taken IS NOT NULL", values : [questionId] }, callback);
 }
 
 var GetQuestions = function(callback) {
