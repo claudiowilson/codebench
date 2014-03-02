@@ -80,16 +80,24 @@ app.get('/problem/:id', function(request, response) {
         if(err) {
             console.log(err);
         } else {
-            queries.GetCodeForSubmission(submissions.rows[0].submissionId, function(err, result) {
-                console.log(result);
-            });
-            queries.GetQuestion(id, function(err, question) {
+	queries.GetQuestion(id, function(err, question) {
                 if(err) {
                     console.log(err);
                 } else {
                     response.render('post.jade', {user: request.cookies.user, question: question.rows[0], submissions: submissions.rows});
                 }
             });
+	
+
+	 
+
+            //queries.GetQuestion(id, function(err, question) {
+             //   if(err) {
+             //       console.log(err);
+             //   } else {
+             //       response.render('post.jade', {user: request.cookies.user, question: question.rows[0], submissions: submissions.rows});
+             //   }
+            //});
         }
     });
 });

@@ -13,16 +13,18 @@ block content
 		div.container
 			for submission in submissions
 				h2
-					| #{submission.time_taken} seconds
+					| _ seconds
 				h5
 					| posted by #{submission.username}        
 
 				pre.prettyprint
 					code
-						if submission.error
-						| #{submission.error}
+						if submission.errors
+							| #{submission.errors}
+						br
 					code
-						| #{submission.code}
+						| #{submission.code} 
+					
 				| #{submission.message}
 				br
 				br
