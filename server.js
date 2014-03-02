@@ -80,25 +80,14 @@ app.get('/problem/:id', function(request, response) {
         if(err) {
             console.log(err);
         } else {
-	queries.GetQuestion(id, function(err, question) {
+	    queries.GetQuestion(id, function(err, question) {
                 if(err) {
                     console.log(err);
                 } else {
                     response.render('post.jade', {user: request.cookies.user, question: question.rows[0], submissions: submissions.rows});
                 }
             });
-	
-
-	 
-
-            //queries.GetQuestion(id, function(err, question) {
-             //   if(err) {
-             //       console.log(err);
-             //   } else {
-             //       response.render('post.jade', {user: request.cookies.user, question: question.rows[0], submissions: submissions.rows});
-             //   }
-            //});
-        }
+	}
     });
 });
 
@@ -148,8 +137,9 @@ app.post('/submitSolution', function(request, response) {
     })
 });
 
-app.post('/setQVote/:problemId/:vote', function(request, response) {
-    queries.SetQuestionVote(request.cookies.user.userId, request.params.problemId, request.params.vote, function(err, result) {
+app.post('/setQVote/:problemId/:prevVote/:vote', function(request, response) {
+    console.log(request.params.vote);
+    queries.SetQuestionVote(request.cookies.user.userId, request.params.problemId, request.params.prevVote, request.params.vote, function(err, result) {
         
     });
 });
@@ -165,5 +155,5 @@ app.get('/index', function(request, response) {
     });
 });
 
-app.listen(80);
-console.log('listening on port 80!');
+app.listen(3000);
+console.log('listening on port 3000!');
