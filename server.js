@@ -19,11 +19,6 @@ app.configure(function() {
     app.set('views', __dirname + '/views');
     app.use(express.static(__dirname + '/public'));
 });
-app.get('/text', function(request, response) {
-    sender.SendMessage(0, "java", function(error, msg) {
-        console.log(msg);
-    });
-});
 
 app.get('/', function(request, response) {
     response.redirect('/index');
@@ -68,7 +63,7 @@ app.post('/register', function(request, response) {
         } else {
             expiry = new Date();
             expiry.setMonth(expiry.getMonth() + 1);
-            response.cookie('user', {'userId' : result.user_id, 'username': username, 'fullName' : name},{expires: expiry, httpOnly:true});
+            response.cookie('user', {'userId' : result.rows[0].user_id, 'username': username, 'fullName' : name},{expires: expiry, httpOnly:true});
             response.redirect('/index');
         }
     });
@@ -76,18 +71,20 @@ app.post('/register', function(request, response) {
 
 app.get('/problem/:id', function(request, response) {
     var id = request.params.id;
-    queries.GetQuestionAndSubmissions(id, function(err, submissions) {
-        if(err) {
+
+    queries.GetQuestion(id, function(err, question) {
+      if(err) {
+        console.log(err);
+      } else {
+        var ques = question.rows[0];
+        queries.GetSubmissionsAndCodeForQuestion(ques.question_id, function(err, result) {
+          if(err) {
             console.log(err);
-        } else {
-	    queries.GetQuestion(id, function(err, question) {
-                if(err) {
-                    console.log(err);
-                } else {
-                    response.render('post.jade', {user: request.cookies.user, question: question.rows[0], submissions: submissions.rows});
-                }
-            });
-	}
+          } else {
+            response.render('post.jade', {user: request.cookies.user, question: ques, submissions: result.rows});
+          }
+        });
+      }
     });
 });
 
@@ -150,7 +147,6 @@ app.get('/submit/:submission_id', function(request, response) {
 
 app.get('/index', function(request, response) {
     queries.GetQuestions( function (err, results) {
-        console.log(results.rows);
         response.render('index.jade', {user: request.cookies.user, questions: results.rows});
     });
 });

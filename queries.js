@@ -5,6 +5,10 @@ var GetSubmissionsForQuestion = function(questionId, callback) {
     CallPreparedStatement({name: 'get_submissions_for_question', text: "SELECT * FROM codebench.submission WHERE question=$1", values: [questionId]}, callback);
 }
 
+var GetSubmissionsAndCodeForQuestion = function(questionId, callback) {
+    CallPreparedStatement({name : 'get_submissions_and_code', text: "SELECT u.username, s.errors, s.message, s.language, c.code, c.class_name FROM codebench.submission AS s JOIN codebench.user AS u ON s.submitted_user = u.user_id JOIN codebench.code AS c ON s.submission_id=c.submission_id WHERE s.question=$1 AND s.time_taken IS NOT NULL", values : [questionId] }, callback);
+}
+
 var GetSubmissionsForUser = function(userId, callback) {
     CallPreparedStatement({name: 'get_submissions_for_user', text: "SELECT * FROM codebench.submission WHERE submitted_user=$1", values: [userId]}, callback);
 }
@@ -29,10 +33,6 @@ var GetQuestion = function(id, callback) {
 
 var GetCodeForSubmission = function(submissionId, callback) {
     CallPreparedStatement( { name: 'get_code_for_submission', text: "SELECT * FROM codebench.code WHERE codebench.code.submission_id=$1", values : [submissionId]}, callback);
-}
-
-var GetQuestionAndSubmissions = function(questionId, callback) {
-    CallPreparedStatement( { name: 'get_questions_and_submissions', text: "SELECT codebench.submission.*, codebench.code.*, codebench.user.username FROM ((codebench.submission INNER JOIN codebench.user ON codebench.submission.submitted_user = codebench.user.user_id) LEFT JOIN codebench.code ON codebench.code.submission_id = codebench.submission.submission_id) WHERE codebench.submission.question=$1 AND codebench.submission.time_taken IS NOT NULL", values : [questionId] }, callback);
 }
 
 var GetQuestions = function(callback) {
@@ -73,7 +73,7 @@ var AddQuestion = function(askedUserId, title, problem, input, output, callback)
     CallPreparedStatement( { name: 'add_question', text : "INSERT INTO codebench.question (asked_user, title, problem, input, output) VALUES ($1, $2, $3, $4, $5) RETURNING question_id", values: [askedUserId, title, problem, input, output] }, callback);
 }
 
-var AddUserPrepared = function(name, username, password, email, callback) {
+var AddUser = function(name, username, password, email, callback) {
     CallPreparedStatement( { name: 'add_user', text: "INSERT INTO codebench.user (username, password, full_name, email) VALUES ($1, crypt($2, gen_salt('bf')), $3, $4) RETURNING user_id", values: [username, password, name, email] }, callback);
 }
 
@@ -96,6 +96,7 @@ var SetQuestionVote = function(userId, questionId, prevVote, vote, callback) {
         });
     });
 }
+
 var SetSubmissionVote = function(userId, submissionId, vote, callback) {
     CallPreparedStatement( { name: 'set_svote', text: "INSERT INTO codebench.svote (user_id, submission_id, vote) VALUES ($1, $2, $3) ON DUPLICATE KEY UPDATE vote = VALUES(vote) RETURNING vote", values: [userId, submissionId, vote] }, callback);
 }
@@ -116,18 +117,20 @@ var CallPreparedStatement = function(statement, callback) {
 
 
 
+module.exports = {
+    AddUser : AddUser,
+    AddQuestion : AddQuestion,
+    AddSubmission : AddSubmission,
+    LoginUser : LoginUser,
+    AddQuestion : AddQuestion,
+    GetQuestion : GetQuestion,
+    GetQuestions : GetQuestions,
+    GetQuestionsForUser : GetQuestionsForUser,
+    GetSubmissionsForUser : GetSubmissionsForUser,
+    GetSubmissionsForQuestion : GetSubmissionsForQuestion,
+    AddCodeForSubmission : AddCodeForSubmission,
+    GetCodeForSubmission : GetCodeForSubmission,
+    SetQuestionVote : SetQuestionVote,
+    GetSubmissionsAndCodeForQuestion : GetSubmissionsAndCodeForQuestion
+};
 
-exports.AddUser = AddUserPrepared;
-exports.AddQuestion = AddQuestion;
-exports.AddSubmission = AddSubmission;
-exports.LoginUser = LoginUser;
-exports.AddQuestion = AddQuestion;
-exports.GetQuestion = GetQuestion;
-exports.GetQuestions = GetQuestions;
-exports.GetQuestionsForUser = GetQuestionsForUser;
-exports.GetSubmissionsForUser = GetSubmissionsForUser;
-exports.GetSubmissionsForQuestion = GetSubmissionsForQuestion;
-exports.GetQuestionAndSubmissions = GetQuestionAndSubmissions;
-exports.AddCodeForSubmission = AddCodeForSubmission;
-exports.GetCodeForSubmission = GetCodeForSubmission;
-exports.SetQuestionVote = SetQuestionVote;
