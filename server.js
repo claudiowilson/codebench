@@ -151,5 +151,6 @@ app.get('/index', function(request, response) {
     });
 });
 
-app.listen(80);
-console.log('listening on port 80!');
+var port = process.env.PORT || 80;
+app.listen(port);
+console.log('listening on port ', port);
