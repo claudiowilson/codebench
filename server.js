@@ -4,7 +4,8 @@ async = require('async'),
 settings = require('./settings'),
 queries = require('./queries'),
 pg = require('pg'),
-sender = require('./messageSender');
+sender = require('./messageSender'),
+sorter = require('./resultSetSorter');
 var app = express();
 
 app.configure(function() {
@@ -81,6 +82,7 @@ app.get('/problem/:id', function(request, response) {
           if(err) {
             console.log(err);
           } else {
+            var submissions = sorter.SortCodeResults(result.rows);
             response.render('post.jade', {user: request.cookies.user, question: ques, submissions: result.rows});
           }
         });
