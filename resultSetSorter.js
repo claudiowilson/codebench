@@ -3,7 +3,6 @@ var SortCodeAndSubmissionsBySubmissions = function(queryResultRows) {
 	var result = [];
 	var prevSubIdResult = -1;
 	var resultIdx = -1;
-	var sortCode = function(prevCode, newCode, index) {
 		
 	for(var i = 0; i < queryResultRows.length; i++) {
 		var res = queryResultRows[i];
