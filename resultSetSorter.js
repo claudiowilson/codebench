@@ -2,19 +2,21 @@
 var SortCodeAndSubmissionsBySubmissions = function(queryResultRows) {
 	var result = [];
 	var prevSubIdResult = -1;
-	var resultIdx = 0;
+	var resultIdx = -1;
+	var sortCode = function(prevCode, newCode, index) {
+		
 	for(var i = 0; i < queryResultRows.length; i++) {
 		var res = queryResultRows[i];
 		if(res.submission_id != prevSubIdResult) {
+			resultIdx++;
 			result[resultIdx] = { username: res.username,
 								errors : res.errors,
 								language : res.language,
 								code : [ {class : res.class_name, code: res.code}],
 								submission_id : res.submission_id};
 			prevSubIdResult = res.submission_id;
-			resultIdx++;
 		} else {
-			result[resultIdx - 1].code.push({class : res.class_name, code: res.code});
+			result[resultIdx].code.push({class : res.class_name, code: res.code});
 		}
 	}
 	return result;
