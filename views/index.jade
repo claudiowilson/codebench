@@ -20,53 +20,13 @@ block content
             .row(class=(i % 2 == 0) ? 'light-row' : 'dark-row')
               .col-md-1
                 // Yolo fix plz fix sql query to update upvotes and downvotes
-                h3.float-left #{question.upvotes - question.downvotes}
+                h3.votes.float-left #{question.upvotes - question.downvotes}
                 //h3.float-left #{question.vote - question.downvotes}
-                img.center(src=(question.vote == 1 ? "/thumbs-up-good.png" : "/thumbs-up.png") height='30' width='30' style='margin-top:13px' onclick='toggleUp(this, #{question.question_id}, #{question.vote});')
-                img.center(src=(question.vote == -1 ? "/thumbs-down-bad.png" : "/thumbs-down.png") height='30' width='30' style='margin:auto' onclick='toggleDown(this, #{question.question_id}, #{question.vote});')
+                img.thumbsup.center(src=(question.vote == 1 ? "/thumbs-up-good.png" : "/thumbs-up.png") height='30' width='30' style='margin-top:13px', onclick='toggleQuestionUp($(this).parent(), #{question.question_id}, #{question.vote})')
+                img.thumbsdown.center(src=(question.vote == -1 ? "/thumbs-down-bad.png" : "/thumbs-down.png") height='30' width='30' style='margin:auto', onclick='toggleQuestionDown($(this).parent(), #{question.question_id}, #{question.vote})')
               .col-md-11
                 h3: a(href="/problem/#{question.question_id}") #{question.title}
                 h5 Submitted by #{question.username}
-
-    script.
-      var toggleUp = function(thumb, qid, curr_vote) {
-        parent = $(thumb).parent();
-        imagepath = $(thumb).attr('src');
-        votes = $(parent).children('h3')[0];
-        if (imagepath == '/thumbs-up.png') {
-          otherThumb = $(parent).children('img')[1];
-          if ($(otherThumb).attr('src') == '/thumbs-down-bad.png') {
-            $(otherThumb).attr('src', '/thumbs-down.png');
-            $(votes).text(parseInt($(votes).text()) + 1);
-          }
-          $(thumb).attr('src', '/thumbs-up-good.png');
-          $(votes).text(parseInt($(votes).text()) + 1);
-          $.post("/SetQVote/" + qid + "/" + (curr_vote ? curr_vote : 0) + "/1");
-        } else {
-          $(thumb).attr('src', '/thumbs-up.png');
-          $(votes).text(parseInt($(votes).text()) - 1);
-          $.post("/SetQVote/" + qid + "/" + (curr_vote ? curr_vote : 0) + "/0");
-        }
-      }
-      var toggleDown = function(thumb, qid, curr_vote) {
-        parent = $(thumb).parent();
-        imagepath = $(thumb).attr('src');
-        votes = $(parent).children('h3')[0];
-        if (imagepath == '/thumbs-down.png') {
-          otherThumb = $(parent).children('img')[0];
-          if ($(otherThumb).attr('src') == '/thumbs-up-good.png') {
-            $(otherThumb).attr('src', '/thumbs-up.png');
-            $(votes).text(parseInt($(votes).text()) - 1);
-          }
-          $(thumb).attr('src', '/thumbs-down-bad.png');
-          $(votes).text(parseInt($(votes).text()) - 1);
-          $.post("/SetQVote/" + qid + "/" + (curr_vote ? curr_vote : 0) + "/-1");
-        } else {
-          $(thumb).attr('src', '/thumbs-down.png');
-          $(votes).text(parseInt($(votes).text()) + 1);
-          $.post("/SetQVote/" + qid + "/" + (curr_vote ? curr_vote : 0) + "/0");
-        }
-      }
 
     #2.tab-pane
       if questions
@@ -75,8 +35,10 @@ block content
             .row(class=(i % 2 == 0) ? 'light-row' : 'dark-row')
               .col-md-1
                 h3.float-left #{question.upvotes - question.downvotes}
-                img.center(src="/thumbs-up.png" height='30' width='30' style='margin-top:13px' onclick='toggleUp(this, #{question.question_id});')
-                img.center(src="/thumbs-down.png" height='30' width='30' style='margin:auto' onclick='toggleDown(this, #{question.question_id});')
+                img.center(src="/thumbs-up.png" height='30' width='30' style='margin-top:13px')
+                img.center(src="/thumbs-down.png" height='30' width='30' style='margin:auto')
               .col-md-11
                 h3: a(href="/problem/#{question.question_id}") #{question.title}
                 h5 Submitted by #{question.username}
+
+   script(defer src='/votes.js' type='text/javascript')
