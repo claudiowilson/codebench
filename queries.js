@@ -83,17 +83,19 @@ var SetQuestionVote = function(userId, questionId, prevVote, vote, callback) {
     // Update qvote if exists
     CallPreparedStatement( { name: 'set_qvote', text: "UPDATE codebench.qvote SET vote = $3 WHERE codebench.qvote.user_id = $1 AND codebench.qvote.question_id = $2", values: [userId, questionId, vote] }, function(err, result) {
 
-        if (err) {
-            // Insert qvote if failed to update
-            CallPreparedStatement( { name: 'add_qvote', text: "INSERT INTO codebench.qvote (user_id, question_id, vote) SELECT $1, $2, $3 WHERE NOT EXISTS (SELECT 1 FROM codebench.qvote WHERE codebench.qvote.user_id=$1 AND codebench.qvote.question_id=$2)", values: [userId, questionId, vote]}, function(err, result) {} );
+        var updateQuestion = function() {
+            up = (prevVote == 1 ? -1 : 0);
+            down = (prevVote == -1 ? -1 : 0);
+            if (vote == 1) up = up + 1;
+            if (vote == -1) down = down + 1;
+            
+            CallPreparedStatement( { name: 'update_question', text: "UPDATE codebench.question SET downvotes=downvotes+$1, upvotes=upvotes+$2 WHERE codebench.question.question_id = $3", values: [down, up, questionId] }, callback);
         }
 
-        up = (prevVote == 1 ? -1 : 0);
-        down = (prevVote == -1 ? -1 : 0);
-        if (vote == 1) up = up + 1;
-        if (vote == -1) down = down + 1;
-
-        CallPreparedStatement( { name: 'update_question', text: "UPDATE codebench.question SET downvotes=downvotes+$1, upvotes=upvotes+$2 WHERE codebench.question.question_id = $3", values: [down, up, questionId] }, callback);
+        // Insert qvote if failed to update
+        CallPreparedStatement( { name: 'add_qvote', text: "INSERT INTO codebench.qvote (user_id, question_id, vote) SELECT $1, $2, $3 WHERE NOT EXISTS (SELECT 1 FROM codebench.qvote WHERE codebench.qvote.user_id=$1 AND codebench.qvote.question_id=$2)", values: [userId, questionId, vote]}, function(err, result) {
+                updateQuestion();
+            } );
     });
 }
 
@@ -102,18 +104,20 @@ var SetSubmissionVote = function(userId, submissionId, prevVote, vote, callback)
 
     // Update qvote if exists
     CallPreparedStatement( { name: 'set_svote', text: "UPDATE codebench.svote SET vote = $3 WHERE codebench.svote.user_id = $1 AND codebench.svote.submission_id = $2", values: [userId, submissionId, vote] }, function(err, result) {
-
-        if (err) {
-            // Insert qvote if failed to update
-            CallPreparedStatement( { name: 'add_svote', text: "INSERT INTO codebench.qvote (user_id, submission_id, vote) SELECT $1, $2, $3 WHERE NOT EXISTS (SELECT 1 FROM codebench.svote WHERE codebench.svote.user_id=$1 AND codebench.svote.submission_id=$2)", values: [userId, submissionId, vote]}, function(err, result) {} );
+        
+        var updateSubmission = function() {
+            up = (prevVote == 1 ? -1 : 0);
+            down = (prevVote == -1 ? -1 : 0);
+            if (vote == 1) up = up + 1;
+            if (vote == -1) down = down + 1;
+            
+            CallPreparedStatement( { name: 'update_submission', text: "UPDATE codebench.submission SET downvotes=downvotes+$1, upvotes=upvotes+$2 WHERE codebench.submission.submission_id = $3", values: [down, up, submissionId] }, callback);
         }
 
-        up = (prevVote == 1 ? -1 : 0);
-        down = (prevVote == -1 ? -1 : 0);
-        if (vote == 1) up = up + 1;
-        if (vote == -1) down = down + 1;
-
-        CallPreparedStatement( { name: 'update_submission', text: "UPDATE codebench.submission SET downvotes=downvotes+$1, upvotes=upvotes+$2 WHERE codebench.submission.submission_id = $3", values: [down, up, submissionId] }, callback);
+        // Insert qvote if failed to update
+        CallPreparedStatement( { name: 'add_svote', text: "INSERT INTO codebench.qvote (user_id, submission_id, vote) SELECT $1, $2, $3 WHERE NOT EXISTS (SELECT 1 FROM codebench.svote WHERE codebench.svote.user_id=$1 AND codebench.svote.submission_id=$2)", values: [userId, submissionId, vote]}, function(err, result) {
+            updateSubmission();
+        } );
     });
 }
 
@@ -147,5 +151,6 @@ module.exports = {
     AddCodeForSubmission : AddCodeForSubmission,
     GetCodeForSubmission : GetCodeForSubmission,
     SetQuestionVote : SetQuestionVote,
+    SetSubmissionVote : SetSubmissionVote,
     GetSubmissionsAndCodeForQuestion : GetSubmissionsAndCodeForQuestion
 };
