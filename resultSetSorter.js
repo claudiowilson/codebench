@@ -11,11 +11,11 @@ var SortCodeAndSubmissionsBySubmissions = function(queryResultRows) {
 			result[resultIdx] = { username: res.username,
 								errors : res.errors,
 								language : res.language,
-								code : [ {class : res.class_name, code: res.code}],
+								classes : [ {name : res.class_name, code: res.code}],
 								submission_id : res.submission_id};
 			prevSubIdResult = res.submission_id;
 		} else {
-			result[resultIdx].code.push({class : res.class_name, code: res.code});
+			result[resultIdx].classes.push({name : res.class_name, code: res.code});
 		}
 	}
 	return result;

@@ -11,9 +11,9 @@ block content
 
 	if submissions
 		div.container
-			for submission in submissions
+			each submission, k in submissions
 				h2
-					| #{submission.time_taken} milliseconds
+					| #{submission.language} solution that took #{submission.time_taken} milliseconds
 				h5
 					| posted by #{submission.username}        
 
@@ -22,8 +22,16 @@ block content
 						if submission.errors
 							| #{submission.errors}
 						br
-					code
-						| #{submission.code} 
+				ul.nav.nav-tabs
+					each newclass, i in submission.classes
+						li
+							a(href='#class' + k + '-' + i, data-toggle='tab') #{newclass.name}
+				.tab-content
+					each newclass, j in submission.classes
+						div(class='tab-pane' id='class' + k + '-' + j)
+							pre.prettyprint
+								code
+									| #{newclass.code}
 					
 				| #{submission.message}
 				br
@@ -79,4 +87,3 @@ block content
 							button#submit(type="submit" class="btn btn-primary") Submit
 								i(class="icon-ok icon-white")
 	script(src="/post.js" type="text/javascript" charset="utf-8")
-

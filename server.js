@@ -83,7 +83,7 @@ app.get('/problem/:id', function(request, response) {
             console.log(err);
           } else {
             var submissions = sorter.SortCodeResults(result.rows);
-            response.render('post.jade', {user: request.cookies.user, question: ques, submissions: result.rows});
+            response.render('post.jade', {user: request.cookies.user, question: ques, submissions: submissions});
           }
         });
       }
