@@ -150,7 +150,8 @@ app.get('/submit/:submission_id', function(request, response) {
 });
 
 app.get('/index', function(request, response) {
-    queries.GetQuestions( function (err, results) {
+    id = (request.cookies.user ? request.cookies.user.userId : null);
+    queries.GetQuestions(id, function (err, results) {
         response.render('index.jade', {user: request.cookies.user, questions: results.rows});
     });
 });
