@@ -14,6 +14,7 @@ var SortCodeAndSubmissionsBySubmissions = function(queryResultRows) {
                                               upvotes : res.upvotes,
                                               downvotes : res.downvotes,
                                               votes : res.votes,
+					      message : res.message,
 					      classes : [ {name : res.class_name, code: res.code}],
 					      submission_id : res.submission_id,
 					      time_taken : res.time_taken};

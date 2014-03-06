@@ -19,10 +19,12 @@ block content
         h2 #{submission.language} solution that took #{submission.time_taken} milliseconds
         h5 posted by #{submission.username}        
 
-        pre.prettyprint
-          code
-            if submission.errors
-              | #{submission.errors}
+        .col-md-1
+        | #{submission.message}
+
+        if submission.errors
+          pre.prettyprint
+            code #{submission.errors}
             br
         ul.nav.nav-tabs
           each newclass, i in submission.classes
@@ -35,7 +37,6 @@ block content
                 code
                   | #{newclass.code}
           
-        | #{submission.message}
         br
         br
   if user

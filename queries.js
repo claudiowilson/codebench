@@ -6,7 +6,7 @@ var GetSubmissionsForQuestion = function(questionId, callback) {
 }
 
 var GetSubmissionsAndCodeForQuestion = function(questionId, callback) {
-    CallPreparedStatement({name : 'get_submissions_and_code', text: "SELECT u.username, s.errors, s.submission_id, s.message, extract(milliseconds from s.time_taken) as time_taken, s.language, s.upvotes, s.downvotes, c.code, c.class_name, svote.vote FROM codebench.submission AS s JOIN codebench.user AS u ON s.submitted_user = u.user_id JOIN codebench.code AS c ON s.submission_id=c.submission_id JOIN codebench.svote AS svote ON svote.user_id=$1 AND s.submission_id = svote.submission_id WHERE s.question=$1 AND s.time_taken IS NOT NULL", values : [questionId] }, callback);
+    CallPreparedStatement({name : 'get_submissions_and_code', text: "SELECT u.username, s.errors, s.submission_id, s.message, extract(milliseconds from s.time_taken) as time_taken, s.language, s.upvotes, s.downvotes, c.code, c.class_name, svote.vote FROM ((codebench.submission AS s JOIN codebench.user AS u ON s.submitted_user = u.user_id JOIN codebench.code AS c ON s.submission_id=c.submission_id) LEFT JOIN codebench.svote AS svote ON svote.user_id=$1 AND s.submission_id = svote.submission_id) WHERE s.question=$1 AND s.time_taken IS NOT NULL ORDER BY (s.upvotes - s.downvotes) DESC", values : [questionId] }, callback);
 }
 
 var GetSubmissionsForUser = function(userId, callback) {
