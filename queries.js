@@ -36,7 +36,7 @@ var GetCodeForSubmission = function(submissionId, callback) {
 }
 
 var GetQuestions = function(callback) {
-    CallPreparedStatement("SELECT codebench.question.question_id, codebench.question.asked_user, codebench.question.title, codebench.question.upvotes, codebench.question.downvotes, codebench.user.username, codebench.qvote.vote FROM ((codebench.question INNER JOIN codebench.user ON codebench.question.asked_user = codebench.user.user_id) LEFT JOIN codebench.qvote ON codebench.question.asked_user = codebench.qvote.user_id AND codebench.question.question_id = codebench.qvote.question_id) LIMIT 50", callback);
+    CallPreparedStatement("SELECT q.question_id, q.asked_user, q.title, q.upvotes, q.downvotes, u.username, qvote.vote FROM ((codebench.question AS q INNER JOIN codebench.user AS u ON q.asked_user = u.user_id) LEFT JOIN codebench.qvote AS qvote ON q.asked_user = qvote.user_id AND q.question_id = qvote.question_id) ORDER BY (q.upvotes - q.downvotes) DESC LIMIT 50", callback);
 }
 
 var GetQuestionVote = function(userId, questionId, callback) {
@@ -79,21 +79,21 @@ var AddUser = function(name, username, password, email, callback) {
 
 var SetQuestionVote = function(userId, questionId, prevVote, vote, callback) {
     if (!prevVote) prevVote = 0;
-//    if (!vote) vote = 0;
 
     // Update qvote if exists
     CallPreparedStatement( { name: 'set_qvote', text: "UPDATE codebench.qvote SET vote = $3 WHERE codebench.qvote.user_id = $1 AND codebench.qvote.question_id = $2", values: [userId, questionId, vote] }, function(err, result) {
 
-        // Insert qvote if failed to update
-        CallPreparedStatement( { name: 'add_qvote', text: "INSERT INTO codebench.qvote (user_id, question_id, vote) SELECT $1, $2, $3 WHERE NOT EXISTS (SELECT 1 FROM codebench.qvote WHERE codebench.qvote.user_id=$1 AND codebench.qvote.question_id=$2)", values: [userId, questionId, vote]}, function(err, result) {
+        if (err) {
+            // Insert qvote if failed to update
+            CallPreparedStatement( { name: 'add_qvote', text: "INSERT INTO codebench.qvote (user_id, question_id, vote) SELECT $1, $2, $3 WHERE NOT EXISTS (SELECT 1 FROM codebench.qvote WHERE codebench.qvote.user_id=$1 AND codebench.qvote.question_id=$2)", values: [userId, questionId, vote]}, function(err, result) {} );
+        }
 
-            // Update question count
-            if (vote == -1) {
-                CallPreparedStatement( { name: 'update_question', text: "UPDATE codebench.question SET downvotes=downvotes+$1, upvotes=upvotes-$3 WHERE codebench.question.question_id = $2", values: [vote, questionId, prevVote] }, callback);
-            } else if (vote == 1) {
-                CallPreparedStatement( { name: 'update_question', text: "UPDATE codebench.question SET upvotes=upvotes+$1, downvotes=downvotes+$3 WHERE codebench.question.question_id = $2", values: [vote, questionId, prevVote] }, callback);
-            }
-        });
+        up = (prevVote == 1 ? -1 : 0);
+        down = (prevVote == -1 ? -1 : 0);
+        if (vote == 1) up = up + 1;
+        if (vote == -1) down = down + 1;
+
+        CallPreparedStatement( { name: 'update_question', text: "UPDATE codebench.question SET downvotes=downvotes+$1, upvotes=upvotes+$2 WHERE codebench.question.question_id = $3", values: [down, up, questionId] }, callback);
     });
 }
 
