@@ -72,13 +72,14 @@ app.post('/register', function(request, response) {
 
 app.get('/problem/:id', function(request, response) {
     var id = request.params.id;
+    var userId = (request.cookies.user ? request.cookies.user.userId : null);
 
     queries.GetQuestion(id, function(err, question) {
       if(err) {
         console.log(err);
       } else {
         var ques = question.rows[0];
-        queries.GetSubmissionsAndCodeForQuestion(ques.question_id, function(err, result) {
+        queries.GetSubmissionsAndCodeForQuestion(userId, ques.question_id, function(err, result) {
           if(err) {
             console.log(err);
           } else {

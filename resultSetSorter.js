@@ -13,7 +13,7 @@ var SortCodeAndSubmissionsBySubmissions = function(queryResultRows) {
 					      language : res.language,
                                               upvotes : res.upvotes,
                                               downvotes : res.downvotes,
-                                              votes : res.votes,
+                                              vote : res.vote,
 					      message : res.message,
 					      classes : [ {name : res.class_name, code: res.code}],
 					      submission_id : res.submission_id,

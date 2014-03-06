@@ -5,8 +5,8 @@ var GetSubmissionsForQuestion = function(questionId, callback) {
     CallPreparedStatement({name: 'get_submissions_for_question', text: "SELECT * FROM codebench.submission WHERE question=$1", values: [questionId]}, callback);
 }
 
-var GetSubmissionsAndCodeForQuestion = function(questionId, callback) {
-    CallPreparedStatement({name : 'get_submissions_and_code', text: "SELECT u.username, s.errors, s.submission_id, s.message, extract(milliseconds from s.time_taken) as time_taken, s.language, s.upvotes, s.downvotes, c.code, c.class_name, svote.vote FROM ((codebench.submission AS s JOIN codebench.user AS u ON s.submitted_user = u.user_id JOIN codebench.code AS c ON s.submission_id=c.submission_id) LEFT JOIN codebench.svote AS svote ON svote.user_id=$1 AND s.submission_id = svote.submission_id) WHERE s.question=$1 AND s.time_taken IS NOT NULL ORDER BY (s.upvotes - s.downvotes) DESC", values : [questionId] }, callback);
+var GetSubmissionsAndCodeForQuestion = function(userId, questionId, callback) {
+    CallPreparedStatement({name : 'get_submissions_and_code', text: "SELECT u.username, s.errors, s.submission_id, s.message, extract(milliseconds from s.time_taken) as time_taken, s.language, s.upvotes, s.downvotes, c.code, c.class_name, svote.vote FROM ((codebench.submission AS s JOIN codebench.user AS u ON s.submitted_user = u.user_id JOIN codebench.code AS c ON s.submission_id=c.submission_id) LEFT JOIN codebench.svote AS svote ON svote.user_id=$1 AND s.submission_id = svote.submission_id) WHERE s.question=$2 AND s.time_taken IS NOT NULL ORDER BY (s.upvotes - s.downvotes) DESC", values : [userId, questionId] }, callback);
 }
 
 var GetSubmissionsForUser = function(userId, callback) {
@@ -115,7 +115,7 @@ var SetSubmissionVote = function(userId, submissionId, prevVote, vote, callback)
         }
 
         // Insert qvote if failed to update
-        CallPreparedStatement( { name: 'add_svote', text: "INSERT INTO codebench.qvote (user_id, submission_id, vote) SELECT $1, $2, $3 WHERE NOT EXISTS (SELECT 1 FROM codebench.svote WHERE codebench.svote.user_id=$1 AND codebench.svote.submission_id=$2)", values: [userId, submissionId, vote]}, function(err, result) {
+        CallPreparedStatement( { name: 'add_svote', text: "INSERT INTO codebench.svote (user_id, submission_id, vote) SELECT $1, $2, $3 WHERE NOT EXISTS (SELECT 1 FROM codebench.svote WHERE codebench.svote.user_id=$1 AND codebench.svote.submission_id=$2)", values: [userId, submissionId, vote]}, function(err, result) {
             updateSubmission();
         } );
     });
