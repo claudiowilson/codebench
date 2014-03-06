@@ -136,13 +136,14 @@ app.post('/submitSolution', function(request, response) {
     })
 });
 
+app.post('/setSVote/:submissionId/:prevVote/:vote', function(request, response) {
+    if(!request.cookies.user) { return; }
+    queries.SetSubmissionVote(request.cookies.user.userId, request.params.submissionId, request.params.prevVote, request.params.vote, function(err, result) {});
+});
+
 app.post('/setQVote/:problemId/:prevVote/:vote', function(request, response) {
-		if(!request.cookies.user) {
-			return;
-		}
-    queries.SetQuestionVote(request.cookies.user.userId, request.params.problemId, request.params.prevVote, request.params.vote, function(err, result) {
-        
-    });
+    if(!request.cookies.user) { return; }
+    queries.SetQuestionVote(request.cookies.user.userId, request.params.problemId, request.params.prevVote, request.params.vote, function(err, result) {});
 });
 
 app.get('/submit/:submission_id', function(request, response) {

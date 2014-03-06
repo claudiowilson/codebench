@@ -9,12 +9,15 @@ var SortCodeAndSubmissionsBySubmissions = function(queryResultRows) {
 		if(res.submission_id != prevSubIdResult) {
 			resultIdx++;
 			result[resultIdx] = { username: res.username,
-								errors : res.errors,
-								language : res.language,
-								classes : [ {name : res.class_name, code: res.code}],
-								submission_id : res.submission_id,
-								time_taken : res.time_taken};
-			prevSubIdResult = res.submission_id;
+					      errors : res.errors,
+					      language : res.language,
+                                              upvotes : res.upvotes,
+                                              downvotes : res.downvotes,
+                                              votes : res.votes,
+					      classes : [ {name : res.class_name, code: res.code}],
+					      submission_id : res.submission_id,
+					      time_taken : res.time_taken};
+		    prevSubIdResult = res.submission_id;
 		} else {
 			result[resultIdx].classes.push({name : res.class_name, code: res.code});
 		}

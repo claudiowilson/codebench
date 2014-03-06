@@ -1,4 +1,4 @@
-function toggleQuestionUp(container, qid, curr_vote) {
+function toggleUpGeneral(container, qid, curr_vote, route) {
     upThumb = $(container).children('.thumbsup');
     downThumb = $(container).children('.thumbsdown');
     votes = $(container).children('.votes');
@@ -11,15 +11,15 @@ function toggleQuestionUp(container, qid, curr_vote) {
         }
         $(upThumb).attr('src', '/thumbs-up-good.png');
         $(votes).text(parseInt($(votes).text()) + 1);
-        $.post("/SetQVote/" + qid + "/" + (curr_vote ? curr_vote : 0) + "/1");
+        $.post(route + id + "/" + (curr_vote ? curr_vote : 0) + "/1");
     } else {
         $(upThumb).attr('src', '/thumbs-up.png');
         $(votes).text(parseInt($(votes).text()) - 1);
-        $.post("/SetQVote/" + qid + "/" + (curr_vote ? curr_vote : 0) + "/0");
+        $.post(route + id + "/" + (curr_vote ? curr_vote : 0) + "/0");
     }
 }
 
-function toggleQuestionDown(container, qid, curr_vote) {
+function toggleDownGeneral(container, id, curr_vote, route) {
     upThumb = $(container).children('.thumbsup');
     downThumb = $(container).children('.thumbsdown');
     votes = $(container).children('.votes');
@@ -32,10 +32,24 @@ function toggleQuestionDown(container, qid, curr_vote) {
         }
         $(downThumb).attr('src', '/thumbs-down-bad.png');
         $(votes).text(parseInt($(votes).text()) - 1);
-        $.post("/SetQVote/" + qid + "/" + (curr_vote ? curr_vote : 0) + "/-1");
+        $.post(route + id + "/" + (curr_vote ? curr_vote : 0) + "/-1");
     } else {
         $(downThumb).attr('src', '/thumbs-down.png');
         $(votes).text(parseInt($(votes).text()) + 1);
-        $.post("/SetQVote/" + qid + "/" + (curr_vote ? curr_vote : 0) + "/0");
+        $.post(route + id + "/" + (curr_vote ? curr_vote : 0) + "/0");
     }
+}
+
+function toggleQuestionUp(container, qid, curr_vote) {
+    toggleUpGeneral(container, qid, curr_vote, "/SetQVote");
+}
+function toggleQuestionDown(container, qid, curr_vote) {
+    toggleDownGeneral(container, qid, curr_vote, "/SetQVote");
+}
+
+function toggleSubmissionUp(container, sid, curr_vote) {
+    toggleUpGeneral(container, sid, curr_vote, "/SetSVote");
+}
+function toggleSubmissionDown(container, sid, curr_vote) {
+    toggleDownGeneral(container, sid, curr_vote, "/SetSVote");
 }
