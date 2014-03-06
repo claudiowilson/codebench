@@ -22,8 +22,8 @@ block content
                 // Yolo fix plz fix sql query to update upvotes and downvotes
                 h3.votes.float-left #{question.upvotes - question.downvotes}
                 //h3.float-left #{question.vote - question.downvotes}
-                img.thumbsup.center(src=(question.vote == 1 ? "/thumbs-up-good.png" : "/thumbs-up.png") height='30' width='30' style='margin-top:13px', onclick='toggleQuestionUp($(this).parent(), #{question.question_id}, #{question.vote})')
-                img.thumbsdown.center(src=(question.vote == -1 ? "/thumbs-down-bad.png" : "/thumbs-down.png") height='30' width='30' style='margin:auto', onclick='toggleQuestionDown($(this).parent(), #{question.question_id}, #{question.vote})')
+                img.thumbsup.center(src=(question.vote == 1 ? "/thumbs-up-good.png" : "/thumbs-up.png") height='30' width='30' style='margin-top:13px', onclick=(user ? 'toggleQuestionUp($(this).parent(), #{question.question_id}, #{question.vote})' : ''))
+                img.thumbsdown.center(src=(question.vote == -1 ? "/thumbs-down-bad.png" : "/thumbs-down.png") height='30' width='30' style='margin:auto', onclick=(user ? 'toggleQuestionDown($(this).parent(), #{question.question_id}, #{question.vote})' : ''))
               .col-md-11
                 h3: a(href="/problem/#{question.question_id}") #{question.title}
                 h5 Submitted by #{question.username}
