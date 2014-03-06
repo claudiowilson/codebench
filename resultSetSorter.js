@@ -12,7 +12,8 @@ var SortCodeAndSubmissionsBySubmissions = function(queryResultRows) {
 								errors : res.errors,
 								language : res.language,
 								classes : [ {name : res.class_name, code: res.code}],
-								submission_id : res.submission_id};
+								submission_id : res.submission_id,
+								time_taken : res.time_taken};
 			prevSubIdResult = res.submission_id;
 		} else {
 			result[resultIdx].classes.push({name : res.class_name, code: res.code});
