@@ -18,13 +18,13 @@ block content
         .container
           each question, i in questions
             .row(class=(i % 2 == 0) ? 'light-row' : 'dark-row')
-              .col-md-1
+              .col-sm-1
                 // Yolo fix plz fix sql query to update upvotes and downvotes
                 h3.votes.float-left #{question.upvotes - question.downvotes}
                 //h3.float-left #{question.vote - question.downvotes}
                 img.thumbsup.center(src=(question.vote == 1 ? "/thumbs-up-good.png" : "/thumbs-up.png") height='30' width='30' style='margin-top:13px', onclick=(user ? 'toggleQuestionUp($(this).parent(), #{question.question_id}, #{question.vote})' : ''))
                 img.thumbsdown.center(src=(question.vote == -1 ? "/thumbs-down-bad.png" : "/thumbs-down.png") height='30' width='30' style='margin:auto', onclick=(user ? 'toggleQuestionDown($(this).parent(), #{question.question_id}, #{question.vote})' : ''))
-              .col-md-11
+              .col-sm-11
                 h3: a(href="/problem/#{question.question_id}") #{question.title}
                 h5 Submitted by #{question.username}
 
@@ -33,11 +33,11 @@ block content
         .container
           each question, i in questions
             .row(class=(i % 2 == 0) ? 'light-row' : 'dark-row')
-              .col-md-1
+              .col-sm-1
                 h3.float-left #{question.upvotes - question.downvotes}
                 img.center(src="/thumbs-up.png" height='30' width='30' style='margin-top:13px')
                 img.center(src="/thumbs-down.png" height='30' width='30' style='margin:auto')
-              .col-md-11
+              .col-sm-11
                 h3: a(href="/problem/#{question.question_id}") #{question.title}
                 h5 Submitted by #{question.username}
 

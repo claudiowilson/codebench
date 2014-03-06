@@ -4,8 +4,9 @@ br
 p #{question.problem}
 div.row
   div.col-md-6
-    h4 Test Inputs
-    textarea.form-control.inout(readonly) #{question.input}
+    if question.input
+      h4 Test Inputs
+      textarea.form-control.inout(readonly) #{question.input}
   div.col-md-6
     h4 Expected Outputs
     textarea.form-control.inout(readonly) #{question.output}
