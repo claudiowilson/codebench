@@ -3,10 +3,14 @@ h5.poster Submitted by #{question.username}
 br
 p #{question.problem}
 div.row
-  div.col-md-6
-    if question.input
+  if question.input
+    .col-md-6
       h4 Test Inputs
       textarea.form-control.inout(readonly) #{question.input}
-  div.col-md-6
-    h4 Expected Outputs
-    textarea.form-control.inout(readonly) #{question.output}
+    .col-md-6
+      h4 Expected Outputs
+      textarea.form-control.inout(readonly) #{question.output}
+  else
+    .col-md-12
+      h4 Expected Outputs
+      textarea.form-control.inout(readonly) #{question.output}
