@@ -63,3 +63,5 @@ CREATE TABLE IF NOT EXISTS codebench.svote(
        CONSTRAINT vote_user_fkey FOREIGN KEY ("user_id") REFERENCES codebench.user ("user_id") ON DELETE CASCADE,
        CONSTRAINT vote_submission_fkey FOREIGN KEY ("submission_id") REFERENCES codebench.submission("submission_id") ON DELETE CASCADE
 );
+
+CREATE EXTENSION pgcrypto;

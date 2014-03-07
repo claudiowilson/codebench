@@ -1,19 +1,24 @@
+var img_up = '/img/thumbs-up.png';
+var img_down = '/img/thumbs-down.png';
+var img_up_active = '/img/thumbs-up-good.png';
+var img_down_active = '/img/thumbs-down-bad.png';
+
 function toggleUpGeneral(container, id, route) {
     upThumb = $(container).children('.thumbsup');
     downThumb = $(container).children('.thumbsdown');
     votes = $(container).children('.votes');
     imagepath = $(upThumb).attr('src');
 
-    if (imagepath == '/thumbs-up.png') {
-        if ($(downThumb).attr('src') == '/thumbs-down-bad.png') {
-            $(downThumb).attr('src', '/thumbs-down.png');
+    if (imagepath == img_up) {
+        if ($(downThumb).attr('src') == img_down_active) {
+            $(downThumb).attr('src', img_down);
             $(votes).text(parseInt($(votes).text()) + 1);
         }
-        $(upThumb).attr('src', '/thumbs-up-good.png');
+        $(upThumb).attr('src', img_up_active);
         $(votes).text(parseInt($(votes).text()) + 1);
         $.post(route + id + "/1");
     } else {
-        $(upThumb).attr('src', '/thumbs-up.png');
+        $(upThumb).attr('src', img_up);
         $(votes).text(parseInt($(votes).text()) - 1);
         $.post(route + id + "/0");
     }
@@ -25,16 +30,16 @@ function toggleDownGeneral(container, id, route) {
     votes = $(container).children('.votes');
     imagepath = $(downThumb).attr('src');
 
-    if (imagepath == '/thumbs-down.png') {
-        if ($(upThumb).attr('src') == '/thumbs-up-good.png') {
-            $(upThumb).attr('src', '/thumbs-up.png');
+    if (imagepath == img_down) {
+        if ($(upThumb).attr('src') == img_up_active) {
+            $(upThumb).attr('src', img_up);
             $(votes).text(parseInt($(votes).text()) - 1);
         }
-        $(downThumb).attr('src', '/thumbs-down-bad.png');
+        $(downThumb).attr('src', img_down_active);
         $(votes).text(parseInt($(votes).text()) - 1);
         $.post("" + route + id + "/-1");
     } else {
-        $(downThumb).attr('src', '/thumbs-down.png');
+        $(downThumb).attr('src', img_down);
         $(votes).text(parseInt($(votes).text()) + 1);
         $.post("" + route + id + "/0");
     }

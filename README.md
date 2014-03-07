@@ -16,9 +16,7 @@ Installing Postgres
 
 * Create tables: `\i <path to .sql file>` 
 
-* Edit `settings.js` to point to the db. `postgres://postgres:<pw>@<ip>:<port>/codebench`, default localhost:5432.
-
-* Install the pgcrypto extension by running the command `CREATE EXTENSION pgcrypto`
+* Edit `settings.js` to point to the db. `postgres://<user>:<pw>@<ip>:<port>/codebench`, default localhost:5432.
 
 
 Cloud Server Settings
@@ -41,4 +39,3 @@ Postgresql - 9.3
 Node - 0.10.24
 
 RabbitMQ - 3.2.2
-

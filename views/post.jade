@@ -14,8 +14,8 @@ block content
       each submission, k in submissions
         .col-sm-1
           h3.votes.float-left #{submission.upvotes - submission.downvotes}
-          img.thumbsup.center(src=(submission.vote == 1 ? "/thumbs-up-good.png" : "/thumbs-up.png") height='30' width='30' style='margin-top:13px', onclick=(user ? 'toggleSubmissionUp($(this).parent(), #{submission.submission_id})' : ''))
-          img.thumbsdown.center(src=(submission.vote == -1 ? "/thumbs-down-bad.png" : "/thumbs-down.png") height='30' width='30' style='margin:auto', onclick=(user ? 'toggleSubmissionDown($(this).parent(), #{submission.submission_id})' : ''))
+          img.thumbsup.center(src=(submission.vote == 1 ? "/img/thumbs-up-good.png" : "/img/thumbs-up.png") height='30' width='30' style='margin-top:13px', onclick=(user ? 'toggleSubmissionUp($(this).parent(), #{submission.submission_id})' : ''))
+          img.thumbsdown.center(src=(submission.vote == -1 ? "/img/thumbs-down-bad.png" : "/img/thumbs-down.png") height='30' width='30' style='margin:auto', onclick=(user ? 'toggleSubmissionDown($(this).parent(), #{submission.submission_id})' : ''))
         h2 #{submission.language} solution that took #{submission.time_taken} milliseconds
         h5 posted by #{submission.username}        
 
@@ -62,7 +62,7 @@ block content
             div#languageSelector.btn-group
               button#javaSelector.btn.btn-default(type="button") Java
               button#pythonSelector.btn.btn-default(type="button") Python
-          ul.nav.nav-tabs
+          ul#response_tabs.nav.nav-tabs
             li.active
               a(href='#0', data-toggle='tab')
                 input.form-control(name="file-0" value="Main");
@@ -80,13 +80,13 @@ block content
                 | }
                 |}
             .controls
-              script(src="/ace-min/ace.js" type="text/javascript" charset="utf-8")
-              script(src="/ace-min/mode-java.js" type="text/javascript" charset="utf-8")
-              script(src="/ace-min/mode-python.js" type="text/javascript" charset="utf-8")
-              script(src="/ace-min/theme-eclipse.js" type="text/javascript" charset="utf-8")
+              script(src="/js/ace-min/ace.js" type="text/javascript" charset="utf-8")
+              script(src="/js/ace-min/mode-java.js" type="text/javascript" charset="utf-8")
+              script(src="/js/ace-min/mode-python.js" type="text/javascript" charset="utf-8")
+              script(src="/js/ace-min/theme-eclipse.js" type="text/javascript" charset="utf-8")
           // Footer
           div.modal-footer
             .form-actions
               button#submit(type="submit" class="btn btn-primary") Submit
                 i(class="icon-ok icon-white")
-  script(src="/post.js" type="text/javascript" charset="utf-8")
+  script(src="/js/post.js" type="text/javascript" charset="utf-8")

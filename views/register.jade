@@ -1,32 +1,4 @@
 // Register Modal
-script.
-  var numClasses = 1;
-  $(document).ready(
-    function() {
-      $(".nav.nav-tabs").on("click", "a", function(e){
-        e.preventDefault();
-        $(this).tab('show');
-      });
-
-      var addClassFunc = function() {
-          $(this).attr('id', numClasses);
-          $('#' + numClasses)[0].onclick = null;
-          $(this).removeAttr('id');
-          $(this).attr('data-toggle', 'tab');
-          $(this).attr('href', '#' + numClasses);
-          $(this)[0].innerHTML = '<input class="form-control" name="file-' + numClasses + '"></input>';
-          $('ul.nav.nav-tabs').append('<li><a id="addClass" href="#' + numClasses + '", data-toggle="tab">+</a></li>');
-          $('#content.tab-content').append('<div id="' + numClasses + '" class="tab-pane"><textarea id="sol-' + numClasses + '" name="' + numClasses + '"class="form-control solution"></textarea><div class="editor form-control" id="editor' + numClasses + '"></div></div>');
-          addEditor();
-          $('#addClass')[0].onclick = addClassFunc;
-          $('#classes').val(numClasses + 1);
-          numClasses++;
-      }
-      $('#solution').tabby();
-      $('input,select,textarea').jqBootstrapValidation();
-      $('#addClass')[0].onclick = addClassFunc;
-  });
-
 #registerModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='registerModalLabel', aria-hidden='true')
   .modal-dialog
     .modal-content

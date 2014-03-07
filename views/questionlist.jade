@@ -4,8 +4,8 @@ if questions
         .row(class=(i % 2 == 0) ? 'light-row' : 'dark-row')
           .col-sm-1
             h3.votes.float-left #{question.upvotes - question.downvotes}
-            img.thumbsup.center(src=(question.vote == 1 ? "/thumbs-up-good.png" : "/thumbs-up.png") height='30' width='30' style='margin-top:13px', onclick=(user ? 'toggleQuestionUp($(this).parent(), #{question.question_id})' : ''))
-            img.thumbsdown.center(src=(question.vote == -1 ? "/thumbs-down-bad.png" : "/thumbs-down.png") height='30' width='30' style='margin:auto', onclick=(user ? 'toggleQuestionDown($(this).parent(), #{question.question_id})' : ''))
+            img.thumbsup.center(src=(question.vote == 1 ? "/img/thumbs-up-good.png" : "/img/thumbs-up.png") height='30' width='30' style='margin-top:13px', onclick=(user ? 'toggleQuestionUp($(this).parent(), #{question.question_id})' : ''))
+            img.thumbsdown.center(src=(question.vote == -1 ? "/img/thumbs-down-bad.png" : "/img/thumbs-down.png") height='30' width='30' style='margin:auto', onclick=(user ? 'toggleQuestionDown($(this).parent(), #{question.question_id})' : ''))
           .col-sm-11
             h3: a(href="/problem/#{question.question_id}") #{question.title}
             h5 Submitted by #{question.username}
