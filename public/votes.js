@@ -1,4 +1,4 @@
-function toggleUpGeneral(container, id, curr_vote, route) {
+function toggleUpGeneral(container, id, route) {
     upThumb = $(container).children('.thumbsup');
     downThumb = $(container).children('.thumbsdown');
     votes = $(container).children('.votes');
@@ -11,15 +11,15 @@ function toggleUpGeneral(container, id, curr_vote, route) {
         }
         $(upThumb).attr('src', '/thumbs-up-good.png');
         $(votes).text(parseInt($(votes).text()) + 1);
-        $.post(route + id + "/" + (curr_vote ? curr_vote : 0) + "/1");
+        $.post(route + id + "/1");
     } else {
         $(upThumb).attr('src', '/thumbs-up.png');
         $(votes).text(parseInt($(votes).text()) - 1);
-        $.post(route + id + "/" + (curr_vote ? curr_vote : 0) + "/0");
+        $.post(route + id + "/0");
     }
 }
 
-function toggleDownGeneral(container, id, curr_vote, route) {
+function toggleDownGeneral(container, id, route) {
     upThumb = $(container).children('.thumbsup');
     downThumb = $(container).children('.thumbsdown');
     votes = $(container).children('.votes');
@@ -32,24 +32,24 @@ function toggleDownGeneral(container, id, curr_vote, route) {
         }
         $(downThumb).attr('src', '/thumbs-down-bad.png');
         $(votes).text(parseInt($(votes).text()) - 1);
-        $.post("" + route + id + "/" + (curr_vote ? curr_vote : 0) + "/-1");
+        $.post("" + route + id + "/-1");
     } else {
         $(downThumb).attr('src', '/thumbs-down.png');
         $(votes).text(parseInt($(votes).text()) + 1);
-        $.post("" + route + id + "/" + (curr_vote ? curr_vote : 0) + "/0");
+        $.post("" + route + id + "/0");
     }
 }
 
-function toggleQuestionUp(container, qid, curr_vote) {
-    toggleUpGeneral(container, qid, curr_vote, "/SetQVote/");
+function toggleQuestionUp(container, qid) {
+    toggleUpGeneral(container, qid, "/SetQVote/");
 }
-function toggleQuestionDown(container, qid, curr_vote) {
-    toggleDownGeneral(container, qid, curr_vote, "/SetQVote/");
+function toggleQuestionDown(container, qid) {
+    toggleDownGeneral(container, qid, "/SetQVote/");
 }
 
-function toggleSubmissionUp(container, sid, curr_vote) {
-    toggleUpGeneral(container, sid, curr_vote, "/SetSVote/");
+function toggleSubmissionUp(container, sid) {
+    toggleUpGeneral(container, sid, "/SetSVote/");
 }
-function toggleSubmissionDown(container, sid, curr_vote) {
-    toggleDownGeneral(container, sid, curr_vote, "/SetSVote/");
+function toggleSubmissionDown(container, sid) {
+    toggleDownGeneral(container, sid, "/SetSVote/");
 }

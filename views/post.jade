@@ -1,4 +1,4 @@
-extend layout
+B1;2802;0cextend layout
 block content
   if question
     div.container
@@ -14,8 +14,8 @@ block content
       each submission, k in submissions
         .col-sm-1
           h3.votes.float-left #{submission.upvotes - submission.downvotes}
-          img.thumbsup.center(src=(submission.vote == 1 ? "/thumbs-up-good.png" : "/thumbs-up.png") height='30' width='30' style='margin-top:13px', onclick=(user ? 'toggleSubmissionUp($(this).parent(), #{submission.submission_id}, #{submission.vote})' : ''))
-          img.thumbsdown.center(src=(submission.vote == -1 ? "/thumbs-down-bad.png" : "/thumbs-down.png") height='30' width='30' style='margin:auto', onclick=(user ? 'toggleSubmissionDown($(this).parent(), #{submission.submission_id}, #{submission.vote})' : ''))
+          img.thumbsup.center(src=(submission.vote == 1 ? "/thumbs-up-good.png" : "/thumbs-up.png") height='30' width='30' style='margin-top:13px', onclick=(user ? 'toggleSubmissionUp($(this).parent(), #{submission.submission_id})' : ''))
+          img.thumbsdown.center(src=(submission.vote == -1 ? "/thumbs-down-bad.png" : "/thumbs-down.png") height='30' width='30' style='margin:auto', onclick=(user ? 'toggleSubmissionDown($(this).parent(), #{submission.submission_id})' : ''))
         h2 #{submission.language} solution that took #{submission.time_taken} milliseconds
         h5 posted by #{submission.username}        
 

@@ -82,11 +82,11 @@ var AddUser = function(name, username, password, email, callback) {
     CallPreparedStatement( { name: 'add_user', text: "INSERT INTO codebench.user (username, password, full_name, email) VALUES ($1, crypt($2, gen_salt('bf')), $3, $4) RETURNING user_id", values: [username, password, name, email] }, callback);
 }
 
-var SetQuestionVote = function(userId, questionId, prevVote, vote, callback) {
-    if (!prevVote) prevVote = 0;
-
+var SetQuestionVote = function(userId, questionId, vote, callback) {
     // Update qvote if exists
-    CallPreparedStatement( { name: 'set_qvote', text: "UPDATE codebench.qvote SET vote = $3 WHERE codebench.qvote.user_id = $1 AND codebench.qvote.question_id = $2", values: [userId, questionId, vote] }, function(err, result) {
+    CallPreparedStatement( { name: 'set_qvote', text: "UPDATE codebench.qvote SET vote = $3 FROM (SELECT qvote.vote FROM codebench.qvote AS qvote WHERE qvote.user_id = $1 AND qvote.question_id = $2 FOR UPDATE) dup WHERE codebench.qvote.vote = dup.vote RETURNING dup.vote AS old_vote", values: [userId, questionId, vote] }, function(err, result) {
+
+        prevVote = result.rows[0].old_vote || 0;
 
         var updateQuestion = function() {
             up = (prevVote == 1 ? -1 : 0);
@@ -104,12 +104,12 @@ var SetQuestionVote = function(userId, questionId, prevVote, vote, callback) {
     });
 }
 
-var SetSubmissionVote = function(userId, submissionId, prevVote, vote, callback) {
-    if (!prevVote) prevVote = 0;
-
+var SetSubmissionVote = function(userId, submissionId, vote, callback) {
     // Update qvote if exists
-    CallPreparedStatement( { name: 'set_svote', text: "UPDATE codebench.svote SET vote = $3 WHERE codebench.svote.user_id = $1 AND codebench.svote.submission_id = $2", values: [userId, submissionId, vote] }, function(err, result) {
+    CallPreparedStatement( { name: 'set_svote', text: "UPDATE codebench.svote SET vote = $3 FROM (SELECT svote.vote FROM codebench.svote AS svote WHERE svote.user_id = $1 AND svote.submission_id = $2 FOR UPDATE) dup WHERE codebench.svote.vote = dup.vote RETURNING dup.vote AS old_vote", values: [userId, submissionId, vote] }, function(err, result) {
         
+        prevVote = result.rows[0].old_vote || 0;
+
         var updateSubmission = function() {
             up = (prevVote == 1 ? -1 : 0);
             down = (prevVote == -1 ? -1 : 0);
