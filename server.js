@@ -75,19 +75,19 @@ app.get('/problem/:id', function(request, response) {
     var userId = (request.cookies.user ? request.cookies.user.userId : null);
 
     queries.GetQuestion(id, function(err, question) {
-      if(err) {
-        console.log(err);
-      } else {
-        var ques = question.rows[0];
-        queries.GetSubmissionsAndCodeForQuestion(userId, ques.question_id, function(err, result) {
-          if(err) {
+        if(err) {
             console.log(err);
-          } else {
-            var submissions = sorter.SortCodeResults(result.rows);
-            response.render('post.jade', {user: request.cookies.user, question: ques, submissions: submissions});
-          }
-        });
-      }
+        } else {
+            var ques = question.rows[0];
+            queries.GetSubmissionsAndCodeForQuestion(userId, ques.question_id, function(err, result) {
+                if(err) {
+                    console.log(err);
+                } else {
+                    var submissions = sorter.SortCodeResults(result.rows);
+                    response.render('post.jade', {user: request.cookies.user, question: ques, submissions: submissions});
+                }
+            });
+        }
     });
 });
 
@@ -153,8 +153,21 @@ app.get('/submit/:submission_id', function(request, response) {
 
 app.get('/index', function(request, response) {
     id = (request.cookies.user ? request.cookies.user.userId : null);
-    queries.GetQuestions(id, function (err, results) {
-        response.render('index.jade', {user: request.cookies.user, questions: results.rows});
+    response.render('index.jade', {user: request.cookies.user});
+});
+
+app.get('/questionlist', function(request, response) {
+    var sortBy = 'top';
+    if (request.params.sort == 'newest') {
+        sortBy = 'newest';
+    }
+
+    id = (request.cookies.user ? request.cookies.user.userId : null);
+    queries.GetQuestions(id, sortBy, function (err, results) {
+        app.render('questionlist.jade', {user: request.cookies.user, questions: results.rows},
+                   function(err, html) {
+                       response.send(html);
+                   });
     });
 });
 

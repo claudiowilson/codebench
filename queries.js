@@ -35,8 +35,13 @@ var GetCodeForSubmission = function(submissionId, callback) {
     CallPreparedStatement( { name: 'get_code_for_submission', text: "SELECT * FROM codebench.code WHERE codebench.code.submission_id=$1", values : [submissionId]}, callback);
 }
 
-var GetQuestions = function(id, callback) {
-    CallPreparedStatement( {name: 'get_questions', text: "SELECT q.question_id, q.asked_user, q.title, q.upvotes, q.downvotes, u.username, qvote.vote FROM ((codebench.question AS q INNER JOIN codebench.user AS u ON q.asked_user = u.user_id) LEFT JOIN codebench.qvote AS qvote ON qvote.user_id=$1 AND q.question_id = qvote.question_id) ORDER BY (q.upvotes - q.downvotes) DESC LIMIT 50", values: [id]} , callback);
+var GetQuestions = function(id, sortBy, callback) {
+    if (sortBy == 'top') {
+        var orderBy = '(q.upvotes - q.downvotes)';
+    } else if (sortBy == 'newest') {
+        var orderBy = 'q.asked_user';
+    }
+    CallPreparedStatement( {name: 'get_questions', text: "SELECT q.question_id, q.asked_user, q.title, q.upvotes, q.downvotes, u.username, qvote.vote FROM ((codebench.question AS q INNER JOIN codebench.user AS u ON q.asked_user = u.user_id) LEFT JOIN codebench.qvote AS qvote ON qvote.user_id=$1 AND q.question_id = qvote.question_id) ORDER BY " + orderBy + " DESC LIMIT 50", values: [id]} , callback);
 }
 
 var GetQuestionVote = function(userId, questionId, callback) {
