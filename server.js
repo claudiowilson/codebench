@@ -1,6 +1,7 @@
 var express = require('express'),
 stylus = require('stylus'),
 async = require('async'),
+markdown = require("markdown").markdown;
 settings = require('./settings'),
 queries = require('./queries'),
 pg = require('pg'),
@@ -84,7 +85,7 @@ app.get('/problem/:id', function(request, response) {
                     console.log(err);
                 } else {
                     var submissions = sorter.SortCodeResults(result.rows);
-                    response.render('post.jade', {user: request.cookies.user, question: ques, submissions: submissions});
+                    response.render('post.jade', {user: request.cookies.user, question: ques, submissions: submissions, markdown:markdown});
                 }
             });
         }
@@ -97,7 +98,7 @@ app.get('/logoff', function(request, response) {
 });
 
 app.get('/addproblem', function(request, response) {
-    response.render('addQuestion.jade', {user: request.cookies.user});
+    response.render('addQuestion.jade', {user: request.cookies.user, markdown:markdown});
 });
 
 app.post('/submitQuestion', function(request, response) {

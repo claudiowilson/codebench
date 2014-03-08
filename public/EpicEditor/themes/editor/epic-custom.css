@@ -1,0 +1,13 @@
+html {
+    font-family:inherit;
+    font-weight:inherit;
+    font-size:15px;
+    color:#555;
+}
+
+body {
+  border:0;
+  background:#fcfcfc;
+  line-height:1.35em;
+  margin:0;
+}

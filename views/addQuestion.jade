@@ -15,9 +15,10 @@ block content
           // Message 
           .control-group
             label.control-label(for='question') Problem
+            div#editor.form-control.markdown-editor
             .controls
-              textarea#question.form-control(name='problem', rows='5', cols='150', required='required')
-         
+              textarea#question(name='problem', rows='5', cols='150', required='required' hidden)
+
           // Input 
           .control-group
             label.control-label(for='input') Inputs
@@ -35,3 +36,6 @@ block content
             button.btn.btn-primary(type='submit')
               | Submit
               i.icon-ok.icon-white
+
+  script(src='/EpicEditor/js/epiceditor.min.js')
+  script(src='/js/addQuestion.js')
