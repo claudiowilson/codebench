@@ -1,7 +1,7 @@
 var express = require('express'),
 stylus = require('stylus'),
 async = require('async'),
-markdown = require("markdown").markdown;
+markdown = require('marked');
 settings = require('./settings'),
 queries = require('./queries'),
 pg = require('pg'),

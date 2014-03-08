@@ -1,7 +1,7 @@
 h2.text-shadowed #{question.title}
 h5.poster Submitted by #{question.username}
 br
-div!= markdown.toHTML(question.problem)
+div!= markdown(question.problem)
 div.row
   if question.input
     .col-md-6
