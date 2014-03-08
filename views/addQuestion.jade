@@ -10,25 +10,25 @@ block content
           .control-group
             label.control-label(for='title') Title
             .controls
-              input#title.form-control(type='text', size='100', name='title', required='required')
+              input#title.form-control(type='text', size='100', name='title', placeholder="What is the question asking?" required='required')
                 
           // Message 
           .control-group
             label.control-label(for='question') Problem
             .controls
-              textarea#question.form-control(name='problem', rows='5', cols='150', required='required')
+              textarea#question.form-control(name='problem', rows='5', cols='150', placeholder="In concise terms, descibe the problem and its inputs and outputs" required='required')
          
           // Input 
           .control-group
             label.control-label(for='input') Inputs
             .controls
-              input#input.form-control(type='text', size='100', name='input')
+              textarea#input.form-control(rows='5', cols='150', name='input', placeholder="Each line represents a single test case (you can have multiple!)")
         
           // Output 
           .control-group
             label.control-label(for='output') Outputs
             .controls
-              input#output.form-control(type='text', size='100', name='output')
+              textarea#output.form-control(rows='5', cols='150', name='output' placeholder="Each line corrresponds to the output for a single test case")
 
         .modal-footer
           .form-actions
