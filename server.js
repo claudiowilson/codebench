@@ -112,31 +112,43 @@ app.post('/submitQuestion', function(request, response) {
 });
 
 app.post('/submitSolution', function(request, response) {
-    console.log(request.body);
     var submissionId = 0;
-    queries.AddSubmission(request.cookies.user.userId, request.body.problemId, request.body.message, request.body.language, function(err, result) {
-        if(err) {
-            response.render('layout.jade', {message: 'Something went wrong'});
-        } else {
-            submissionId = result.rows[0].submission_id;
-            numClasses = request.body.numClasses;
-            for(var i = 0; i < numClasses; i++) {
-                console.log(request.body[i] + ' ' + request.body['file-' + i] + ' ' + numClasses)
-                if(i == numClasses - 1) {
-                    queries.AddCodeForSubmission(submissionId,request.body[i], request.body['file-' + i], function(err, result) {
-                        sender.SendMessage(submissionId, "java", function(err, result) {
-                            console.log(result);
+    var compiling = (request.body.submit == 'Compile and Run' ? true : false);
+
+    if (compiling) {
+        queries.AddSubmission(request.cookies.user.userId, request.body.problemId, request.body.message, request.body.language, function(err, result) {
+            if(err) {
+                response.render('layout.jade', {message: 'Something went wrong'});
+            } else {
+                submissionId = result.rows[0].submission_id;
+                request.cookies.user.pendingSubmission = submissionId;
+                numClasses = request.body.numClasses;
+                for(var i = 0; i < numClasses; i++) {
+                    console.log(request.body[i] + ' ' + request.body['file-' + i] + ' ' + numClasses)
+                    if(i == numClasses - 1) {
+                        queries.AddCodeForSubmission(submissionId,request.body[i], request.body['file-' + i], function(err, result) {
+                            sender.SendMessage(submissionId, "java", function(err, result) {
+                                console.log(result);
+                                response.send(result); // Coderunner should return output as result
+                            });
                         });
-                    });
-                } else {
-                    queries.AddCodeForSubmission(submissionId, request.body[i], request.body['file-' + i], function(err, result) {
-                        console.log('Sent to postgres' + result);
-                    });
+                    } else {
+                        queries.AddCodeForSubmission(submissionId, request.body[i], request.body['file-' + i], function(err, result) {
+                            console.log('Sent to postgres' + result);
+                        });
+                    }
                 }
             }
-            response.redirect(/submit/ + result.rows[0].submission_id);
-        }
-    })
+        });    
+    } else {
+        queries.FinalizeSubmission(response.cookies.user.pendingSubmission, function(err, result) {
+            if(err) {
+                response.render('layout.jade', {message: 'Something went wrong'});
+            } else {
+                response.redirect(/submit/ + result.rows[0].submission_id);
+            }
+        });
+    }
 });
 
 app.post('/setSVote/:submissionId/:vote', function(request, response) {

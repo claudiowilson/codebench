@@ -70,6 +70,10 @@ var AddSubmission = function(submittedUserId, question, message, language,  call
     CallPreparedStatement( { name: 'add_sumission', text : "INSERT INTO codebench.submission (submitted_user, question, message, language) VALUES($1, $2, $3, $4) RETURNING submission_id", values: [submittedUserId, question, message, language] }, callback);
 }
 
+var FinalizeSubmission = function(submissionId, callback) {
+    CallPreparedStatement( { name: 'finalize_submission', text: "UPDATE codebench.submission SET submitted = TRUE WHERE codebench.submission.submission_id = $1 RETURNING submission_id", values: [submissionId] }, callback);
+}
+
 var AddCodeForSubmission = function(submissionId, code, className, callback) {
     CallPreparedStatement( { name: 'add_code_for_submission', text : "INSERT INTO codebench.code (submission_id, code, class_name) VALUES($1, $2, $3) RETURNING code_id", values: [submissionId, code, className] }, callback);
 }
@@ -146,6 +150,7 @@ module.exports = {
     AddUser : AddUser,
     AddQuestion : AddQuestion,
     AddSubmission : AddSubmission,
+    FinalizeSubmission : FinalizeSubmission,
     LoginUser : LoginUser,
     AddQuestion : AddQuestion,
     GetQuestion : GetQuestion,

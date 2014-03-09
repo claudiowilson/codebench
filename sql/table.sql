@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS codebench.submission(
         upvotes integer DEFAULT 0,
 	downvotes integer DEFAULT 0,
         date_created timestamp with time zone,
+        submitted boolean DEFAULT FALSE,
 	PRIMARY KEY (submission_id),
 	CONSTRAINT submission_user_fkey FOREIGN KEY ("submitted_user") REFERENCES codebench.user ("user_id") ON DELETE CASCADE,
 	CONSTRAINT submission_question_fkey FOREIGN KEY ("question") REFERENCES codebench.question("question_id") ON DELETE CASCADE
