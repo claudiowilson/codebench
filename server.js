@@ -112,6 +112,7 @@ app.post('/submitQuestion', function(request, response) {
 });
 
 app.post('/submitSolution', function(request, response) {
+    console.log(request.body);
     var submissionId = 0;
     queries.AddSubmission(request.cookies.user.userId, request.body.problemId, request.body.message, request.body.language, function(err, result) {
         if(err) {

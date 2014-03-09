@@ -50,7 +50,7 @@ block content
       form.form-horizontal(method="post" action="/submitSolution" novalidate)
         input(type="hidden" name="problemId" value="#{question.question_id}")
         input(type="hidden" id="classes" name="numClasses" value="1");
-        input(type="hidden" id="lang" name="language" value="java");
+        input(type="hidden" id="language" name="language" value="java");
         div.modal-body
           // Message
           div.control-group
@@ -62,8 +62,9 @@ block content
           div.control-group
             label.control-label(for="solution") Solution
             div#languageSelector.btn-group
-              button#javaSelector.btn.btn-default(type="button") Java
-              button#pythonSelector.btn.btn-default(type="button") Python
+              button#cSelector.button.btn.btn-default C
+              button#javaSelector.button.btn.btn-default Java
+              button#pythonSelector.button.btn.btn-default Python
           ul#response_tabs.nav.nav-tabs
             li.active
               a(href='#0', data-toggle='tab')
@@ -85,11 +86,13 @@ block content
               script(src="/js/ace-min/ace.js" type="text/javascript" charset="utf-8")
               script(src="/js/ace-min/mode-java.js" type="text/javascript" charset="utf-8")
               script(src="/js/ace-min/mode-python.js" type="text/javascript" charset="utf-8")
+              script(src="/js/ace-min/mode-c_cpp.js" type="text/javascript" charset="utf-8")
               script(src="/js/ace-min/theme-eclipse.js" type="text/javascript" charset="utf-8")
           // Footer
           div.modal-footer
             .form-actions
-              button#submit(type="submit" class="btn btn-primary") Submit
+              input#compile.button(type="submit" class="btn btn-primary" name="submit" value="Compile and Run")
+              input#submit.button(type="submit" class="btn btn-primary" name="submit" value="Submit")
                 i(class="icon-ok icon-white")
 
   script(defer src="/js/votes.js")

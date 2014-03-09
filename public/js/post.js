@@ -2,6 +2,7 @@ var numClasses = 1;
 var editors = [];
 var JavaMode = require("ace/mode/java").Mode;
 var PythonMode = require("ace/mode/python").Mode;
+var CCPPMode = require("ace/mode/c_cpp").Mode;
 
 function addEditor(){
     current_i = editors.length;
@@ -27,6 +28,14 @@ var addClassFunc = function() {
 
 $('#solution').tabby();
 $('#addClass')[0].onclick = addClassFunc;
+
+$("#cSelector")[0].onclick = function() {
+    for(var i = 0; i < editors.length; i++){
+        editors[i].getSession().setMode(new CCPPMode());
+        editors[i].getSession().setValue("");
+        $("#language").val("c");
+    }
+};
 
 $("#javaSelector")[0].onclick = function() {
     for(var i = 0; i < editors.length; i++){

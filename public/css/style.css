@@ -1,5 +1,5 @@
 body {
-    padding-top: 100px;
+    margin-top: 70px;
     background-color:rgb(61,83,178);
     color:white;
 }
@@ -87,7 +87,7 @@ a:hover {
 }
 #intro {
     marginBottom:10px;
-    background:url(/stripe.png);
+    background:url(/img/stripe.png);
     background-repeat: repeat;
     box-shadow: 0px -4px 4px -2px #363636 inset;
 }
