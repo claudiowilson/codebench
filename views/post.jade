@@ -12,15 +12,17 @@ block content
   if submissions
     div.container
       each submission, k in submissions
-        .col-sm-1
-          h3.votes.float-left #{submission.upvotes - submission.downvotes}
-          img.thumbsup.center(src=(submission.vote == 1 ? "/img/thumbs-up-good.png" : "/img/thumbs-up.png") height='30' width='30' style='margin-top:13px', onclick=(user ? 'toggleSubmissionUp($(this).parent(), #{submission.submission_id})' : ''))
-          img.thumbsdown.center(src=(submission.vote == -1 ? "/img/thumbs-down-bad.png" : "/img/thumbs-down.png") height='30' width='30' style='margin:auto', onclick=(user ? 'toggleSubmissionDown($(this).parent(), #{submission.submission_id})' : ''))
-        h2 #{submission.language} solution that took #{submission.time_taken} milliseconds
-        h5 posted by #{submission.username}        
-
-        .col-md-1
-        | #{submission.message}
+        table.table-condensed
+          tr.row
+            td(width="1%")
+            td(width="3%"): h3.votes.float-left #{submission.upvotes - submission.downvotes}
+            td(width="4%")
+              img.thumbsup.center(src=(submission.vote == 1 ? "/img/thumbs-up-good.png" : "/img/thumbs-up.png") height='30' width='30' style='margin-top:13px', onclick=(user ? 'toggleSubmissionUp($(this).parent(), #{submission.submission_id})' : ''))
+              img.thumbsdown.center(src=(submission.vote == -1 ? "/img/thumbs-down-bad.png" : "/img/thumbs-down.png") height='30' width='30' style='margin:auto', onclick=(user ? 'toggleSubmissionDown($(this).parent(), #{submission.submission_id})' : ''))
+            td(width="94%")
+              h2 #{submission.language} solution that took #{submission.time_taken} milliseconds
+              h5 posted by #{submission.username}        
+              | #{submission.message}
 
         if submission.errors
           pre.prettyprint

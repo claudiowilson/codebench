@@ -4,9 +4,9 @@ var img_up_active = '/img/thumbs-up-good.png';
 var img_down_active = '/img/thumbs-down-bad.png';
 
 function toggleUpGeneral(container, id, route) {
-    upThumb = $(container).children('.thumbsup');
-    downThumb = $(container).children('.thumbsdown');
-    votes = $(container).children('.votes');
+    upThumb = $(container).find('.thumbsup');
+    downThumb = $(container).find('.thumbsdown');
+    votes = $(container).find('.votes');
     imagepath = $(upThumb).attr('src');
 
     if (imagepath == img_up) {
@@ -25,9 +25,9 @@ function toggleUpGeneral(container, id, route) {
 }
 
 function toggleDownGeneral(container, id, route) {
-    upThumb = $(container).children('.thumbsup');
-    downThumb = $(container).children('.thumbsdown');
-    votes = $(container).children('.votes');
+    upThumb = $(container).find('.thumbsup');
+    downThumb = $(container).find('.thumbsdown');
+    votes = $(container).find('.votes');
     imagepath = $(downThumb).attr('src');
 
     if (imagepath == img_down) {

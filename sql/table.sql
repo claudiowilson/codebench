@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS codebench.user(
 	password text NOT NULL,
 	full_name text,
 	email text NOT NULL,
+        date_created timestamp with time zone,
 	PRIMARY KEY (user_id),
 	CONSTRAINT username_unique UNIQUE("username")
 );
@@ -19,6 +20,7 @@ CREATE TABLE IF NOT EXISTS codebench.question(
 	output text,
 	upvotes integer DEFAULT 0,
 	downvotes integer DEFAULT 0,
+        date_created timestamp with time zone,
 	PRIMARY KEY (question_id),
 	CONSTRAINT question_user_fkey FOREIGN KEY ("asked_user") REFERENCES codebench.user ("user_id") ON DELETE CASCADE
 );
@@ -33,6 +35,7 @@ CREATE TABLE IF NOT EXISTS codebench.submission(
 	language text,
         upvotes integer DEFAULT 0,
 	downvotes integer DEFAULT 0,
+        date_created timestamp with time zone,
 	PRIMARY KEY (submission_id),
 	CONSTRAINT submission_user_fkey FOREIGN KEY ("submitted_user") REFERENCES codebench.user ("user_id") ON DELETE CASCADE,
 	CONSTRAINT submission_question_fkey FOREIGN KEY ("question") REFERENCES codebench.question("question_id") ON DELETE CASCADE
