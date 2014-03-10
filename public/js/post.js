@@ -10,7 +10,7 @@ function addEditor(){
     editors[current_i].getSession().setMode(new JavaMode());
     editors[current_i].setTheme("ace/theme/eclipse");
     editors[current_i].on("input", function() {
-        $("#submit").hide();
+        $("#submit").prop("disabled",true);
     });
 }
 
@@ -37,7 +37,7 @@ $("#cSelector")[0].onclick = function() {
         editors[i].getSession().setMode(new CCPPMode());
         editors[i].getSession().setValue("");
         $("#language").val("c");
-        $("#submit").hide();
+        $("#submit").prop("disabled",true);
     }
 };
 
@@ -46,7 +46,7 @@ $("#javaSelector")[0].onclick = function() {
         editors[i].getSession().setMode(new JavaMode());
         editors[i].getSession().setValue("import java.util.*;\n\npublic class Main {\n\tpublic static void main(String[] args){\n\t\t// code away!\n\t}\n}");
         $("#language").val("java");
-        $("#submit").hide();
+        $("#submit").prop("disabled",true);
     }
 };
 
@@ -55,11 +55,18 @@ $("#pythonSelector")[0].onclick = function() {
         editors[i].getSession().setMode(new PythonMode());
         editors[i].getSession().setValue("");
         $("#language").val("python");
-        $("#submit").hide();
+        $("#submit").prop("disabled",true);
     }
 };
 
 $("#submissionForm").submit(function(e) {
+    if ($("#submitVal").val() == "submit" && $("#response").val() == "") {
+        alert("Please provide an explanation for your algorithm!");
+        return false;
+    } else if ($("#submitVal").val() == "compile") {
+        $("#compileLoader").show("fast");
+    }
+
     $.ajax({
         type: "POST",
         url: "/submitSolution",
@@ -68,7 +75,8 @@ $("#submissionForm").submit(function(e) {
         {
             if (data.result) {
                 $("#preview").html("<p>"+data.result+"<\p>");                
-                $("#submit").show();
+                $("#submit").prop("disabled", false);
+                $("#compileLoader").hide("fast");
             } else {
                 window.location = data;
             }
@@ -104,4 +112,5 @@ $(".nav.nav-tabs").on("click", "a", function(e){
 });
 
 addEditor();
-$("#submit").hide();
+$("#submit").prop("disabled",true);
+$("#compileLoader").hide("fast");

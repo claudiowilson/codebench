@@ -120,3 +120,8 @@ a:hover {
 .inout {
     max-width: 100%;
 }
+#compileLoader {
+    height: 40px;
+    width: 50px;
+    padding-right: 10px;
+}

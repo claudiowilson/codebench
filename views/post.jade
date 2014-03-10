@@ -62,10 +62,10 @@ block content
           // Solution
           div.control-group
             label.control-label(for="solution") Solution
-            div#languageSelector.btn-group
-              div#cSelector.btn.btn-default C
-              div#javaSelector.btn.btn-default Java
-              div#pythonSelector.btn.btn-default Python
+            #languageSelector.btn-group
+              #cSelector.btn.btn-default C
+              #javaSelector.btn.btn-default Java
+              #pythonSelector.btn.btn-default Python
           ul#response_tabs.nav.nav-tabs
             li.active
               a(href='#0', data-toggle='tab')
@@ -89,14 +89,20 @@ block content
               script(src="/js/ace-min/mode-python.js" type="text/javascript" charset="utf-8")
               script(src="/js/ace-min/mode-c_cpp.js" type="text/javascript" charset="utf-8")
               script(src="/js/ace-min/theme-eclipse.js" type="text/javascript" charset="utf-8")
+
+          label.control-label Compilation Output
+          pre.prettyprint
+            code#preview Run your code to view compilation results.
+
           // Footer
           div.modal-footer
             .form-actions
+              img#compileLoader(src="/img/loading.gif")
               input#compile.button.btn.btn-primary(type="submit" value="Compile and Run")
                 i(class="icon-ok icon-white")
               input#submit.button.btn.btn-primary(type="submit" value="Submit")
                 i(class="icon-ok icon-white")
-          div#preview
+          
 
   script(defer src="/js/votes.js")
   script(src="/js/post.js" type="text/javascript" charset="utf-8")
