@@ -1,4 +1,4 @@
-B1;2802;0c(function() {
+(function() {
     var amqp = require('amqp'),
     settings = require('./settings'),
     connection = amqp.createConnection( { url : settings.Rabbit.url }),
