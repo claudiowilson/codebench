@@ -70,8 +70,8 @@ var AddSubmission = function(submittedUserId, question, message, language,  call
     CallPreparedStatement( { name: 'add_sumission', text : "INSERT INTO codebench.submission (submitted_user, question, message, language) VALUES($1, $2, $3, $4) RETURNING submission_id", values: [submittedUserId, question, message, language] }, callback);
 }
 
-var FinalizeSubmission = function(submissionId, callback) {
-    CallPreparedStatement( { name: 'finalize_submission', text: "UPDATE codebench.submission SET submitted = TRUE WHERE codebench.submission.submission_id = $1 RETURNING submission_id", values: [submissionId] }, callback);
+var FinalizeSubmission = function(submissionId, message, callback) {
+    CallPreparedStatement( { name: 'finalize_submission', text: "UPDATE codebench.submission SET submitted = TRUE, message = $2 WHERE codebench.submission.submission_id = $1 RETURNING submission_id", values: [submissionId, message] }, callback);
 }
 
 var AddCodeForSubmission = function(submissionId, code, className, callback) {

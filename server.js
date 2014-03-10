@@ -115,6 +115,7 @@ app.post('/submitSolution', function(request, response) {
     var submissionId = 0;
     var compiling = (request.body.submit == 'compile' ? true : false);
 
+    console.log(request.body.message);
     if (compiling) {
         queries.AddSubmission(request.cookies.user.userId, request.body.problemId, request.body.message, request.body.language, function(err, result) {
             if(err) {
@@ -141,7 +142,7 @@ app.post('/submitSolution', function(request, response) {
         });    
     } else {
         console.log(request.cookies.pendingSubmission);
-        queries.FinalizeSubmission(request.cookies.pendingSubmission, function(err, result) {
+        queries.FinalizeSubmission(request.cookies.pendingSubmission, request.body.message, function(err, result) {
             if(err) {
                 response.render('layout.jade', {message: 'Something went wrong', user: request.cookies.user});
             } else {
