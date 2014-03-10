@@ -113,23 +113,22 @@ app.post('/submitQuestion', function(request, response) {
 
 app.post('/submitSolution', function(request, response) {
     var submissionId = 0;
-    var compiling = (request.body.submit == 'Compile and Run' ? true : false);
+    var compiling = (request.body.submit == 'compile' ? true : false);
 
     if (compiling) {
         queries.AddSubmission(request.cookies.user.userId, request.body.problemId, request.body.message, request.body.language, function(err, result) {
             if(err) {
                 response.render('layout.jade', {message: 'Something went wrong'});
             } else {
-                submissionId = result.rows[0].submission_id;
-                request.cookies.user.pendingSubmission = submissionId;
+                submissionId = result.rows[0].submission_id;                
+                response.cookie('pendingSubmission', submissionId);
                 numClasses = request.body.numClasses;
                 for(var i = 0; i < numClasses; i++) {
                     console.log(request.body[i] + ' ' + request.body['file-' + i] + ' ' + numClasses)
                     if(i == numClasses - 1) {
                         queries.AddCodeForSubmission(submissionId,request.body[i], request.body['file-' + i], function(err, result) {
                             sender.SendMessage(submissionId, "java", function(err, result) {
-                                console.log(result);
-                                response.send(result); // Coderunner should return output as result
+                                response.json({result:result, submissionId:submissionId});
                             });
                         });
                     } else {
@@ -141,11 +140,14 @@ app.post('/submitSolution', function(request, response) {
             }
         });    
     } else {
-        queries.FinalizeSubmission(response.cookies.user.pendingSubmission, function(err, result) {
+        console.log(request.cookies.pendingSubmission);
+        queries.FinalizeSubmission(request.cookies.pendingSubmission, function(err, result) {
             if(err) {
-                response.render('layout.jade', {message: 'Something went wrong'});
+                response.render('layout.jade', {message: 'Something went wrong', user: request.cookies.user});
             } else {
-                response.redirect(/submit/ + result.rows[0].submission_id);
+                submission = request.cookies.pendingSubmission;
+                request.cookies.pendingSubmission = null;
+                response.send(response.url);
             }
         });
     }

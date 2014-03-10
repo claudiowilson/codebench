@@ -9,6 +9,9 @@ function addEditor(){
     editors[current_i] = ace.edit("editor" + current_i);
     editors[current_i].getSession().setMode(new JavaMode());
     editors[current_i].setTheme("ace/theme/eclipse");
+    editors[current_i].on("input", function() {
+        $("#submit").hide();
+    });
 }
 
 var addClassFunc = function() {
@@ -34,6 +37,7 @@ $("#cSelector")[0].onclick = function() {
         editors[i].getSession().setMode(new CCPPMode());
         editors[i].getSession().setValue("");
         $("#language").val("c");
+        $("#submit").hide();
     }
 };
 
@@ -42,6 +46,7 @@ $("#javaSelector")[0].onclick = function() {
         editors[i].getSession().setMode(new JavaMode());
         editors[i].getSession().setValue("import java.util.*;\n\npublic class Main {\n\tpublic static void main(String[] args){\n\t\t// code away!\n\t}\n}");
         $("#language").val("java");
+        $("#submit").hide();
     }
 };
 
@@ -50,10 +55,44 @@ $("#pythonSelector")[0].onclick = function() {
         editors[i].getSession().setMode(new PythonMode());
         editors[i].getSession().setValue("");
         $("#language").val("python");
+        $("#submit").hide();
+    }
+};
+
+$("#submissionForm").submit(function(e) {
+    $.ajax({
+        type: "POST",
+        url: "/submitSolution",
+        data: $("#submissionForm").serialize(),
+        success: function(data)
+        {
+            if (data.result) {
+                $("#preview").html("<p>"+data.result+"<\p>");                
+                $("#submit").show();
+            } else {
+                window.location = data;
+            }
+        },
+        failure: function()
+        {
+        },
+        complete: function()
+        {
+        }
+    });
+
+    e.preventDefault();
+});
+
+$("#compile")[0].onclick = function() {
+    $("#submitVal").val("compile");
+    for(var i = 0; i < editors.length; i++) {
+        document.getElementById("sol-" + i).value = editors[i].getValue();
     }
 };
 
 $("#submit")[0].onclick = function() {
+    $("#submitVal").val("submit");
     for(var i = 0; i < editors.length; i++) {
         document.getElementById("sol-" + i).value = editors[i].getValue();
     }
@@ -65,3 +104,4 @@ $(".nav.nav-tabs").on("click", "a", function(e){
 });
 
 addEditor();
+$("#submit").hide();

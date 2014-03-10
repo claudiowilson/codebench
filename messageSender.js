@@ -13,11 +13,11 @@
 	});
         connection.queue('', options, function(q) {
             queue = q.name;
-            queue.subscribe(function(message, headers, props, m) {
+            q.subscribe(function(message, headers, props, m) {
                 var correlationId = m.correlationId;
                 if (correlationId in requests) {
-                    var callback = self.requests[correlationId].callback;
-                    delete self.eequests[correlationId];
+                    var callback = requests[correlationId].callback;
+                    delete requests[correlationId];
                     callback(null, message);
                 }
             });
@@ -27,9 +27,10 @@
     
     var SendMessage = function(message, routingKey, callback) {
 	if(exchange === null) return callback(new Error('exchange not defined!'));
-	exchange.publish(routingKey,  message, { correlationId: message, replyTo: routingKey });
+        var correlationId = String(message);
+	exchange.publish(routingKey,  message, { correlationId: correlationId, replyTo: queue });
         requests[correlationId] = { callback:callback };
-//	callback(null, "Sent " + message);
+	callback(null, "Sent " + message);
     };
 	
     exports.SendMessage = SendMessage;
