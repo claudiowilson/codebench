@@ -1,4 +1,4 @@
-IMAGES = $(wildcard dockerfiles/*)
+####IMAGES = $(wildcard dockerfiles/*)
 
 images: $(IMAGES)
 	docker build -t runner-1 .
