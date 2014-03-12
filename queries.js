@@ -17,8 +17,8 @@ var GetQuestionsForUser = function(userId, callback) {
     CallPreparedStatement({name: 'get_questions_for_user', text: "SELECT * FROM codebench.question WHERE asked_user=$1", values: [userId]}, callback);
 }
 
-var GetQuestion = function(id, callback) {
-    CallPreparedStatement( {name: 'get_user', text: "SELECT *, to_char(codebench.question.date_created at time zone 'UTC', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"') AS date_created FROM codebench.question INNER JOIN codebench.user ON codebench.question.asked_user = codebench.user.user_id WHERE question_id=$1", values : [id] }, function(err, result) {
+var GetQuestion = function(id, userId, callback) {
+    CallPreparedStatement( {name: 'get_user', text: "SELECT q.*, u.*, to_char(q.date_created at time zone 'UTC', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"') AS date_created, qvote.vote FROM ((codebench.question AS q INNER JOIN codebench.user AS u ON q.asked_user = u.user_id) LEFT JOIN codebench.qvote AS qvote ON qvote.user_id=$2 AND q.question_id=qvote.question_id) WHERE q.question_id=$1", values : [id, userId] }, function(err, result) {
         if(err) {
             callback(err);
         } else {

@@ -114,3 +114,46 @@ $(".nav.nav-tabs").on("click", "a", function(e){
 addEditor();
 $("#submit").prop("disabled",true);
 $("#compileLoader").hide("fast");
+
+// Markdown Response Editor
+var opts = {
+  container: 'editor',
+  textarea: 'response',
+  basePath: '/EpicEditor',
+  clientSideStorage: true,
+  localStorageName: 'epiceditor',
+  useNativeFullscreen: true,
+  parser: marked,
+  file: {
+    name: 'epiceditor',
+    defaultContent: 'Explain your algorithm in plain english',
+    autoSave: 100
+  },
+  theme: {
+    base: '/themes/base/epiceditor.css',
+    preview: '/themes/preview/github.css',
+    editor: '/themes/editor/epic-custom.css'
+  },
+  button: {
+    preview: true,
+    fullscreen: true,
+    bar: "auto"
+  },
+  focusOnLoad: false,
+  shortcut: {
+    modifier: 18,
+    fullscreen: 70,
+    preview: 80
+  },
+  string: {
+    togglePreview: 'Toggle Preview Mode',
+    toggleEdit: 'Toggle Edit Mode',
+    toggleFullscreen: 'Enter Fullscreen'
+  },
+  autogrow: {
+    minHeight: 300,
+    scroll: true
+  }
+}
+
+var editor = new EpicEditor(opts).load();

@@ -5,8 +5,6 @@ block content
       include question.jade
       if submissions
         | #{submissions.length} answers
-      else
-        Nobody has submitted an answer.
   hr
 
   if submissions
@@ -22,7 +20,7 @@ block content
             td(width="94%")
               h2 #{submission.language} solution that took #{submission.time_taken} milliseconds
               h5 posted by #{submission.username}        
-              | #{submission.message}
+              div!= markdown(submission.message)
 
         if submission.errors
           pre.prettyprint
@@ -52,15 +50,16 @@ block content
         input(type="hidden" id="classes" name="numClasses" value="1");
         input(type="hidden" id="language" name="language" value="java");
         input#submitVal(type="hidden" name="submit" value="compile")
-        div.modal-body
+        .modal-body
           // Message
-          div.control-group
-            label.control-label( for="response") Response
+          .control-group
+            label.control-label(for="response") Response
+            #editor.form-control.markdown-editor             
             .controls
-            textarea#response(class="form-control" name="message" placeholder="Explain your algorithm in plain english." rows="5" cols="150" required)
+              textarea#response(name="message" rows="5" cols="150" required='required' hidden)
             br
           // Solution
-          div.control-group
+          .control-group
             label.control-label(for="solution") Solution
             #languageSelector.btn-group
               #cSelector.btn.btn-default C
@@ -105,4 +104,5 @@ block content
           
 
   script(defer src="/js/votes.js")
+  script(src='/EpicEditor/js/epiceditor.min.js')
   script(src="/js/post.js" type="text/javascript" charset="utf-8")
