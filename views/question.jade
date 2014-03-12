@@ -6,7 +6,7 @@ table.table-condensed
         span (
         span.upvotes #{question.upvotes}
         span |
-        span.downvotes #{question.downvotes}
+        span.downvotes #{-question.downvotes}
         span )
     td(width="5%")
       img.thumbsup.center(src=(question.vote == 1 ? "/img/thumbs-up-good.png" : "/img/thumbs-up.png") height='30' width='30' style='margin-top:13px', onclick=(user ? 'toggleQuestionUp($(this).parent().parent(), #{question.question_id})' : ''))

@@ -15,7 +15,7 @@ function toggleUpGeneral(container, id, route) {
         if ($(downThumb).attr('src') == img_down_active) {
             $(downThumb).attr('src', img_down);
             $(votes).text(parseInt($(votes).text()) + 1);
-            $(downvotes).text(parseInt($(downvotes).text()) - 1);
+            $(downvotes).text(parseInt($(downvotes).text()) + 1);
         }
         $(upThumb).attr('src', img_up_active);
         $(votes).text(parseInt($(votes).text()) + 1);
@@ -45,12 +45,12 @@ function toggleDownGeneral(container, id, route) {
         }
         $(downThumb).attr('src', img_down_active);
         $(votes).text(parseInt($(votes).text()) - 1);
-        $(downvotes).text(parseInt($(downvotes).text()) + 1);
+        $(downvotes).text(parseInt($(downvotes).text()) - 1);
         $.post("" + route + id + "/-1");
     } else {
         $(downThumb).attr('src', img_down);
         $(votes).text(parseInt($(votes).text()) + 1);
-        $(downvotes).text(parseInt($(downvotes).text()) - 1);
+        $(downvotes).text(parseInt($(downvotes).text()) + 1);
         $.post("" + route + id + "/0");
     }
 }
