@@ -6,7 +6,7 @@ var GetSubmissionsForQuestion = function(questionId, callback) {
 }
 
 var GetSubmissionsAndCodeForQuestion = function(userId, questionId, callback) {
-    CallPreparedStatement({name : 'get_submissions_and_code', text: "SELECT u.username, s.errors, s.submission_id, s.message, extract(milliseconds from s.time_taken) as time_taken, s.language, s.upvotes, s.downvotes, c.code, c.class_name, svote.vote FROM ((codebench.submission AS s JOIN codebench.user AS u ON s.submitted_user = u.user_id JOIN codebench.code AS c ON s.submission_id=c.submission_id) LEFT JOIN codebench.svote AS svote ON svote.user_id=$1 AND s.submission_id = svote.submission_id) WHERE s.submitted = TRUE AND s.question=$2 AND s.time_taken IS NOT NULL ORDER BY (s.upvotes - s.downvotes) DESC, s.date_created DESC", values : [userId, questionId] }, callback);
+    CallPreparedStatement({name : 'get_submissions_and_code', text: "SELECT u.username, s.errors, s.submission_id, s.message, extract(milliseconds from s.time_taken) as time_taken, s.language, s.upvotes, s.downvotes, c.code, c.class_name, svote.vote FROM ((codebench.submission AS s JOIN codebench.user AS u ON s.submitted_user = u.user_id JOIN codebench.code AS c ON s.submission_id=c.submission_id) LEFT JOIN codebench.svote AS svote ON svote.user_id=$1 AND s.submission_id = svote.submission_id) WHERE s.submitted = TRUE AND s.question=$2 AND s.time_taken IS NOT NULL ORDER BY (s.upvotes - s.downvotes) DESC, s.date_created::text ASC", values : [userId, questionId] }, callback);
 }
 
 var GetSubmissionsForUser = function(userId, callback) {
@@ -18,7 +18,7 @@ var GetQuestionsForUser = function(userId, callback) {
 }
 
 var GetQuestion = function(id, callback) {
-    CallPreparedStatement( {name: 'get_user', text: "SELECT * FROM codebench.question INNER JOIN codebench.user ON codebench.question.asked_user = codebench.user.user_id WHERE question_id=$1", values : [id] }, function(err, result) {
+    CallPreparedStatement( {name: 'get_user', text: "SELECT *, to_char(codebench.question.date_created at time zone 'UTC', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"') AS date_created FROM codebench.question INNER JOIN codebench.user ON codebench.question.asked_user = codebench.user.user_id WHERE question_id=$1", values : [id] }, function(err, result) {
         if(err) {
             callback(err);
         } else {
@@ -28,7 +28,7 @@ var GetQuestion = function(id, callback) {
                 callback(null, result);
             }
         }
-    })
+    });
 }
 
 var GetCodeForSubmission = function(submissionId, callback) {
@@ -37,11 +37,12 @@ var GetCodeForSubmission = function(submissionId, callback) {
 
 var GetQuestions = function(id, sortBy, callback) {
     if (sortBy == 'top') {
-        var orderBy = '(q.upvotes - q.downvotes)';
+        orderBy = '(q.upvotes - q.downvotes) DESC, q.date_created::text DESC';
     } else if (sortBy == 'newest') {
-        var orderBy = 'q.date_created';
+        orderBy = 'q.date_created::text DESC';
     }
-    CallPreparedStatement( {name: 'get_questions', text: "SELECT q.question_id, q.asked_user, q.title, q.upvotes, q.downvotes, u.username, qvote.vote FROM ((codebench.question AS q INNER JOIN codebench.user AS u ON q.asked_user = u.user_id) LEFT JOIN codebench.qvote AS qvote ON qvote.user_id=$1 AND q.question_id = qvote.question_id) ORDER BY " + orderBy + " DESC, q.date_created DESC LIMIT 50", values: [id]} , callback);
+
+    CallPreparedStatement( {name: 'get_questions', text: "SELECT q.question_id, q.asked_user, q.title, q.upvotes, q.downvotes, to_char(q.date_created at time zone 'UTC', 'YYYY-MM-DD\"T\"HH24:MI:SS\"Z\"') AS date_created, u.username, qvote.vote FROM ((codebench.question AS q INNER JOIN codebench.user AS u ON q.asked_user = u.user_id) LEFT JOIN codebench.qvote AS qvote ON qvote.user_id=$1 AND q.question_id = qvote.question_id) ORDER BY " + orderBy + " LIMIT 50", values: [id]} , callback);
 }
 
 var GetQuestionVote = function(userId, questionId, callback) {
@@ -97,21 +98,21 @@ var SetQuestionVote = function(userId, questionId, vote, callback) {
             down = (prevVote == -1 ? -1 : 0);
             if (vote == 1) up = up + 1;
             if (vote == -1) down = down + 1;
-            
+
             CallPreparedStatement( { name: 'update_question', text: "UPDATE codebench.question SET downvotes=downvotes+$1, upvotes=upvotes+$2 WHERE codebench.question.question_id = $3", values: [down, up, questionId] }, callback);
         }
 
         // Insert qvote if failed to update
         CallPreparedStatement( { name: 'add_qvote', text: "INSERT INTO codebench.qvote (user_id, question_id, vote) SELECT $1, $2, $3 WHERE NOT EXISTS (SELECT 1 FROM codebench.qvote WHERE codebench.qvote.user_id=$1 AND codebench.qvote.question_id=$2)", values: [userId, questionId, vote]}, function(err, result) {
-                updateQuestion();
-            } );
+            updateQuestion();
+        } );
     });
 }
 
 var SetSubmissionVote = function(userId, submissionId, vote, callback) {
     // Update qvote if exists
     CallPreparedStatement( { name: 'set_svote', text: "UPDATE codebench.svote sv SET vote = $3 FROM (SELECT vote FROM codebench.svote WHERE user_id = $1 AND submission_id = $2 FOR UPDATE) dup WHERE user_id = $1 AND submission_id = $2 AND sv.vote = dup.vote RETURNING dup.vote AS old_vote, dup", values: [userId, submissionId, vote] }, function(err, result) {
-                
+
         prevVote = (result.rows[0] ? result.rows[0].old_vote || 0 : 0);
 
         var updateSubmission = function() {
@@ -119,7 +120,7 @@ var SetSubmissionVote = function(userId, submissionId, vote, callback) {
             down = (prevVote == -1 ? -1 : 0);
             if (vote == 1) up = up + 1;
             if (vote == -1) down = down + 1;
-            
+
             CallPreparedStatement( { name: 'update_submission', text: "UPDATE codebench.submission SET downvotes=downvotes+$1, upvotes=upvotes+$2 WHERE codebench.submission.submission_id = $3", values: [down, up, submissionId] }, callback);
         }
 

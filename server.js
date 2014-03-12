@@ -1,7 +1,7 @@
 var express = require('express'),
 stylus = require('stylus'),
 async = require('async'),
-markdown = require('marked');
+markdown = require('marked'),
 settings = require('./settings'),
 queries = require('./queries'),
 pg = require('pg'),
@@ -175,7 +175,7 @@ app.get('/index', function(request, response) {
 
 app.get('/questionlist', function(request, response) {
     var sortBy = 'top';
-    if (request.params.sort == 'newest') {
+    if (request.query.sort == 'newest') {
         sortBy = 'newest';
     }
 
