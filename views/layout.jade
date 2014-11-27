@@ -23,6 +23,7 @@ html(lang="en")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap-tab.js" type="text/javascript")
     script(src="/js/jqBootstrapValidation.js")
     script(src="/js/jquery.textarea.min.js")
+    script(src="/js/moment.min.js")
     script(src="/js/app.js")
 
     nav#topnav(class="navbar navbar-default navbar-fixed-top" role="navigation")
@@ -55,6 +56,20 @@ html(lang="en")
                       li.dropdown-header(role="presentation") #{user.username}
                       li.divider(role="presentation")
                     li(role="presentation")
+                      a(role="menuitem" tabindex="-1") 
+                        img(src='/img/thumbs-up-good.png' style='max-height:15px;max-width:15px')
+                        |  Likes
+                    li(role="presentation")
+                      a(role="menuitem" tabindex="-1") 
+                        img(src='/img/thumbs-down-bad.png' style='max-height:15px;max-width:15px')
+                        |  Dislikes
+                    li(role="presentation")
+                      a(role="menuitem" tabindex="-1") Your Questions
+                    li(role="presentation")
+                      a(role="menuitem" tabindex="-1") Your Solutions
+                    li(role="presentation")
+                      a(role="menuitem" tabindex="-1") Your Comments
+                    li(role="presentation")
                       a(role="menuitem" tabindex="-1" href="/logoff") Logoff
                     
               else
@@ -74,5 +89,4 @@ html(lang="en")
           h2 !{message}
 
   footer
-    .separator
-    .container
+    block footer

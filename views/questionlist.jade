@@ -4,11 +4,18 @@ if questions
         table.table-condensed
           tr.row(class=(i % 2 == 0) ? 'light-row' : 'dark-row')
             td(width="1%")
-            td(width="3%")
-              h3.votes.float-left #{question.upvotes - question.downvotes}
+            td(width="5%")
+              h3.votes.text-center #{question.upvotes - question.downvotes}
+              h5.text-center.text-dim
+                span (
+                span.upvotes #{question.upvotes}
+                span |
+                span.downvotes #{-question.downvotes}
+                span )
             td(width="6%")
               img.thumbsup.center(src=(question.vote == 1 ? "/img/thumbs-up-good.png" : "/img/thumbs-up.png") height='30' width='30' style='margin-top:13px', onclick=(user ? 'toggleQuestionUp($(this).parent().parent(), #{question.question_id})' : ''))
               img.thumbsdown.center(src=(question.vote == -1 ? "/img/thumbs-down-bad.png" : "/img/thumbs-down.png") height='30' width='30' style='margin:auto', onclick=(user ? 'toggleQuestionDown($(this).parent().parent(), #{question.question_id})' : ''))
-            td(width="90%")
+            td(width="88%")
               h3: a(href="/problem/#{question.question_id}") #{question.title}
-              h5 Submitted by #{question.username}
+              h5.date(datetime="#{question.date_created}" user='#{question.username}')
+              script(src='/js/questionlist.js')

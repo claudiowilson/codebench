@@ -8,7 +8,7 @@ var opts = {
   parser: marked,
   file: {
     name: 'epiceditor',
-    defaultContent: '',
+    defaultContent: 'In concise terms, describe the problem and its inputs and outputs.',
     autoSave: 100
   },
   theme: {

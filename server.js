@@ -1,7 +1,7 @@
 var express = require('express'),
 stylus = require('stylus'),
 async = require('async'),
-markdown = require('marked');
+markdown = require('marked'),
 settings = require('./settings'),
 queries = require('./queries'),
 pg = require('pg'),
@@ -24,15 +24,6 @@ app.configure(function() {
 
 app.get('/', function(request, response) {
     response.redirect('/index');
-});
-
-app.get('/question/:id', function(request, response) {
-    queries.GetQuestion(request.params.id, function(err, result) {
-        if(err) {console.log(err);}
-        else {
-            console.log(result);
-        }
-    });
 });
 
 app.post('/logon', function(request, response) {
@@ -75,7 +66,7 @@ app.get('/problem/:id', function(request, response) {
     var id = request.params.id;
     var userId = (request.cookies.user ? request.cookies.user.userId : null);
 
-    queries.GetQuestion(id, function(err, question) {
+    queries.GetQuestion(id, userId, function(err, question) {
         if(err) {
             console.log(err);
         } else {
@@ -175,7 +166,7 @@ app.get('/index', function(request, response) {
 
 app.get('/questionlist', function(request, response) {
     var sortBy = 'top';
-    if (request.params.sort == 'newest') {
+    if (request.query.sort == 'newest') {
         sortBy = 'newest';
     }
 

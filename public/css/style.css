@@ -125,3 +125,20 @@ a:hover {
     width: 50px;
     padding-right: 10px;
 }
+.userlink {
+    padding:3px;
+    border-radius:2px;
+    background:#DB6837;
+    box-shadow: 0px 3px 1px -2px #363636;
+}
+.text-dim {
+    color:#7a7a7a;
+}
+.upvotes {
+    color:#5ad75a;
+    text-shadow: 1px 1px 5px #141414;
+}
+.downvotes {
+    color:#DB6837;
+    text-shadow: 1px 1px 5px #141414;
+}
